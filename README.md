@@ -1,6 +1,6 @@
 # Computer-Security-IV1013
 
-Course contents *
+## Course contents
 
 Basic cryptography: symmetric and asymmetric cryptography.
 Cryptographic hashing and digital signatures.
@@ -10,7 +10,7 @@ Security in network systems: routers, firewalls, and systems to detect intrusion
 Security in operating systems.
 Software security: vulnerability, attacks, and defence mechanisms.
 
-Intended learning outcomes *
+## Intended learning outcomes
 
 The course gives an introduction to the basics of cryptography, security in computer systems, and network security. On completion of the course the student should be able to:
 
