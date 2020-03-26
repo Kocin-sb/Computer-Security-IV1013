@@ -18,10 +18,11 @@ public class HillCipher {
         radix = (Integer.parseInt(args[0]) <= MAX_RADIX) ? Integer.parseInt(args[0]) : MAX_RADIX;
         blocksize = (Integer.parseInt(args[1]) <= MAX_BLOCKSIZE) ? Integer.parseInt(args[1]) : MAX_BLOCKSIZE;
 
-        File file = new File(args[4]);
+        File plainFile = new File(args[4]);
         try {
-            Scanner sc = new Scanner(file);
+            Scanner sc = new Scanner(plainFile);
         } catch (FileNotFoundException exception) {
         }
+
     }
 }
