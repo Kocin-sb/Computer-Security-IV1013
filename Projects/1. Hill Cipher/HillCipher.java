@@ -53,6 +53,25 @@ public class HillCipher {
 
     public static void encrypt() {
 
+        try {
+            BufferedWriter w = new BufferedWriter(new FileWriter(cipherFile));
+
+            for (int i = 0; i < plain.size(); i += keyMatrix.length) {
+                for (int j = 0; j < keyMatrix.length; j++) {
+                    int encoded = 0;
+                    for (int k = 0; k < keyMatrix.length; k++) {
+                        encoded += (Integer.parseInt(String.valueOf(plain.get(k + i)))) * keyMatrix[j][k];
+                    }
+                    try {
+                        w.write(String.valueOf(encoded % radix));
+                        w.write(" ");
+                    } catch (IOException e) {
+                    }
+                }
+            }
+            w.close();
+        } catch (IOException e) {
+        }
     }
 
     public static void main(String[] args) {
@@ -72,6 +91,8 @@ public class HillCipher {
 
         readKey(keyFile, blocksize);
         printkey(blocksize);
+
+        encrypt();
 
     }
 }
