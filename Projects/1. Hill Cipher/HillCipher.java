@@ -13,6 +13,7 @@ public class HillCipher {
     public static void main(String[] args) {
 
         int radix, blocksize;
+        String keyFile, plainFile, cipherFile;
 
         if (args.length < 5) {
             System.out.println("Usage: <radix> <blocksize> <keyfile> <plainfile> <cipherfile>");
@@ -20,9 +21,12 @@ public class HillCipher {
         }
         radix = (Integer.parseInt(args[0]) <= MAX_RADIX) ? Integer.parseInt(args[0]) : MAX_RADIX;
         blocksize = (Integer.parseInt(args[1]) <= MAX_BLOCKSIZE) ? Integer.parseInt(args[1]) : MAX_BLOCKSIZE;
+        keyFile = args[2];
+        plainFile = args[3];
+        cipherFile = args[4];
 
         try {
-            Scanner sc = new Scanner(new File(args[4]));
+            Scanner sc = new Scanner(new File(plainFile));
             plain = new ArrayList<String>();
             while (sc.hasNext()) {
                 plain.add(sc.next());
