@@ -10,19 +10,6 @@ public class HillCipher {
     private static Scanner sc;
     File file;
 
-    public static void readPlain(String fileName, int blocksize) {
-
-        try {
-            Scanner sc = new Scanner(new File(fileName));
-            plain = new ArrayList<String>();
-            while (sc.hasNext()) {
-                plain.add(sc.next());
-            }
-            sc.close();
-        } catch (FileNotFoundException ex) {
-        }
-    }
-
     public static void main(String[] args) {
 
         int radix, blocksize;
@@ -34,8 +21,15 @@ public class HillCipher {
         radix = (Integer.parseInt(args[0]) <= MAX_RADIX) ? Integer.parseInt(args[0]) : MAX_RADIX;
         blocksize = (Integer.parseInt(args[1]) <= MAX_BLOCKSIZE) ? Integer.parseInt(args[1]) : MAX_BLOCKSIZE;
 
-        readPlain(args[4], blocksize);
-
+        try {
+            Scanner sc = new Scanner(new File(args[4]));
+            plain = new ArrayList<String>();
+            while (sc.hasNext()) {
+                plain.add(sc.next());
+            }
+            sc.close();
+        } catch (FileNotFoundException ex) {
+        }
         System.out.println(plain);
 
     }
