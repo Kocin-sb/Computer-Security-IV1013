@@ -53,10 +53,13 @@ public class HillCipher {
         readKey(keyFile, blocksize);
 
         for (int i = 0; i < blocksize; i++) {
+            System.out.print("[ ");
             for (int j = 0; j < blocksize; j++) {
-                System.out.print(HillCipher.keyMatrix[i][j]);
+                System.out.print(HillCipher.keyMatrix[i][j] + " ");
             }
+            System.out.println("]");
         }
+        System.out.println("");
 
     }
 }
