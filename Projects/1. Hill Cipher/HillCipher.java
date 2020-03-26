@@ -1,11 +1,3 @@
-
-import org.jscience.mathematics.number.LargeInteger;
-import org.jscience.mathematics.number.ModuloInteger;
-import org.jscience.mathematics.vector.DenseMatrix;
-import org.jscience.mathematics.vector.DenseVector;
-import org.jscience.mathematics.vector.Matrix;
-import org.jscience.mathematics.vector.Vector;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -17,6 +9,9 @@ public class HillCipher {
     private static ArrayList<String> plain;
     private static Scanner sc;
     public static int[][] keyMatrix;
+
+    public static int radix, blocksize;
+    public static String keyFile, plainFile, cipherFile;
 
     public static void readKey(String key, int blocksize) {
         try {
@@ -56,10 +51,11 @@ public class HillCipher {
         System.out.println("");
     }
 
-    public static void main(String[] args) {
+    public static void encrypt() {
 
-        int radix, blocksize;
-        String keyFile, plainFile, cipherFile;
+    }
+
+    public static void main(String[] args) {
 
         if (args.length < 5) {
             System.out.println("Usage: <radix> <blocksize> <keyfile> <plainfile> <cipherfile>");
