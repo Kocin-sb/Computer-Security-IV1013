@@ -1,2 +1,2 @@
 javac HillCipher.java
-java HillCipher
+java HillCipher 26 3 key.txt plain tesst
