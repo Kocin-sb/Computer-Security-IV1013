@@ -24,6 +24,17 @@ public class HillCipher {
         }
     }
 
+    public static void printkey(int blocksize) {
+        for (int i = 0; i < blocksize; i++) {
+            System.out.print("[ ");
+            for (int j = 0; j < blocksize; j++) {
+                System.out.print(HillCipher.keyMatrix[i][j] + " ");
+            }
+            System.out.println("]");
+        }
+        System.out.println("");
+    }
+
     public static void main(String[] args) {
 
         int radix, blocksize;
@@ -52,14 +63,7 @@ public class HillCipher {
 
         readKey(keyFile, blocksize);
 
-        for (int i = 0; i < blocksize; i++) {
-            System.out.print("[ ");
-            for (int j = 0; j < blocksize; j++) {
-                System.out.print(HillCipher.keyMatrix[i][j] + " ");
-            }
-            System.out.println("]");
-        }
-        System.out.println("");
+        printkey(blocksize);
 
     }
 }
