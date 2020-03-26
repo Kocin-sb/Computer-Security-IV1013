@@ -8,7 +8,21 @@ public class HillCipher {
     private static int MAX_BLOCKSIZE = 4;
     private static ArrayList<String> plain;
     private static Scanner sc;
-    File file;
+    public static int[][] keyMatrix;
+
+    public static void readKey(String key, int blocksize) {
+        try {
+            sc = new Scanner(new File(key));
+
+            keyMatrix = new int[blocksize][blocksize];
+
+            for (int i = 0; i < blocksize; i++)
+                for (int j = 0; j < blocksize; j++) {
+                    keyMatrix[i][j] = sc.nextInt();
+                }
+        } catch (FileNotFoundException ex) {
+        }
+    }
 
     public static void main(String[] args) {
 
@@ -26,7 +40,7 @@ public class HillCipher {
         cipherFile = args[4];
 
         try {
-            Scanner sc = new Scanner(new File(plainFile));
+            sc = new Scanner(new File(plainFile));
             plain = new ArrayList<String>();
             while (sc.hasNext()) {
                 plain.add(sc.next());
@@ -35,6 +49,14 @@ public class HillCipher {
         } catch (FileNotFoundException ex) {
         }
         System.out.println(plain);
+
+        readKey(keyFile, blocksize);
+
+        for (int i = 0; i < blocksize; i++) {
+            for (int j = 0; j < blocksize; j++) {
+                System.out.print(HillCipher.keyMatrix[i][j]);
+            }
+        }
 
     }
 }
