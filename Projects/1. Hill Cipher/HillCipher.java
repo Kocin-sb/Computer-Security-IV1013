@@ -1,3 +1,11 @@
+
+import org.jscience.mathematics.number.LargeInteger;
+import org.jscience.mathematics.number.ModuloInteger;
+import org.jscience.mathematics.vector.DenseMatrix;
+import org.jscience.mathematics.vector.DenseVector;
+import org.jscience.mathematics.vector.Matrix;
+import org.jscience.mathematics.vector.Vector;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
