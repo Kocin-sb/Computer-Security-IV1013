@@ -24,6 +24,19 @@ public class HillCipher {
         }
     }
 
+    public static void readPlain(String plainFile) {
+
+        try {
+            sc = new Scanner(new File(plainFile));
+            plain = new ArrayList<String>();
+            while (sc.hasNext()) {
+                plain.add(sc.next());
+            }
+            sc.close();
+        } catch (FileNotFoundException ex) {
+        }
+    }
+
     public static void printkey(int blocksize) {
         for (int i = 0; i < blocksize; i++) {
             System.out.print("[ ");
@@ -50,19 +63,10 @@ public class HillCipher {
         plainFile = args[3];
         cipherFile = args[4];
 
-        try {
-            sc = new Scanner(new File(plainFile));
-            plain = new ArrayList<String>();
-            while (sc.hasNext()) {
-                plain.add(sc.next());
-            }
-            sc.close();
-        } catch (FileNotFoundException ex) {
-        }
-        System.out.println(plain);
+        readPlain(plainFile);
+        System.out.println(HillCipher.plain);
 
         readKey(keyFile, blocksize);
-
         printkey(blocksize);
 
     }
