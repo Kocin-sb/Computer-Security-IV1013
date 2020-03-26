@@ -41,6 +41,8 @@ public class HillCipher {
     }
 
     public static void printkey(int blocksize) {
+
+        System.out.println("\nKey:\n");
         for (int i = 0; i < blocksize; i++) {
             System.out.print("[ ");
             for (int j = 0; j < blocksize; j++) {
@@ -64,6 +66,7 @@ public class HillCipher {
                     }
                     try {
                         w.write(String.valueOf(encoded % radix));
+                        System.out.print(encoded % radix + " ");
                         w.write(" ");
                     } catch (IOException e) {
                     }
@@ -72,6 +75,7 @@ public class HillCipher {
             w.close();
         } catch (IOException e) {
         }
+        System.out.println();
     }
 
     public static void main(String[] args) {
@@ -87,11 +91,12 @@ public class HillCipher {
         cipherFile = args[4];
 
         readPlain(plainFile);
-        System.out.println(HillCipher.plain);
+        System.out.println("\nPlain message:\n\n" + HillCipher.plain);
 
         readKey(keyFile, blocksize);
         printkey(blocksize);
 
+        System.out.println("Encrypted message:\n");
         encrypt();
 
     }
