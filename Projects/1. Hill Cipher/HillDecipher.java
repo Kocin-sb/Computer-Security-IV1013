@@ -44,9 +44,9 @@ public class HillDecipher {
 
         for(int i = 0; i < temp.size(); i+= blocksize) {
             keyList = new ArrayList<>();
-            for(int j = 0; j < blocksize; j++) {
+            for(int j = 0; j < blocksize; j++) 
                 keyList.add(Real.valueOf(Integer.parseInt(String.valueOf(temp.get(i+j)))));
-            }
+            
             cipherArray.add(DenseVector.valueOf(keyList));
         }
         cipher = DenseMatrix.valueOf(cipherArray).transpose();
@@ -56,13 +56,13 @@ public class HillDecipher {
         try {
             sc = new Scanner(new File(key));
 
-            Real [][] matrix = new Real[blocksize][blocksize];
+            Real [][] tempMatrix = new Real[blocksize][blocksize];
 
             for (int i = 0; i < blocksize; i++)
                 for (int j = 0; j < blocksize; j++) {
-                    matrix[i][j] = Real.valueOf(sc.nextInt());
+                    tempMatrix[i][j] = Real.valueOf(sc.nextInt());
                 }
-            keyMatrix = DenseMatrix.valueOf(matrix);
+            keyMatrix = DenseMatrix.valueOf(tempMatrix);
         } catch (FileNotFoundException ex) {
         }
     }
@@ -84,9 +84,8 @@ public class HillDecipher {
 
     public static void decrypt() {
 
-       
         Real[][] temp = new Real[blocksize][blocksize];
-        DenseMatrix<Real> inverseKey, decryptKey, plain;
+        DenseMatrix<Real> inverseKey, plain;
 
         LargeInteger detKey = LargeInteger.valueOf(keyMatrix.determinant().longValue());
         Real invDet = Real.valueOf(detKey.modInverse(LargeInteger.valueOf(radix)).longValue());
@@ -98,37 +97,30 @@ public class HillDecipher {
                 temp[i][j] = Real.valueOf(modolus.longValue());
             }
 
-        decryptKey = DenseMatrix.valueOf(temp);
-        plain = decryptKey.times(cipher).transpose();
-        writePlain(plain);
+        writePlain(DenseMatrix.valueOf(temp).times(cipher).transpose());
     }
 
     public static void writePlain(DenseMatrix<Real> plain) {
 
         ArrayList<String> plainArray = new ArrayList<String>();
+       
         for(int i = 0; i < plain.getNumberOfRows(); i++){
-            for(int j = 0; j < plain.getNumberOfColumns(); j++){
+            for(int j = 0; j < plain.getNumberOfColumns(); j++)
                 plainArray.add(String.valueOf((plain.get(i,j).intValue()) % radix));
-            }
         }
 
         try {
 
-        BufferedWriter w = new BufferedWriter(new FileWriter(plainFile));
+            BufferedWriter w = new BufferedWriter(new FileWriter(plainFile));
        
-        for(int i = 0; i < plainArray.size(); i++) {
-        System.out.print(plainArray.get((i)) + " ");
+            for(int i = 0; i < plainArray.size(); i++) {
+                System.out.print(plainArray.get((i)) + " ");
+                w.write(plainArray.get((i)) + " ");
+            }
+            w.close();
 
-        w.write(plainArray.get((i)) + " ");
-        }
-        w.close();
-
-        } catch (IOException e) {}
-
-      
-
+            } catch (IOException e) {}
     }
-
 
     public static void main(String[] args) {
 
