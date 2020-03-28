@@ -19,23 +19,36 @@ public class HillDecipher {
     private static Scanner sc;
 
     public static DenseMatrix<Real> keyMatrix;
+    public static DenseMatrix cipher;
 
 
-    public static void readCipher(String cipher, int blocksize) {
+   public static void readCipher(String cipherFile, int blocksize) {
+
+        ArrayList<Real> keyList;
+        ArrayList cipherArray = new ArrayList<Integer>();
+        ArrayList temp = new ArrayList();
+        String digit; 
 
         try {
-            sc = new Scanner(new File(cipher));
-            ArrayList cipherArray = new ArrayList<Integer>();
+            sc = new Scanner(new File(cipherFile));
             while (sc.hasNext()) {
-                cipherArray.add(sc.next());
+                digit = String.valueOf(sc.nextInt());
+                temp.add(digit);
+                System.out.print(digit + " ");
             }
+            System.out.println();
             sc.close();
-        } catch (FileNotFoundException ex) {
+        } catch (FileNotFoundException ex) {}
+
+        for(int i = 0; i < temp.size(); i+= blocksize) {
+            keyList = new ArrayList<>();
+            for(int j = 0; j < blocksize; j++) {
+                keyList.add(Real.valueOf(Integer.parseInt(String.valueOf(temp.get(i+j)))));
+            }
+            cipherArray.add(DenseVector.valueOf(keyList));
         }
+        cipher = DenseMatrix.valueOf(cipherArray).transpose();
     }
-
-
-
 
     public static void readKey(String key, int blocksize) {
         try {
