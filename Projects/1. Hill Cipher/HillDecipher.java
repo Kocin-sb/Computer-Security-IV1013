@@ -7,6 +7,9 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
+import java.io.File;
+import java.nio.file.Files;
+
 
 public class HillDecipher {
 
@@ -102,24 +105,28 @@ public class HillDecipher {
 
     public static void writePlain(DenseMatrix<Real> plain) {
 
-        ArrayList plainList = new ArrayList();
+        ArrayList<String> plainArray = new ArrayList<String>();
         for(int i = 0; i < plain.getNumberOfRows(); i++){
             for(int j = 0; j < plain.getNumberOfColumns(); j++){
-                plainList.add(String.valueOf((plain.get(i,j).intValue()) % radix));
+                plainArray.add(String.valueOf((plain.get(i,j).intValue()) % radix));
             }
         }
-        for(int i = 0; i < plainList.size(); i++)
-        System.out.print(plainList.get((i)) + " ");
-/*
-        ArrayList<String> plainArray = plainList.toArray();
 
         try {
+
         BufferedWriter w = new BufferedWriter(new FileWriter(plainFile));
+       
+        for(int i = 0; i < plainArray.size(); i++) {
+        System.out.print(plainArray.get((i)) + " ");
 
-        Files.write(plainFile, plainArray);
-        } catch(FileNotFoundException e) {}
+        w.write(plainArray.get((i)) + " ");
+        }
+        w.close();
 
-    */
+        } catch (IOException e) {}
+
+      
+
     }
 
 
