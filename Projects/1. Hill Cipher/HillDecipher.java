@@ -102,14 +102,26 @@ public class HillDecipher {
 
     public static void writePlain(DenseMatrix<Real> plain) {
 
-        LinkedList plainList = new LinkedList<>();
+        ArrayList plainList = new ArrayList();
         for(int i = 0; i < plain.getNumberOfRows(); i++){
             for(int j = 0; j < plain.getNumberOfColumns(); j++){
                 plainList.add(String.valueOf((plain.get(i,j).intValue()) % radix));
             }
         }
-        System.out.println(plainList);
-    } 
+        for(int i = 0; i < plainList.size(); i++)
+        System.out.print(plainList.get((i)) + " ");
+/*
+        ArrayList<String> plainArray = plainList.toArray();
+
+        try {
+        BufferedWriter w = new BufferedWriter(new FileWriter(plainFile));
+
+        Files.write(plainFile, plainArray);
+        } catch(FileNotFoundException e) {}
+
+    */
+    }
+
 
     public static void main(String[] args) {
 
