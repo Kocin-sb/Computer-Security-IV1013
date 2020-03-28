@@ -20,6 +20,23 @@ public class HillDecipher {
 
     public static DenseMatrix<Real> keyMatrix;
 
+
+    public static void readCipher(String cipher, int blocksize) {
+
+        try {
+            sc = new Scanner(new File(cipher));
+            ArrayList cipherArray = new ArrayList<Integer>();
+            while (sc.hasNext()) {
+                cipherArray.add(sc.next());
+            }
+            sc.close();
+        } catch (FileNotFoundException ex) {
+        }
+    }
+
+
+
+
     public static void readKey(String key, int blocksize) {
         try {
             sc = new Scanner(new File(key));
@@ -62,6 +79,7 @@ public class HillDecipher {
         cipherFile = args[4];
 
         readKey(keyFile, blocksize);
+        readCipher(cipherFile, blocksize);
         printkey(keyFile, blocksize);
 
         //decrypt();
