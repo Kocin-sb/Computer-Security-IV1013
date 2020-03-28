@@ -1,3 +1,4 @@
+clear
 echo "Decrypting cipher"
 rm plain
 javac -cp ".:./jscience.jar" HillDecipher.java
