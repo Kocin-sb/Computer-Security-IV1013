@@ -19,8 +19,7 @@ public class HillDecipher {
     private static Scanner sc;
 
     public static DenseMatrix<Real> keyMatrix;
-    public static DenseMatrix cipher;
-
+    public static DenseMatrix cipher;    
 
    public static void readCipher(String cipherFile, int blocksize) {
 
@@ -79,6 +78,39 @@ public class HillDecipher {
             }
     } catch(FileNotFoundException exception) {}
     }
+
+    public static void decrypt() {
+
+       
+        Real[][] temp = new Real[blocksize][blocksize];
+        DenseMatrix<Real> inverseKey, decryptKey, plain;
+
+        LargeInteger detKey = LargeInteger.valueOf(keyMatrix.determinant().longValue());
+        Real invDet = Real.valueOf(detKey.modInverse(LargeInteger.valueOf(radix)).longValue());
+        inverseKey = keyMatrix.inverse().times(Real.valueOf(detKey.longValue()).times(invDet));
+
+        for(int i = 0; i < blocksize; i++) 
+            for(int j = 0; j< blocksize; j++) {
+                LargeInteger modolus = LargeInteger.valueOf(inverseKey.get(i,j).longValue()).mod(LargeInteger.valueOf(radix));
+                temp[i][j] = Real.valueOf(modolus.longValue());
+            }
+
+        decryptKey = DenseMatrix.valueOf(temp);
+        plain = decryptKey.times(cipher).transpose();
+        writePlain(plain);
+    }
+
+    public static void writePlain(DenseMatrix<Real> plain) {
+
+        LinkedList plainList = new LinkedList<>();
+        for(int i = 0; i < plain.getNumberOfRows(); i++){
+            for(int j = 0; j < plain.getNumberOfColumns(); j++){
+                plainList.add(String.valueOf((plain.get(i,j).intValue()) % radix));
+            }
+        }
+        System.out.println(plainList);
+    } 
+
     public static void main(String[] args) {
 
         if (args.length < 5) {
@@ -95,7 +127,7 @@ public class HillDecipher {
         readCipher(cipherFile, blocksize);
         printkey(keyFile, blocksize);
 
-        //decrypt();
+        decrypt();
 
     }
 }
