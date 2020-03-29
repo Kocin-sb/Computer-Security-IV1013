@@ -1,1 +1,0 @@
-javac -cp .:./jscience-4.3.jar HillDecipher.java
