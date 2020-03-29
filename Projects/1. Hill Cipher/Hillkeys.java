@@ -28,8 +28,8 @@ public class HillKeys {
                 temp[i][j] = Real.valueOf(r.nextInt(radix));
 
         keyMatrix = DenseMatrix.valueOf(temp);
-
-        if(checkInvertible(keyMatrix) == false)
+        
+        if(checkInvertible(keyMatrix) == false) 
             generateKeyMatrix();
         
         try {
