@@ -43,12 +43,11 @@ public class HillKeys {
     public static boolean checkInvertible(DenseMatrix<Real> keyMatrix) {
 
         LargeInteger determinant = LargeInteger.valueOf(keyMatrix.determinant().longValue());
+        LargeInteger gcd = determinant.gcd(LargeInteger.valueOf(radix));
 
-        if ((keyMatrix.determinant() != Real.valueOf(0)) && (determinant.gcd(LargeInteger.valueOf(radix)).equals(LargeInteger.valueOf(1)))
-        && keyMatrix.getNumberOfRows() == keyMatrix.getNumberOfColumns()) {
-
+        if ((keyMatrix.determinant() != Real.valueOf(0)) && (gcd.equals(LargeInteger.valueOf(1))))
             return true;
-        }
+
         else return false;
     
     }
