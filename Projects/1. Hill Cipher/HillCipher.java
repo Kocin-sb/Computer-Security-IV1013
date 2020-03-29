@@ -94,9 +94,9 @@ public class HillCipher {
         System.out.println("\nPlain message:\n\n" + HillCipher.plain);
 
         readKey(keyFile, blocksize);
-        printkey(blocksize);
+        //printkey(blocksize);
 
-        System.out.println("Encrypted message:\n");
+        //System.out.println("Encrypted message:\n");
         encrypt();
 
     }

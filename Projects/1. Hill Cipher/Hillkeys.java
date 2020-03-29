@@ -45,8 +45,8 @@ public class HillKeys {
         LargeInteger determinant = LargeInteger.valueOf(keyMatrix.determinant().longValue());
         LargeInteger gcd = determinant.gcd(LargeInteger.valueOf(radix));
 
-        if ((keyMatrix.determinant() != Real.valueOf(0)) && (gcd.equals(LargeInteger.valueOf(1))))
-            return true;
+        if ((keyMatrix.determinant() != Real.valueOf(0)) && (determinant.gcd(LargeInteger.valueOf(radix)).equals(LargeInteger.valueOf(1))))
+        return true;
 
         else return false;
     
