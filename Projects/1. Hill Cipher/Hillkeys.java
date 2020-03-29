@@ -4,6 +4,8 @@ import org.jscience.mathematics.vector.DenseMatrix;
 import org.jscience.mathematics.vector.DenseVector;
 
 import java.util.Random;
+import java.util.ArrayList;
+import java.io.*;
 
 
 public class HillKeys {
@@ -27,7 +29,15 @@ public class HillKeys {
 
         keyMatrix = DenseMatrix.valueOf(temp);
 
-        checkInvertible(keyMatrix);
+        if(checkInvertible(keyMatrix) == false)
+            generateKeyMatrix();
+        
+        try {
+            BufferedWriter w = new BufferedWriter(new FileWriter(keyFile));
+            w.write(keyMatrix.toString().replaceAll("[{,}]",""));
+            w.close();
+        } catch (IOException e) {} 
+
     }
 
     public static boolean checkInvertible(DenseMatrix<Real> keyMatrix) {
@@ -42,9 +52,6 @@ public class HillKeys {
         else return false;
     
     }
-    
-
-
 
     public static void main(String[] args) {
 
