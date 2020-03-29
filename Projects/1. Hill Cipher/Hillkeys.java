@@ -12,7 +12,7 @@ public class HillKeys {
 
 
     private static int MAX_RADIX = 256;
-    private static int MAX_BLOCKSIZE = 4;
+    private static int MAX_BLOCKSIZE = 8;
 
     public static String keyFile;
     public static int radix, blocksize;

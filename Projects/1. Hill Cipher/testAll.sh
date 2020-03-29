@@ -17,7 +17,7 @@ java HillCipher 26 3 key plain-alpha cipher
 
 echo "Cipher created" ; echo " "
 
-cat cipher
+cat cipher ; echo " "
 
 echo "Decrypting cipher"
 
