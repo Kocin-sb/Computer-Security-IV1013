@@ -56,13 +56,13 @@ public class HillDecipher {
         try {
             sc = new Scanner(new File(key));
 
-            Real [][] tempMatrix = new Real[blocksize][blocksize];
+            Real [][] temp = new Real[blocksize][blocksize];
 
             for (int i = 0; i < blocksize; i++)
                 for (int j = 0; j < blocksize; j++) {
-                    tempMatrix[i][j] = Real.valueOf(sc.nextInt());
+                    temp[i][j] = Real.valueOf(sc.nextInt());
                 }
-            keyMatrix = DenseMatrix.valueOf(tempMatrix);
+            keyMatrix = DenseMatrix.valueOf(temp);
         } catch (FileNotFoundException ex) {
         }
     }
@@ -85,17 +85,12 @@ public class HillDecipher {
     public static void decrypt() {
 
         Real[][] temp = new Real[blocksize][blocksize];
-        DenseMatrix<Real> inverseKey, plain;
 
-        LargeInteger detKey = LargeInteger.valueOf(keyMatrix.determinant().longValue());
-        Real invDet = Real.valueOf(detKey.modInverse(LargeInteger.valueOf(radix)).longValue());
-        inverseKey = keyMatrix.inverse().times(Real.valueOf(detKey.longValue()).times(invDet));
+        DenseMatrix<Real> inverseKey = keyMatrix.inverse().times(Real.valueOf(LargeInteger.valueOf(keyMatrix.determinant().longValue()).longValue()).times(Real.valueOf(LargeInteger.valueOf(keyMatrix.determinant().longValue()).modInverse(LargeInteger.valueOf(radix)).longValue())));
 
         for(int i = 0; i < blocksize; i++) 
-            for(int j = 0; j< blocksize; j++) {
-                LargeInteger modolus = LargeInteger.valueOf(inverseKey.get(i,j).longValue()).mod(LargeInteger.valueOf(radix));
-                temp[i][j] = Real.valueOf(modolus.longValue());
-            }
+            for(int j = 0; j< blocksize; j++) 
+                temp[i][j] = Real.valueOf(LargeInteger.valueOf(inverseKey.get(i,j).longValue()).mod(LargeInteger.valueOf(radix)).longValue());
 
         writePlain(DenseMatrix.valueOf(temp).times(cipher).transpose());
     }
