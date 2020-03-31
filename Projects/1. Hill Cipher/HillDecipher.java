@@ -102,24 +102,16 @@ public class HillDecipher {
 
     public static void writePlain(DenseMatrix<Real> plain) {
 
-        ArrayList<String> plainArray = new ArrayList<String>();
-       
-        for(int i = 0; i < plain.getNumberOfRows(); i++){
-            for(int j = 0; j < plain.getNumberOfColumns(); j++)
-                plainArray.add(String.valueOf((plain.get(i,j).intValue()) % radix));
-        }
-
         try {
-
+            
             BufferedWriter w = new BufferedWriter(new FileWriter(plainFile));
-       
-            for(int i = 0; i < plainArray.size(); i++) {
-                System.out.print(plainArray.get((i)) + " ");
-                w.write(plainArray.get((i)) + " ");
+            
+            for(int i = 0; i < plain.getNumberOfRows(); i++) {
+                for(int j = 0; j < plain.getNumberOfColumns(); j++)
+                    w.write(String.valueOf((plain.get(i,j).intValue()) % radix) + " ");
             }
             w.close();
-
-            } catch (IOException e) {}
+        } catch (IOException e) {System.out.println("An errror occured while writing to " + plainFile);}
     }
 
     public static void main(String[] args) {
@@ -141,6 +133,5 @@ public class HillDecipher {
         //printkey(keyFile, blocksize);
 
         decrypt();
-
     }
 }
