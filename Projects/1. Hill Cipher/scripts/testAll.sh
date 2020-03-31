@@ -27,5 +27,7 @@ java -cp ".:./jscience.jar" HillDecipher 26 3 key plain cipher
 
 echo "Cipher decrypted" ; echo " "
 
-echo "Plain: " ; echo " "
-cat plain
+echo "Plain: " ; cat plain
+
+echo " "
+echo " "
