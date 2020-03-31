@@ -7,17 +7,15 @@ import java.util.Random;
 import java.util.ArrayList;
 import java.io.*;
 
-
 public class HillKeys {
-
-
+    
     private static int MAX_RADIX = 256;
     private static int MAX_BLOCKSIZE = 8;
-
+    
     public static String keyFile;
     public static int radix, blocksize;
-   public static DenseMatrix<Real> keyMatrix;
-
+    public static DenseMatrix<Real> keyMatrix;
+    
     public static void generateKeyMatrix() {
         
         Random r = new Random();
