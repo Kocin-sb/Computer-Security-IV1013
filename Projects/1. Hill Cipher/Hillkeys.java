@@ -50,7 +50,7 @@ public class HillKeys {
 
         if (args.length < 3 || (Integer.parseInt(args[0]) > MAX_RADIX || Integer.parseInt(args[1]) > MAX_BLOCKSIZE)) {
             System.out.println("Usage: <radix> <blocksize> <keyfile>");
-            System.out.println("Max radix: 256 \nMax blocksize: 8:");
+            System.out.println("Max radix: " + MAX_RADIX + "\nMax blocksize: " + MAX_BLOCKSIZE);
             System.exit(1);
         }
 

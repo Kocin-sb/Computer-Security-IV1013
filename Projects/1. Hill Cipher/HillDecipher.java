@@ -14,7 +14,7 @@ import java.nio.file.Files;
 public class HillDecipher {
 
     private static int MAX_RADIX = 256;
-    private static int MAX_BLOCKSIZE = 4;
+    private static int MAX_BLOCKSIZE = 8;
 
     public static int radix, blocksize;
     public static String keyFile, plainFile, cipherFile;
@@ -124,19 +124,21 @@ public class HillDecipher {
 
     public static void main(String[] args) {
 
-        if (args.length < 5) {
+        if (args.length < 5 || (Integer.parseInt(args[0]) > MAX_RADIX || Integer.parseInt(args[1]) > MAX_BLOCKSIZE)) {
             System.out.println("Usage: <radix> <blocksize> <keyfile> <plainfile> <cipherfile>");
+            System.out.println("Max radix: " + MAX_RADIX + "\nMax blocksize: " + MAX_BLOCKSIZE);
             System.exit(1);
         }
-        radix = (Integer.parseInt(args[0]) <= MAX_RADIX) ? Integer.parseInt(args[0]) : MAX_RADIX;
-        blocksize = (Integer.parseInt(args[1]) <= MAX_BLOCKSIZE) ? Integer.parseInt(args[1]) : MAX_BLOCKSIZE;
+
+        radix = (Integer.parseInt(args[0]));
+        blocksize = (Integer.parseInt(args[1]));
         keyFile = args[2];
         plainFile = args[3];
         cipherFile = args[4];
 
         readKey(keyFile, blocksize);
         readCipher(cipherFile, blocksize);
-        printkey(keyFile, blocksize);
+        //printkey(keyFile, blocksize);
 
         decrypt();
 
