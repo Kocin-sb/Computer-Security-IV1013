@@ -9,15 +9,16 @@ java -cp ".:./jscience.jar" HillKeys 26 3 key
 echo "Key generated"
 cat key 
 echo " "
-
+echo " "
 echo "Encrypting plain-alpha"
 
+echo "Cipher created" ; echo " "
 javac HillCipher.java
 java HillCipher 26 3 key plain-alpha cipher
 
-echo "Cipher created" ; echo " "
+cat cipher
 
-cat cipher ; echo " "
+echo " "
 
 echo "Decrypting cipher"
 
