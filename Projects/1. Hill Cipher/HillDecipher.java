@@ -10,7 +10,6 @@ import java.util.Scanner;
 import java.io.File;
 import java.nio.file.Files;
 
-
 public class HillDecipher {
 
     private static int MAX_RADIX = 256;
@@ -36,11 +35,9 @@ public class HillDecipher {
             while (sc.hasNext()) {
                 digit = String.valueOf(sc.nextInt());
                 temp.add(digit);
-                System.out.print(digit + " ");
             }
-            System.out.println();
             sc.close();
-        } catch (FileNotFoundException ex) {}
+        } catch (FileNotFoundException ex) {System.out.println("File + " + cipherFile + " not found");}
 
         for(int i = 0; i < temp.size(); i+= blocksize) {
             keyList = new ArrayList<>();
@@ -53,33 +50,29 @@ public class HillDecipher {
     }
 
     public static void readKey(String key, int blocksize) {
+       
         try {
             sc = new Scanner(new File(key));
 
             Real [][] temp = new Real[blocksize][blocksize];
 
             for (int i = 0; i < blocksize; i++)
-                for (int j = 0; j < blocksize; j++) {
+                for (int j = 0; j < blocksize; j++)
                     temp[i][j] = Real.valueOf(sc.nextInt());
-                }
+        
             keyMatrix = DenseMatrix.valueOf(temp);
-        } catch (FileNotFoundException ex) {
-        }
+
+        } catch (FileNotFoundException ex) {System.out.println("File + " + keyFile + " not found");}
     }
 
-    public static void printkey(String key, int blocksize) {
+    public static void printkey(DenseMatrix<Real> keyArray) {
 
-        try {
-            sc = new Scanner(new File(key));
-
-            for (int i = 0; i < blocksize; i++) {
-                System.out.print("[ ");
-                for (int j = 0; j < blocksize; j++) {
-                    System.out.print(sc.nextInt() + " ");
-                }
-                System.out.println("]");
+            System.out.println();            
+            for(int i = 0; i < keyArray.getNumberOfRows(); i++) {
+                for(int j = 0; j < keyArray.getNumberOfColumns(); j++) 
+                    System.out.print(String.valueOf((keyArray.get(i,j).intValue()) % radix) + " ");
+                System.out.println();
             }
-    } catch(FileNotFoundException exception) {}
     }
 
     public static void decrypt() {
@@ -98,7 +91,6 @@ public class HillDecipher {
     public static void writePlain(DenseMatrix<Real> plain) {
 
         try {
-            
             BufferedWriter w = new BufferedWriter(new FileWriter(plainFile));
             
             for(int i = 0; i < plain.getNumberOfRows(); i++) {
@@ -125,7 +117,7 @@ public class HillDecipher {
 
         readKey(keyFile, blocksize);
         readCipher(cipherFile, blocksize);
-        //printkey(keyFile, blocksize);
+        //printkey(keyMatrix);
 
         decrypt();
     }
