@@ -1,14 +1,11 @@
-import org.jscience.mathematics.number.LargeInteger;
 import org.jscience.mathematics.number.Real;
 import org.jscience.mathematics.vector.DenseMatrix;
 import org.jscience.mathematics.vector.DenseVector;
+import org.jscience.mathematics.number.LargeInteger;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Scanner;
-import java.io.File;
-import java.nio.file.Files;
 
 public class HillDecipher {
 
