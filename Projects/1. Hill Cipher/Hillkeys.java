@@ -16,39 +16,37 @@ public class HillKeys {
 
     public static String keyFile;
     public static int radix, blocksize;
-    public static DenseMatrix<Real> key;
+   public static DenseMatrix<Real> keyMatrix;
 
     public static void generateKeyMatrix() {
-        Real[][] matrixArray = new Real[blocksize][blocksize];
-        Random rand = new Random();
+        
+        Random r = new Random();
+        Real[][] temp = new Real[blocksize][blocksize];
 
-        while (true) {
-            for (int i = 0; i < blocksize; i++)
-                for (int j = 0; j < blocksize; j++)
-                    matrixArray[i][j] = Real.valueOf(rand.nextInt(radix));
+        for (int i = 0; i < blocksize; i++)
+            for (int j = 0; j < blocksize; j++)
+                temp[i][j] = Real.valueOf(r.nextInt(radix));
 
-                key = DenseMatrix.valueOf(matrixArray);
-                LargeInteger determinant = LargeInteger.valueOf(key.determinant().longValue());
+        keyMatrix = DenseMatrix.valueOf(temp);
+        
+        if(checkInvertible(keyMatrix) == false) 
+            generateKeyMatrix();
+        
+        try {
+            BufferedWriter w = new BufferedWriter(new FileWriter(keyFile));
+            w.write(keyMatrix.toString().replaceAll("[{,}]",""));
+            w.close();
+        } catch (IOException e) {} 
 
-                if ((key.determinant() != Real.valueOf(0)) && (determinant.gcd(LargeInteger.valueOf(radix)).equals(LargeInteger.valueOf(1)))
-                        && key.getNumberOfRows() == key.getNumberOfColumns()) {
-                    break;
-                }
-            }
-            try {
-                BufferedWriter w = new BufferedWriter(new FileWriter(keyFile));
-                w.write(key.toString().replaceAll("[{,}]",""));
-                w.close();
-            } catch (IOException e) {} 
     }
 
     public static boolean checkInvertible(DenseMatrix<Real> keyMatrix) {
 
         LargeInteger determinant = LargeInteger.valueOf(keyMatrix.determinant().longValue());
+        LargeInteger gcd = determinant.gcd(LargeInteger.valueOf(radix));
 
-        if ((keyMatrix.determinant() != Real.valueOf(0)) && (determinant.gcd(LargeInteger.valueOf(radix)).equals(LargeInteger.valueOf(1)))
-                && keyMatrix.getNumberOfRows() == keyMatrix.getNumberOfColumns()) 
-                return true;
+        if ((keyMatrix.determinant() != Real.valueOf(0)) && (determinant.gcd(LargeInteger.valueOf(radix)).equals(LargeInteger.valueOf(1))))
+        return true;
 
         else return false;
     
