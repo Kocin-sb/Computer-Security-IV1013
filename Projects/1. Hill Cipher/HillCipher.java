@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class HillCipher {
 
     private static int MAX_RADIX = 256;
-    private static int MAX_BLOCKSIZE = 4;
+    private static int MAX_BLOCKSIZE = 8;
     private static ArrayList<String> plain;
     private static Scanner sc;
     public static int[][] keyMatrix;
