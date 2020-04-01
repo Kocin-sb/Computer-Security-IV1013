@@ -4,7 +4,7 @@
            javac -cp ".:./jscience.jar" HillKeys.java
            java -cp ".:./jscience.jar" HillKeys <radix> <blocksize> <keyfile>
 
-    @author Emil Ståhl
+    @author Emil Stahl
 */
 
 import org.jscience.mathematics.number.Real;
@@ -37,11 +37,15 @@ public class HillKeys {
         if(checkInvertible(keyMatrix) == false) 
             generateKeyMatrix();
         
+        writeKey(keyMatrix); 
+    }
+
+    public static void writeKey(DenseMatrix<Real> keyMatrix) {
         try {
             BufferedWriter w = new BufferedWriter(new FileWriter(keyFile));
             w.write(keyMatrix.toString().replaceAll("[{,}]",""));
             w.close();
-        } catch (IOException e) {System.out.println("An error occurred while writing to file");} 
+        } catch (IOException e) {System.out.println("An error occurred while writing to " + keyFile);} 
     }
 
     public static boolean checkInvertible(DenseMatrix<Real> keyMatrix) {
