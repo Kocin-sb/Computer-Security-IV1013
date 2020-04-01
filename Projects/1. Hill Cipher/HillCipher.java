@@ -1,3 +1,14 @@
+/* This program encrypts a message with a given key by performing matrix multiplication and returns a file cipher with the decoded message 
+  
+    Features: Encrypts a message that is a multiple of the keys blocksize
+    
+    usage under UNIX:
+            javac HillCipher.java
+            java HillCipher <radix> <blocksize> <keyfile> <plainfile> <cipherfile>
+
+    @author Emil Ståhl
+*/
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
