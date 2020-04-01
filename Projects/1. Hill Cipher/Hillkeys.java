@@ -35,13 +35,17 @@ public class HillKeys {
         
         if(checkInvertible(keyMatrix) == false) 
             generateKeyMatrix();
-        
+
+        writeKey(keyMatrix);
+    }
+
+    public static void writeKey(DenseMatrix<Real> keyMatrix) {
         try {
             BufferedWriter w = new BufferedWriter(new FileWriter(keyFile));
             w.write(keyMatrix.toString().replaceAll("[{,}]",""));
             w.close();
         } catch (IOException e) {System.out.println("An error occurred while writing to file");} 
-    }
+    } 
 
     public static boolean checkInvertible(DenseMatrix<Real> keyMatrix) {
 
