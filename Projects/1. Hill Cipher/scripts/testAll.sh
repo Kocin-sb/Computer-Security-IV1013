@@ -3,9 +3,10 @@ rm key
 rm cipher
 rm plain
 cat plain-alpha
+echo " "
 echo "Generating key:"
 javac -cp ".:./jscience.jar" HillKeys.java
-java -cp ".:./jscience.jar" HillKeys 256 6 key
+java -cp ".:./jscience.jar" HillKeys 26 7 key
 
 echo "Key generated"
 cat key 
@@ -15,7 +16,7 @@ echo "Encrypting plain-alpha"
 
 echo "Cipher created" ; echo " "
 javac HillCipher.java
-java HillCipher 256 6 key plain-alpha cipher
+java HillCipher 26 7 key plain-alpha cipher
 
 cat cipher
 
@@ -24,7 +25,7 @@ echo " "
 echo "Decrypting cipher"
 
 javac -cp ".:./jscience.jar" HillDecipher.java
-java -cp ".:./jscience.jar" HillDecipher 256 6 key plain cipher
+java -cp ".:./jscience.jar" HillDecipher 26 7 key plain cipher
 
 echo "Cipher decrypted" ; echo " "
 

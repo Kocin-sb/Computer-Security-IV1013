@@ -1,4 +1,4 @@
-/* This program finds a invertible key matrix of the dimenssion blocksize and writes it to keyfile 
+/* This program finds a invertible key matrix of the dimension <blocksize> and writes it to keyfile 
     
     usage under UNIX:
            javac -cp ".:./jscience.jar" HillKeys.java
@@ -6,6 +6,7 @@
 
     @author Emil Stahl
 */
+
 import org.jscience.mathematics.number.Real;
 import org.jscience.mathematics.vector.DenseMatrix;
 import org.jscience.mathematics.number.LargeInteger;
@@ -22,6 +23,7 @@ public class HillKeys {
     public static int radix, blocksize;
     public static DenseMatrix<Real> keyMatrix;
     
+    /* Generate a key matrix by creating a 2D array with random values [0, radix] */
     public static void generateKeyMatrix() {
         
         Random r = new Random();
@@ -39,6 +41,7 @@ public class HillKeys {
         writeKey(keyMatrix);
     }
 
+    /* Write generated key matrix to specified file */
     public static void writeKey(DenseMatrix<Real> keyMatrix) {
         try {
             BufferedWriter w = new BufferedWriter(new FileWriter(keyFile));
@@ -47,6 +50,7 @@ public class HillKeys {
         } catch (IOException e) {System.out.println("An error occurred while writing to file");} 
     } 
 
+    /* Check if generated matrix is invertible and gcd of determinant is 1 */
     public static boolean checkInvertible(DenseMatrix<Real> keyMatrix) {
 
         LargeInteger det = LargeInteger.valueOf(keyMatrix.determinant().longValue());
