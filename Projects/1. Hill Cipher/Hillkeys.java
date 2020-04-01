@@ -1,3 +1,12 @@
+/* This program finds a invertible key matrix of the dimenssion blocksize and writes it to keyfile 
+    
+    usage under UNIX:
+           javac -cp ".:./jscience.jar" HillKeys.java
+           java -cp ".:./jscience.jar" HillKeys <radix> <blocksize> <keyfile>
+
+    @author Emil Ståhl
+*/
+
 import org.jscience.mathematics.number.Real;
 import org.jscience.mathematics.vector.DenseMatrix;
 import org.jscience.mathematics.number.LargeInteger;
