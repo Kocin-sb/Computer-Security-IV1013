@@ -126,7 +126,6 @@ public class HillDecipher {
 
         getKey(keyFile, blocksize);
         getCipher(cipherFile, blocksize);
-
         decrypt();
     }
 }
