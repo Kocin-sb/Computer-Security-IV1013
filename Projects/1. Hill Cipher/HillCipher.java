@@ -6,7 +6,7 @@
             javac HillCipher.java
             java HillCipher <radix> <blocksize> <keyfile> <plainfile> <cipherfile>
 
-    @author Emil Ståhl
+    @author Emil Stahl
 */
 
 import java.io.*;

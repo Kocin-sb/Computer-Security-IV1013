@@ -6,7 +6,7 @@
            javac -cp ".:./jscience.jar" HillDecipher.java
            java -cp ".:./jscience.jar" HillDecipher <radix> <blocksize> <keyfile> <plainfile> <cipherfile>
 
-    @author Emil Ståhl
+    @author Emil Stahl
 */
 
 import org.jscience.mathematics.number.Real;
