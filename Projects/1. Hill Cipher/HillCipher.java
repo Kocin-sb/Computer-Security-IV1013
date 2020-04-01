@@ -76,37 +76,31 @@ public class HillCipher {
                     }
                     try {
                         w.write(String.valueOf(encoded % radix));
-                        System.out.print(encoded % radix + " ");
                         w.write(" ");
                     } catch (IOException e) {
                     }
                 }
             }
             w.close();
-        } catch (IOException e) {
-        }
-        System.out.println();
+        } catch (IOException e) {}
     }
 
     public static void main(String[] args) {
 
-        if (args.length < 5) {
+        if (args.length < 5 || (Integer.parseInt(args[0]) > MAX_RADIX || Integer.parseInt(args[1]) > MAX_BLOCKSIZE)) {
             System.out.println("Usage: <radix> <blocksize> <keyfile> <plainfile> <cipherfile>");
+            System.out.println("Max radix: " + MAX_RADIX + "\nMax blocksize: " + MAX_BLOCKSIZE);
             System.exit(1);
         }
-        radix = (Integer.parseInt(args[0]) <= MAX_RADIX) ? Integer.parseInt(args[0]) : MAX_RADIX;
-        blocksize = (Integer.parseInt(args[1]) <= MAX_BLOCKSIZE) ? Integer.parseInt(args[1]) : MAX_BLOCKSIZE;
+
+        radix = (Integer.parseInt(args[0]));
+        blocksize = (Integer.parseInt(args[1]));
         keyFile = args[2];
         plainFile = args[3];
         cipherFile = args[4];
-
+        
         readPlain(plainFile);
-        //System.out.println("\nPlain message:\n\n" + HillCipher.plain);
-
         readKey(keyFile, blocksize);
-        //printkey(blocksize);
-
-        //System.out.println("Encrypted message:\n");
         encrypt();
 
     }
