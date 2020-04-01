@@ -16,14 +16,16 @@ public class HillCipher {
 
     private static int MAX_RADIX = 256;
     private static int MAX_BLOCKSIZE = 8;
-    private static ArrayList<String> plain;
+
     private static Scanner sc;
     public static int[][] keyMatrix;
+    private static ArrayList<String> plain;
 
     public static int radix, blocksize;
     public static String keyFile, plainFile, cipherFile;
 
-    public static void readKey(String key, int blocksize) {
+    public static void getKey(String key, int blocksize) {
+        
         try {
             sc = new Scanner(new File(key));
 
@@ -33,11 +35,10 @@ public class HillCipher {
                 for (int j = 0; j < blocksize; j++) {
                     keyMatrix[i][j] = sc.nextInt();
                 }
-        } catch (FileNotFoundException ex) {
-        }
+        } catch (FileNotFoundException ex) {System.out.println("Could not find file " + keyFile);}
     }
 
-    public static void readPlain(String plainFile) {
+    public static void getPlain(String plainFile) {
 
         try {
             sc = new Scanner(new File(plainFile));
@@ -46,8 +47,7 @@ public class HillCipher {
                 plain.add(sc.next());
             }
             sc.close();
-        } catch (FileNotFoundException ex) {
-        }
+        } catch (FileNotFoundException ex) {System.out.println("Could not find file " + plainFile);}
     }
 
     public static void printkey(int blocksize) {
@@ -71,18 +71,15 @@ public class HillCipher {
             for (int i = 0; i < plain.size(); i += keyMatrix.length) {
                 for (int j = 0; j < keyMatrix.length; j++) {
                     int encoded = 0;
-                    for (int k = 0; k < keyMatrix.length; k++) {
+                    for (int k = 0; k < keyMatrix.length; k++)
                         encoded += (Integer.parseInt(String.valueOf(plain.get(k + i)))) * keyMatrix[j][k];
-                    }
-                    try {
-                        w.write(String.valueOf(encoded % radix));
-                        w.write(" ");
-                    } catch (IOException e) {
-                    }
+                    
+                    w.write(String.valueOf(encoded % radix));
+                    w.write(" ");
                 }
             }
             w.close();
-        } catch (IOException e) {}
+        } catch (IOException e) {System.out.println("An error occurred while writing to file: " + cipherFile);}
     }
 
     public static void main(String[] args) {
@@ -99,8 +96,8 @@ public class HillCipher {
         plainFile = args[3];
         cipherFile = args[4];
         
-        readPlain(plainFile);
-        readKey(keyFile, blocksize);
+        getPlain(plainFile);
+        getKey(keyFile, blocksize);
         encrypt();
     }
 }
