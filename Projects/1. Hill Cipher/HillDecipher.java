@@ -8,7 +8,6 @@
 
     @author Emil Stahl
 */
-
 import org.jscience.mathematics.number.Real;
 import org.jscience.mathematics.vector.DenseMatrix;
 import org.jscience.mathematics.vector.DenseVector;
