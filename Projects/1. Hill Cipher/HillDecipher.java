@@ -30,7 +30,7 @@ public class HillDecipher {
     public static DenseMatrix<Real> keyMatrix;
     public static DenseMatrix cipher;    
 
-   public static void readCipher(String cipherFile, int blocksize) {
+   public static void getCipher(String cipherFile, int blocksize) {
 
         ArrayList<Real> keyList;
         ArrayList cipherArray = new ArrayList<Integer>();
@@ -56,7 +56,7 @@ public class HillDecipher {
         cipher = DenseMatrix.valueOf(cipherArray).transpose();
     }
 
-    public static void readKey(String key, int blocksize) {
+    public static void getKey(String key, int blocksize) {
        
         try {
             sc = new Scanner(new File(key));
@@ -82,6 +82,7 @@ public class HillDecipher {
             }
     }
 
+    /* Decrypts the cipher by inverting the key mod radix */
     public static void decrypt() {
 
         Real[][] temp = new Real[blocksize][blocksize];
@@ -95,6 +96,7 @@ public class HillDecipher {
         writePlain(DenseMatrix.valueOf(temp).times(cipher).transpose());
     }
 
+    /* Write the result from decrypt() to specified plainfile  */
     public static void writePlain(DenseMatrix<Real> plain) {
 
         try {
@@ -122,9 +124,8 @@ public class HillDecipher {
         plainFile = args[3];
         cipherFile = args[4];
 
-        readKey(keyFile, blocksize);
-        readCipher(cipherFile, blocksize);
-        //printkey(keyMatrix);
+        getKey(keyFile, blocksize);
+        getCipher(cipherFile, blocksize);
 
         decrypt();
     }
