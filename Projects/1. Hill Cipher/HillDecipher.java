@@ -1,3 +1,14 @@
+/* This program decrypts a message with a given key by calculating the mod inverse of the given key and then performing matrix multiplication to get the decrypted message
+
+    Features: Decrypts a message that is a multiple of the keys blocksize and writes the result to plainfile
+    
+    usage under UNIX:
+           javac -cp ".:./jscience.jar" HillDecipher.java
+           java -cp ".:./jscience.jar" HillDecipher <radix> <blocksize> <keyfile> <plainfile> <cipherfile>
+
+    @author Emil Ståhl
+*/
+
 import org.jscience.mathematics.number.Real;
 import org.jscience.mathematics.vector.DenseMatrix;
 import org.jscience.mathematics.vector.DenseVector;
