@@ -1,5 +1,3 @@
-IV1013 VT20 – Introduction to Computer Security
-
 # 1 Introduction
 
 The learning objective of this lab is for students to get familiar with one-way hash functions and Message Authentication Code (MAC). After finishing the lab, in addition to gaining a deeper understanding of the concepts, you should be able to use tools and write programs to generate one-way hash value and MAC for a given message. See the Grading section at the end for information about the marking for this lab.
