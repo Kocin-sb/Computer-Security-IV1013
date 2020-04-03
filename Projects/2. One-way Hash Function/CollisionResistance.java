@@ -39,7 +39,10 @@ public class CollisionResistance {
         String msgToDigest = sc.nextLine();
         System.out.println(msgToDigest);
         // Make digest by calling function makeDigest
+        Byte[] digest = makeDigest(msgToDigest);
         //Print digest
+        printDigest(digest);
         //Perform brute force with digest
+        bruteForce(digest);
     }
 }
