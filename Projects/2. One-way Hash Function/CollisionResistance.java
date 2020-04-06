@@ -8,21 +8,28 @@ public class CollisionResistance {
     //declare byte array for digest, inputBytes, tryDigest
     //declare encoding
     //declare algorithm
-    public static byte[] digest;
+    public static byte[] digest, tryDigest;
+    public static int c = 0;
     public static String algorithm = "SHA-256";
     public static String encoding = "UTF-8";
 
 
-    public void bruteForce(byte[] digest) {
+    public static void bruteForce(byte[] digest) {
 
-        //increment counter
-        //create string input text to make a second digest of
-        //make a trydigest of input text
+        while(true) {
+            //increment counter
+            c++;
+            //make a trydigest of input text
+            tryDigest = getDigest(Long.valueOf(c).toString());
 
-        //check if first 24 bits of digest and trydigest is equal
-            // if so, print trydigest and return
-        
-
+            //check if first 24 bits of digest and trydigest is equal
+            if(digest[0] == tryDigest[0] && digest[1] == tryDigest[1] && digest[2] == tryDigest[2]) {
+                // if so, print trydigest and return
+                System.out.println("It took " +c+" times to generate a identical digest\n\nThe digest was: ");
+                printDigest(tryDigest);
+                return;
+            }    
+        }   
     }
 
     public static byte[] getDigest(String inputText){
@@ -35,7 +42,6 @@ public class CollisionResistance {
         msgDig.update(inputText.getBytes(encoding));
         // create digest by object.digest();
         digest = msgDig.digest();
-        printDigest(digest);
         } catch(NoSuchAlgorithmException e) {System.out.println("The specified algorithm " + algorithm + " does not exists");}
         catch(UnsupportedEncodingException ex) {System.out.println("Encoding " + encoding + " not supported");}
     
@@ -57,6 +63,7 @@ public class CollisionResistance {
         System.out.println(msgToDigest);
 
         byte[] digest = getDigest(msgToDigest);
+        printDigest(digest);
         bruteForce(digest);
     }
 }
