@@ -14,7 +14,7 @@ public class CollisionResistance {
     public String encoding = "UTF-8";
 
 
-    public void bruteForce(byte[] input) {
+    public void bruteForce(byte[] input, int id) {
 
         byte[] tryDigest;
         while(true) {
@@ -26,7 +26,7 @@ public class CollisionResistance {
             //check if first 24 bits of digest and trydigest is equal
             if(input[0] == tryDigest[0] && input[1] == tryDigest[1] && input[2] == tryDigest[2]) {
                 // if so, print trydigest and return
-                System.out.println("It took " +c+" times to generate a identical digest\n\nThe digest was: ");
+                System.out.println("\nThread nr: " + id + "\nIt took " +c+" times to generate a identical digest\n\nThe digest was: ");
                 printDigest(tryDigest);
                 return;
             }    
@@ -67,6 +67,8 @@ public class CollisionResistance {
         CollisionResistance cResistance = new CollisionResistance();
 
         byte[] digest = cResistance.getDigest(msgToDigest);
+        System.out.println("The digest of the message " + msgToDigest + " is:");
+        cResistance.printDigest(digest);
 
         for(int i = 0; i < 4; i++) {
             final worker worker = new worker(i, digest, cResistance);

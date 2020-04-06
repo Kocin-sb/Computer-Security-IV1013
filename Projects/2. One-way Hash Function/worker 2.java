@@ -12,7 +12,10 @@ public class worker extends Thread {
 
     public void run() {
 
-        cResistance.bruteForce(digest, id);
+        while(cResistance.finished == false) {
+            cResistance.bruteForce(digest, id);
+        }
+        cResistance.finished = true;
 
     }
 }
