@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.io.UnsupportedEncodingException;
@@ -8,7 +9,8 @@ public class CollisionResistance {
     //declare byte array for digest, inputBytes, tryDigest
     //declare encoding
     //declare algorithm
-    public int c = 0;
+
+    private AtomicInteger c = new AtomicInteger(0);
     public byte[] digest;
     public String algorithm = "SHA-256";
     public String encoding = "UTF-8";
@@ -19,9 +21,9 @@ public class CollisionResistance {
         byte[] tryDigest;
         while(true) {
             //increment counter
-            c++;
+            c.incrementAndGet();
             //make a trydigest of input text
-            tryDigest = getDigest(Long.valueOf(c).toString());
+            tryDigest = getDigest(c.toString());
 
             //check if first 24 bits of digest and trydigest is equal
             if(input[0] == tryDigest[0] && input[1] == tryDigest[1] && input[2] == tryDigest[2]) {
