@@ -8,14 +8,15 @@ public class CollisionResistance {
     //declare byte array for digest, inputBytes, tryDigest
     //declare encoding
     //declare algorithm
-    public byte[] digest, tryDigest;
     public int c = 0;
+    public byte[] digest;
     public String algorithm = "SHA-256";
     public String encoding = "UTF-8";
 
 
-    public void bruteForce(byte[] digest) {
+    public void bruteForce(byte[] input) {
 
+        byte[] tryDigest;
         while(true) {
             //increment counter
             c++;
@@ -23,7 +24,7 @@ public class CollisionResistance {
             tryDigest = getDigest(Long.valueOf(c).toString());
 
             //check if first 24 bits of digest and trydigest is equal
-            if(digest[0] == tryDigest[0] && digest[1] == tryDigest[1] && digest[2] == tryDigest[2]) {
+            if(input[0] == tryDigest[0] && input[1] == tryDigest[1] && input[2] == tryDigest[2]) {
                 // if so, print trydigest and return
                 System.out.println("It took " +c+" times to generate a identical digest\n\nThe digest was: ");
                 printDigest(tryDigest);
@@ -63,10 +64,13 @@ public class CollisionResistance {
         System.out.println(msgToDigest);
         sc.close();
         
-        CollisionResistance obj = new CollisionResistance();
+        CollisionResistance cResistance = new CollisionResistance();
 
-        obj.digest = obj.getDigest(msgToDigest);
-        obj.printDigest(obj.digest);
-        obj.bruteForce(obj.digest);
+        byte[] digest = cResistance.getDigest(msgToDigest);
+
+        for(int i = 0; i < 4; i++) {
+            final worker worker = new worker(i, digest, cResistance);
+            worker.start();
+        }
     }
 }
