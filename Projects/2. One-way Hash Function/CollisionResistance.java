@@ -1,3 +1,4 @@
+import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.security.MessageDigest;
@@ -14,6 +15,7 @@ public class CollisionResistance {
     public byte[] digest;
     public String algorithm = "SHA-256";
     public String encoding = "UTF-8";
+    Random rand = new Random();
 
 
     public void bruteForce(byte[] input, int id) {
@@ -22,8 +24,9 @@ public class CollisionResistance {
         while(true) {
             //increment counter
             c.incrementAndGet();
+            int seed = rand.nextInt(2147483647);
             //make a trydigest of input text
-            tryDigest = getDigest(c.toString());
+            tryDigest = getDigest(Long.valueOf(seed).toString());
 
             //check if first 24 bits of digest and trydigest is equal
             if(input[0] == tryDigest[0] && input[1] == tryDigest[1] && input[2] == tryDigest[2]) {
