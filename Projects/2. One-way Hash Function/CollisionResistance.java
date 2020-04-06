@@ -8,13 +8,13 @@ public class CollisionResistance {
     //declare byte array for digest, inputBytes, tryDigest
     //declare encoding
     //declare algorithm
-    public static byte[] digest, tryDigest;
-    public static int c = 0;
-    public static String algorithm = "SHA-256";
-    public static String encoding = "UTF-8";
+    public byte[] digest, tryDigest;
+    public int c = 0;
+    public String algorithm = "SHA-256";
+    public String encoding = "UTF-8";
 
 
-    public static void bruteForce(byte[] digest) {
+    public void bruteForce(byte[] digest) {
 
         while(true) {
             //increment counter
@@ -32,7 +32,7 @@ public class CollisionResistance {
         }   
     }
 
-    public static byte[] getDigest(String inputText){
+    public byte[] getDigest(String inputText){
 
         try {
         // create object of message digest with SHA-256
@@ -48,7 +48,7 @@ public class CollisionResistance {
         return digest;
 }
 
-   public static void printDigest(byte[] digest) {
+   public void printDigest(byte[] digest) {
        for(int i = 0; i < digest.length; i++)
             System.out.format("%02x", digest[i]&0xff);
         System.out.println();
@@ -61,9 +61,12 @@ public class CollisionResistance {
         Scanner sc = new Scanner(System.in);
         String msgToDigest = sc.nextLine();
         System.out.println(msgToDigest);
+        sc.close();
+        
+        CollisionResistance obj = new CollisionResistance();
 
-        byte[] digest = getDigest(msgToDigest);
-        printDigest(digest);
-        bruteForce(digest);
+        obj.digest = obj.getDigest(msgToDigest);
+        obj.printDigest(obj.digest);
+        obj.bruteForce(obj.digest);
     }
 }
