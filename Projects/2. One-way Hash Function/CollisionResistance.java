@@ -66,7 +66,9 @@ public class CollisionResistance {
         System.out.println("Type message to digest:");
         Scanner sc = new Scanner(System.in);
         String msgToDigest = sc.nextLine();
-        System.out.println(msgToDigest);
+        System.out.println("Type number of threads to utilizie");
+        int threads = sc.nextInt();
+        System.out.println("Message: " + msgToDigest + "\nThreads: " + threads);
         sc.close();
         
         CollisionResistance cResistance = new CollisionResistance();
@@ -75,7 +77,7 @@ public class CollisionResistance {
         System.out.println("The digest of the message " + msgToDigest + " is:");
         cResistance.printDigest(digest);
 
-        for(int i = 0; i < 4; i++) {
+        for(int i = 0; i < threads; i++) {
             final worker worker = new worker(i, digest, cResistance);
             worker.start();
         }
