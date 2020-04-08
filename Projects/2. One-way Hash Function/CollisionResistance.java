@@ -43,7 +43,6 @@ public class CollisionResistance {
         try {
         // create object of message digest with SHA-256
         MessageDigest msgDig = MessageDigest.getInstance(algorithm);
-        // create inputBytes of inputText with correct encoding
         // call object.update with inputBytes
         msgDig.update(inputText.getBytes(encoding));
         // create digest by object.digest();
@@ -68,8 +67,8 @@ public class CollisionResistance {
         String msgToDigest = sc.nextLine();
         System.out.println("Type number of threads to utilizie");
         int threads = sc.nextInt();
-        System.out.println("Message: " + msgToDigest + "\nThreads: " + threads);
         sc.close();
+        System.out.println("Message: " + msgToDigest + "\nThreads: " + threads);
         
         CollisionResistance cResistance = new CollisionResistance();
 
@@ -81,5 +80,23 @@ public class CollisionResistance {
             final worker worker = new worker(i, digest, cResistance);
             worker.start();
         }
+    }
+}
+
+ class worker extends Thread {
+
+    int id;
+    CollisionResistance cResistance;
+    byte[] digest;
+
+    public worker(int id, byte[] digest, CollisionResistance cResistance) {
+        this.id = id;
+        this.digest = digest;
+        this.cResistance = cResistance;
+    }
+
+    public void run() {
+
+        cResistance.bruteForce(digest, id);
     }
 }
