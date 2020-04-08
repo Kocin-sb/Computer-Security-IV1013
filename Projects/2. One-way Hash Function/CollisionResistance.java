@@ -64,7 +64,7 @@ public class CollisionResistance {
         System.out.println("Type number of threads to utilizie");
         int threads = sc.nextInt();
         sc.close();
-        System.out.println("Message: " + msgToDigest + "\nThreads: " + threads + "\n");
+        System.out.println("\nMessage: " + msgToDigest + "\nThreads: " + threads + "\n");
         
         CollisionResistance cResistance = new CollisionResistance();
 
