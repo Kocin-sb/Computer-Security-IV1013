@@ -64,13 +64,15 @@ public class CollisionResistance {
         System.out.println("Type number of threads to utilizie");
         int threads = sc.nextInt();
         sc.close();
-        System.out.println("Message: " + msgToDigest + "\nThreads: " + threads);
+        System.out.println("Message: " + msgToDigest + "\nThreads: " + threads + "\n");
         
         CollisionResistance cResistance = new CollisionResistance();
 
         byte[] digest = cResistance.getDigest(msgToDigest);
         System.out.println("The digest of the message " + msgToDigest + " is:");
         cResistance.printDigest(digest);
+
+        System.out.println("\n\nRunning brute force . . . . . .\n");
 
         for(int i = 0; i < threads; i++) {
             final worker worker = new worker(i, digest, cResistance);
