@@ -7,25 +7,21 @@ import java.io.UnsupportedEncodingException;
 
 public class CollisionResistance {
 
-    //declare byte array for digest, inputBytes, tryDigest
-    //declare encoding
-    //declare algorithm
-
-    private AtomicInteger c = new AtomicInteger(0);
     public byte[] digest;
-    public String algorithm = "SHA-256";
-    public String encoding = "UTF-8";
     Random rand = new Random();
-
+    public String encoding = "UTF-8";
+    public String algorithm = "SHA-256";
 
     public void bruteForce(byte[] input, int id) {
 
+        long c = 0;
         byte[] tryDigest;
+
         while(true) {
             //increment counter
-            c.incrementAndGet();
+            c++;
             int seed = rand.nextInt(2147483647);
-            //make a trydigest of input text
+            //make a trydigest to compare
             tryDigest = getDigest(Long.valueOf(seed).toString());
 
             //check if first 24 bits of digest and trydigest is equal
@@ -86,8 +82,8 @@ public class CollisionResistance {
  class worker extends Thread {
 
     int id;
-    CollisionResistance cResistance;
     byte[] digest;
+    CollisionResistance cResistance;
 
     public worker(int id, byte[] digest, CollisionResistance cResistance) {
         this.id = id;
