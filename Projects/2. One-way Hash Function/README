@@ -1,0 +1,19 @@
+This program reads in a message from the user and creates a digest of it.
+The program then executes a brute-force algorithm in order to try to find a 
+digest that equals the 24 first bits of the digest of the input message.
+
+Features: Prints digest of input message and the found matching digest along with number of trials
+it took to find a match. The program has support for multithreadiing. 
+
+Usage under UNIX: 
+            
+javac CollisionResistance.java
+java CollisionResistance
+
+Upon execution the program will ask for a message to digest and after that it asks for the number of
+threads to utilize when performing brute-force. The prgram prints out the digest of the input message 
+and when a thread finds a matching digest it prints it to STDOUT along with its TID (id) along with the number of trials
+it took to find the match. 
+
+NOTE: The program will not terminate any threads if one thread finds a match. All threads will run until they find a match.
+To terminate the program at any point use CTRL+C.

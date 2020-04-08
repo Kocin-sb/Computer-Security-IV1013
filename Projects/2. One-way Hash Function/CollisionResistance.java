@@ -1,6 +1,19 @@
+/* This program reads in a message from the user and creates a digest of it. 
+   The program then executes a brute-force algorithm in order to try to find a 
+   digest that equals the 24 first bits of the digest of the input message.
+
+   Features: Prints digest of input message and the found matching digest along with number of trials
+             it took to find a match. The program has support for multithreadiing. 
+
+    Usage under UNIX: 
+             javac CollisionResistance.java
+             java CollisionResistance
+
+    @author Emil Stahl
+*/
+
 import java.util.Random;
 import java.util.Scanner;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.io.UnsupportedEncodingException;
@@ -64,12 +77,12 @@ public class CollisionResistance {
         System.out.println("Type number of threads to utilizie");
         int threads = sc.nextInt();
         sc.close();
-        System.out.println("Message: " + msgToDigest + "\nThreads: " + threads + "\n");
+        System.out.println("\nMessage: " + msgToDigest + "\nThreads: " + threads + "\n");
         
         CollisionResistance cResistance = new CollisionResistance();
 
         byte[] digest = cResistance.getDigest(msgToDigest);
-        System.out.println("The digest of the message " + msgToDigest + " is:");
+        System.out.println("The digest of the message '" + msgToDigest + "' is:");
         cResistance.printDigest(digest);
 
         System.out.println("\n\nRunning brute force . . . . . .\n");
