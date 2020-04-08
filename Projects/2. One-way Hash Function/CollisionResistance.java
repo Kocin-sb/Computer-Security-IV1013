@@ -82,7 +82,7 @@ public class CollisionResistance {
         CollisionResistance cResistance = new CollisionResistance();
 
         byte[] digest = cResistance.getDigest(msgToDigest);
-        System.out.println("The digest of the message " + msgToDigest + " is:");
+        System.out.println("The digest of the message '" + msgToDigest + "' is:");
         cResistance.printDigest(digest);
 
         System.out.println("\n\nRunning brute force . . . . . .\n");
