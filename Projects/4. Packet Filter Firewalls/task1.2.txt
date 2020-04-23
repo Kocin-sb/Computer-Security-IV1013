@@ -1,0 +1,14 @@
+root@firewall:~# sudo ufw status verbose
+Status: active
+Logging: on (low)
+Default: deny (incoming), deny (outgoing), deny (routed)
+New profiles: skip
+
+To                         Action      From
+--                         ------      ----
+Anywhere on eth1           ALLOW IN    10.0.20.0/24              
+
+10.0.20.0/24               ALLOW OUT   Anywhere on eth1          
+
+root@firewall:~# 
+
