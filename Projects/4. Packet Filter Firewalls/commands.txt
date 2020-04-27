@@ -2,6 +2,7 @@
 
  ufw default deny outgoing 
  ufw default deny ingoing 
+ ufw default deny routed
 
 1.2 Network Permissions 
 
