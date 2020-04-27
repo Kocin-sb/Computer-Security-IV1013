@@ -1,0 +1,54 @@
+Induvidual not authorized to use the computer and who exploits a legitimate users account  '96 masquerade 
+ 
+The misfeasor is a legitimate user who access data, programs or resourses for which such access is not authorised  '96 misfeasor 
+ 
+Clandestine is a user who seize supervisory control of the system (can be both a insider or outsider) 
+ 
+2 ARP spoofing 
+A mitm attack against ARP 
+ 
+3 IPsec standards define two modes of use, which are these IPsec modes? 
+IPsec, ip security protocol consists of the authentication header(AH) and the Encapsulating Security Payload (ESP) 
+ 
+4 which of following statements are true about security associations? 
+- SA can be manually configured 
+- The SA specifies what cryptographic algorithms to use 
+ 
+5 IP Spoofing 
+- the attacker sends an IP packet with fake source address 
+ 
+6 which of following pieces must you supply when creating a policy that configures IPsec to use tunnelmode between two routers over the internet? 
+- the IP address of the router at the far end of the tunnel 
+ 
+7 Secure tunnelling is a technique in which the IP datagram is first ENCAPSULATED IN ANOTHER DATAGRAM and then ENCRYPTED 
+ 
+8 you use URL with https what assumptions can you make? 
+- The communication with server is confidential 
+- The server is authenticated 
+-The communication is integrity protected 
+ 
+9 Assume you have a border router/firewall between an internal network and the (external) internet. Which of the following actions are reasonable ways to try to deal with IP spoofing? 
+- block incoming packets from external network with source address belonging to the internal network 
+-block outgoing packets from the internal network with source addresses from outside the internal network 
+ 
+10 Which of the following statements about the capabilities and configuration of firewalls are true? 
+- When a firewall has the default discard policy it needs to be explicitly configured for each service or destination that you want the firewall to allow.(everything not expressly permitted is prohbited. 
+-When a firewall has default forward policy you typically do not need to change the configuration when you want to use a new service from your protected network (everything not expressly prohibited is permitted) 
+- Application level gateway firewalls can support applications using TCP as well as applications using UDP 
+ 
+11 which of the following statements about TCP vulnerability is (most) correct? 
+- TCPs way of establishing connection makes it vulnerable to a denial of service attack(TCP SYN attack) 
+ 
+12 Which of following is NOT a well known TCP attack? 
+Found both TCP FIN Flooding and TCP ACK storm 
+-TCP FIN flooding 
+ 
+13 you set up a connection to a web server with your browser, and as a part of the process, the web server sends its certificate. What information can you find in the certificate? 
+-domain name 
+-name of the CA that issued the certificate 
+-the certificates expiration date 
+-the servers public key 
+- A globally unique serial number 
+ 
+14 One of the following statements about packet filter firewalls is true. Which one? 
+- packet filter firewalls can block or allow packets based on information both in the IP header and in the transport level header. 
