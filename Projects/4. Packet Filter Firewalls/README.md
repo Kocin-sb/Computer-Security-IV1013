@@ -5,7 +5,7 @@
 The learning objective of this lab is for students to gain the insights on how firewalls work by playing with firewall software and implement a simplified packet filtering firewall. Firewalls have several types, and the two most commonly known are the packet filter and application level gateway (application firewall). Packet filters act by inspecting the packets; if a packet matches the packet filter’s set of rules, the packet filter will either drop the packet or forward it, depending on what the rules say. Packet filters are usually stateless; they filter each packet based only on the information contained in that packet, without paying attention to whether a packet is part of an existing stream of traffic. Packet filters often use a combination of the packet’s source and destination address, its protocol, and, for TCP and UDP traffic, port numbers. In this lab, the focus is on packet filtering firewalls.
 Lab environment
 
-###Network setup
+### Network setup
 
 To conduct this lab, you need four machines: a firewall, an inside host, an outside host, and an attacker. You will use an LXC container for each of these machines. Let the outside network be 10.0.10.0/24, and the inside network be 10.0.20.0/24
 
