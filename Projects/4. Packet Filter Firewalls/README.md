@@ -31,7 +31,8 @@ Now, connect to these containers. You will open new terminal window for each con
       lxc exec firewall /bin/bash
 Once you run the command, you will get into the root terminal in the container. Lastly, test connectivity by pinging each host from all others.
 
- Task 1 – Building a Firewall
+### Task 1 – Building a Firewall
+
 In this task you will use ufw to build a simple firewall for your network.
 1.1 Default Policy
 It is good practice to take a conservative approach, and state that everything that is not explicitly allowed, is forbidden:
@@ -86,17 +87,17 @@ After completing the tasks above, you should have the following rules active:
 • Connections from the inside are allowed out.
 • Connections from the outside are blocked.
 
-Task 2 – Defending Against SSH Brute-force Attacks
+### Task 2 – Defending Against SSH Brute-force Attacks
 
 You have allowed connections to the SSH port (hence, its service) of the firewall from any host on the outside network. There is nothing that would avoid a brute-force attack or a Distributed Denial of Service (DDoS) attack because there are no limitations on the amount of times that one particular host can try a username and a password (besides the ones that the SSH server implementation might have internally).
 Examine how you can use ufw to prevent excessive load on the firewall from SSH attacks. Verify that it works.
 Question 7: How does ufw support protection against denial of service attacks? Explain how you configure your firewall.
-5
 
- Question 8: How can you verify that the protection works? Explain the experiments you perform.
+Question 8: How can you verify that the protection works? Explain the experiments you perform.
 Report your ufw configuration for this part by using the command ufw status verbose.
-Task 3 – Ping and the Internet Control Message Protocol
-(ICMP)
+
+### Task 3 – Ping and the Internet Control Message Protocol (ICMP)
+
 The ping tool is usually used to test the reachability of a host that implements the Internet protocol (IP). It operates by sending packets using the Internet Control Message Protocol (ICMP) of the type ‘echo request’ to the host whose reachability is to be tested, and processing the response from that host (if any).
 Ping can also be used in attacks, such as ping flooding, ping of death, and smurf attacks. Your overall task here is to design firewall rules that will allow inside-host to ping outside- host, but at the same time prevent an attacker from doing an attack where large amounts of ICMP echo requests or ICMP echo replies reach the inside-host.
 There are no ufw commands to directly set up rules regarding ICMP echo requests and replies, so you may have to work with iptables to create such rule sets.
@@ -113,7 +114,6 @@ Question 9: Can you ping from the outside-host to the inside interface of the fi
 Blocking ICMP Echo Replies
 Let the attacker ping the outside-host while spoofing the source address by using the inside- host’s address as source address. Use netwox if necessary.
 Create a rule to prevent the ICMP Echo Replies from reaching the inside-host in the scenario above.
-6
 
  In your report, specify the rules you now have in your firewall. You can use the following commands to examine the rules:
 • ufw status numbered
@@ -133,7 +133,7 @@ This assignment is done individually.
 Submission
 Upload your solution as a single ZIP archive in moodle. The ZIP archive should contain the following:
 • A detailed lab report that describes what you have done and what you have observed; you also need to provide explanation to the observations that are interesting or surprising.
-7
+
 
 • Specification of the rule sets you have created in the various tasks (ufw status verbose).
 • A file called ”AUTHOR”, with full name and KTH email address of author. Requirements and points
