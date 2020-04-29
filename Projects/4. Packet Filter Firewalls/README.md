@@ -79,6 +79,7 @@ Report your ufw configuration for this part by using the command ufw status verb
 Verify your setup in a systematic manner, making sure all rules work correctly. To test a certain rule, you can listen to a port with netcat and try to connect to it using netcat or telnet:
 On the receiving host run: nc -l PORT
 On the sending host run: telnet IPADDRESS PORT or nc IPADDRESS PORT
+
 After completing the tasks above, you should have the following rules active:
 • Connections on port 135 from the inside hosts are blocked.
 • Connections on the SSH port are allowed to the firewall host from the outside.
@@ -91,6 +92,7 @@ After completing the tasks above, you should have the following rules active:
 
 You have allowed connections to the SSH port (hence, its service) of the firewall from any host on the outside network. There is nothing that would avoid a brute-force attack or a Distributed Denial of Service (DDoS) attack because there are no limitations on the amount of times that one particular host can try a username and a password (besides the ones that the SSH server implementation might have internally).
 Examine how you can use ufw to prevent excessive load on the firewall from SSH attacks. Verify that it works.
+
 Question 7: How does ufw support protection against denial of service attacks? Explain how you configure your firewall.
 
 Question 8: How can you verify that the protection works? Explain the experiments you perform.
