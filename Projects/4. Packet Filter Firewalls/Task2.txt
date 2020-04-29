@@ -1,0 +1,19 @@
+root@firewall:~# ufw status verbose
+Status: active
+Logging: on (low)
+Default: deny (incoming), deny (outgoing), deny (routed)
+New profiles: skip
+
+To                         Action      From
+--                         ------      ----
+22                         LIMIT IN    Anywhere                  
+Anywhere on eth1           ALLOW IN    10.0.20.0/24              
+10.0.10.1 22/tcp on eth0   ALLOW IN    10.0.10.0/24              
+
+Anywhere                   ALLOW OUT   10.0.20.0/24 on eth1      
+
+135 on eth0                DENY FWD    Anywhere on eth1          
+Anywhere on eth0           ALLOW FWD   10.0.20.0/24 on eth1      
+9000 on eth1               ALLOW FWD   Anywhere on eth0          
+
+root@firewall:~# 
