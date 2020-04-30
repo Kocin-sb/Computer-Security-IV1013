@@ -24,19 +24,17 @@ ncapitalize the string, e.g., sTRING;
 toggle case of the string, e.g., StRiNg or sTrInG.
 You only need to consider characters that are letters (uppercase and lowercase) and numbers;  so no special characters (such as "#", "¢", "?", etc) or control characters. (This goes against the general wisdom that says that a "good" password should consist of different kinds of characters, but it simplifies the assignment.)
 
-There are several programs available to system administrators to test the guessability of user passwords, as well as by hackers to perform dictionary attacks, such as John the Ripper (Länkar till en externa sida.), Cain & Abel (Länkar till en externa sida.), and Crack (Länkar till en externa sida.).
-
-The goal of this assignment is to implement a portion of those programs' functionality and attempt to guess one or more passwords. Input to your program will be a "captured" /etc/passwd file from a system with 20 users. Your aim is to crack as many passwords as possible. But don't expect to crack them all; if you get 15 or so passwords, you're doing just fine.
+There are several programs available to system administrators to test the guessability of user passwords, as well as by hackers to perform dictionary attacks, such as John the Ripper. The goal of this assignment is to implement a portion of those programs' functionality and attempt to guess one or more passwords. Input to your program will be a "captured" /etc/passwd file from a system with 20 users. Your aim is to crack as many passwords as possible. But don't expect to crack them all; if you get 15 or so passwords, you're doing just fine.
 
 How do you know when to stop? You don't! Write the program to run until it finds all of the passwords. Realistically, your program should find a majority of the passwords (12 or so) in just a few minutes. Make sure that you print out the passwords as they are found and that you code your program reasonably efficiently.
 
 To do this for a specific user, you might take the following steps:
 
 Extract the encrypted password and salt for that user (see format below);
-Seed the word list with words that the user might have utilized in constructing his or her password (e.g., his first and last name);
-With the salt and augmented wordlist, systematically encrypt words and compare against the stored encrypted password;
+Seed the word list with words that the user might have utilized in constructing his or her password (e.g., his first and last name); With the salt and augmented wordlist, systematically encrypt words and compare against the stored encrypted password;
 Redo step 3, but using mangled versions of the words;
 Redo step 4, attempting to apply two mangles to each word.
+
 Design your program in such a way as to be as efficient as possible. For example, your program should stop searching with respect to a given user if you have cracked that password. Consider whether to use a breadth-first or depth-first search. Also consider if you should try to break one password at a time, of if you should try to match each guess against all entries in the password file. The algorithm only considers the first eight characters of a password, but the user might or might not take that into account. You do not have to break all passwords, but you should break at least the simple passwords (generated from words in the dictionary using one mangle). In general, if you can't break most of the passwords, you're not trying hard enough.
 
 ### Encryption Specifics
