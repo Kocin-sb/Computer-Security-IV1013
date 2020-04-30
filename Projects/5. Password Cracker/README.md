@@ -1,4 +1,6 @@
-# Introduction
+# Password Cracker
+
+## Introduction
 
 In this assignment, you are provided a traditional UNIX-style password file. The file contains salted and hashed passwords. Your job is to reveal as many of the passwords as possible, by performing a dictionary attack where you generate password guesses, hash them, and match the result with the entries in the password file.  
 
