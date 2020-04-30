@@ -1,9 +1,11 @@
 # Introduction
 
 In this assignment, you are provided a traditional UNIX-style password file. The file contains salted and hashed passwords. Your job is to reveal as many of the passwords as possible, by performing a dictionary attack where you generate password guesses, hash them, and match the result with the entries in the password file.  
+
 On a traditional Unix system, passwords are stored in encrypted form in a world-readable file /etc/passwd. Moreover, the encryption algorithm is widely known. This means that an attacker can attempt to discover one or more passwords on the system by encrypting a sequence of strings and comparing the results against the stored encrypted passwords of the system. If any of the trial encryptions match stored encrypted passwords, the attacker will know the corresponding cleartext password for that user and can then use it to access the user's account. This is a classic dictionary attack and explains why many systems enforce rules to ensure that user-generated passwords are not easily guessed words.
 
 ## Password Cracking
+
 Systematic password guessing involves both cleverness and brute force. Dictionary attacks are so named because a word list, or dictionary, is used to generate password guesses. A more sophisticated dictionary attack not only uses common words and phrases, but also attempts users' surnames, common pet names,  "worst passwords" from lists published on the web, etc. Such words and phrases may be prepended to the dictionary and then become available in the attack.
 
 A user may attempt to render his or her password unguessable by "mangling" the plaintext password in some algorithmic way. Some common "mangles" (ways to take a password and make it less easily guessable) are listed below. Assume the plaintext password is "string". You might:
