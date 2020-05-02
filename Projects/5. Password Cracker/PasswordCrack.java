@@ -29,10 +29,12 @@ public class PasswordCrack {
         while (sc.hasNextLine()) {
             line = sc.nextLine();
             String splitted[] = line.split(":");
-            System.out.println("splitted[1] = " + splitted[1]);
-            System.out.println("splitted[1].substring(0,2) = " + splitted[1].substring(0, 2));
-            String[] name = splitted[4].split(" ");
-            System.out.println("name = " + name[0]);
+            String salt = splitted[1].substring(0, 2);
+            String encryptedPassword = splitted[1];
+            String[] username = splitted[4].split(" ");
+            System.out.println("name = " + username[0]);
+            System.out.println("password = " + encryptedPassword);
+            System.out.println("salt = " + salt + "\n");
         }
 
         sc.close();
