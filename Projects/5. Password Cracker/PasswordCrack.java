@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.HashMap;
 
 public class PasswordCrack {
 
@@ -19,7 +20,24 @@ public class PasswordCrack {
 
     }
 
-    public static void getPasswords(String passwords) {
+    public static HashMap<String, String> getPasswords(String passwords) throws IOException {
+
+        Scanner sc = new Scanner(new File(passwords));
+        HashMap<String, String> temp = new HashMap<String, String>();
+
+        String line;
+        while (sc.hasNextLine()) {
+            line = sc.nextLine();
+            String splitted[] = line.split(":");
+            System.out.println("splitted[1] = " + splitted[1]);
+            System.out.println("splitted[1].substring(0,2) = " + splitted[1].substring(0, 2));
+            String[] name = splitted[4].split(" ");
+            System.out.println("name = " + name[0]);
+        }
+
+        sc.close();
+
+        return temp;
 
     }
 
@@ -36,16 +54,18 @@ public class PasswordCrack {
         String passwords = args[1];
 
         ArrayList<String> dictList = new ArrayList<String>();
+        HashMap<String, String> userPasswords = new HashMap<>();
 
         try {
             dictList = getDict(dictionary);
-            // getPasswords(passwords);
+            userPasswords = getPasswords(passwords);
 
         } catch (Exception e) {
             // TO D O: handle exception
         }
-        for (int i = 0; i < dictList.size(); i++)
-            System.out.println(dictList.get(i));
-    }
+        /*
+         * for (int i = 0; i < dictList.size(); i++)
+         * System.out.println(dictList.get(i));
+         */}
 
 }
