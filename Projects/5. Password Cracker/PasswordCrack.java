@@ -75,10 +75,10 @@ public class PasswordCrack {
 
         dictList.addAll(nameList);
 
-        //for (int i = 0; i < dictList.size(); i++)
-           //System.out.println(dictList.get(i));
+        for(int i = 0; i < dictList.size(); i++)
+            System.out.println(dictList.get(i));
 
-        // System.out.println(Arrays.asList(userPasswords));
+        //System.out.println(Arrays.asList(userPasswords));
 
     }
 
