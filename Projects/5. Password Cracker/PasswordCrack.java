@@ -32,9 +32,11 @@ public class PasswordCrack {
             String salt = splitted[1].substring(0, 2);
             String encryptedPassword = splitted[1];
             String[] username = splitted[4].split(" ");
-            System.out.println("name = " + username[0]);
-            System.out.println("password = " + encryptedPassword);
-            System.out.println("salt = " + salt + "\n");
+            /*
+             * System.out.println("name = " + username[0]); System.out.println("password = "
+             * + encryptedPassword); System.out.println("salt = " + salt + "\n");
+             */
+            temp.put(encryptedPassword, salt);
         }
 
         sc.close();
