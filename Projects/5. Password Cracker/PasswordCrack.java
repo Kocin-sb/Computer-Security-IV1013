@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.HashMap;
+import java.util.Arrays;
 
 public class PasswordCrack {
 
@@ -70,6 +71,8 @@ public class PasswordCrack {
         /*
          * for (int i = 0; i < dictList.size(); i++)
          * System.out.println(dictList.get(i));
-         */}
+         */
+        System.out.println(Arrays.asList(userPasswords));
+    }
 
 }
