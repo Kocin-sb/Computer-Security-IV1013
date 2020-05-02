@@ -1,12 +1,14 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.HashMap;
 import java.util.Arrays;
 
 public class PasswordCrack {
 
     public static ArrayList<String> nameList;
+    AtomicInteger c = new AtomicInteger();
 
     public static ArrayList<String> getDict(String dictionary) throws IOException {
 
@@ -51,6 +53,15 @@ public class PasswordCrack {
 
     }
 
+    public void checkPass(int id, int threads, ArrayList dictList) {
+
+        for (int i = id; i < 100; i += threads) {
+            c.getAndIncrement();
+            System.out.println("Thread nr: " + id + " c = " + c);
+        }
+
+    }
+
     public static void main(String[] args) {
 
         if (args.length < 2) {
@@ -75,11 +86,34 @@ public class PasswordCrack {
 
         dictList.addAll(nameList);
 
-        for(int i = 0; i < dictList.size(); i++)
-            System.out.println(dictList.get(i));
+        // for (int i = 0; i < dictList.size(); i++)
+        // System.out.println(dictList.get(i));
 
-        //System.out.println(Arrays.asList(userPasswords));
+        // System.out.println(Arrays.asList(userPasswords));
 
+        int threads = 4;
+
+        for (int id = 0; id < threads; id++)
+            pc.checkPass(id, threads, dictList);
+    }
+}
+
+class worker extends Thread {
+
+    int id;
+    int threads;
+    ArrayList<String> dictList;
+    PasswordCrack pCrack;
+
+    public worker(int id, int threads, ArrayList<String> dictList, PasswordCrack pCrack) {
+        this.id = id;
+        this.threads = threads;
+        this.dictList = dictList;
+        this.pCrack = pCrack;
     }
 
+    public void run() {
+
+        pCrack.checkPass(id, threads, dictList);
+    }
 }
