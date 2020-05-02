@@ -6,6 +6,8 @@ import java.util.Arrays;
 
 public class PasswordCrack {
 
+    public static ArrayList<String> nameList;
+
     public static ArrayList<String> getDict(String dictionary) throws IOException {
 
         Scanner sc = new Scanner(new File(dictionary));
@@ -25,6 +27,7 @@ public class PasswordCrack {
 
         Scanner sc = new Scanner(new File(passwords));
         HashMap<String, String> temp = new HashMap<String, String>();
+        nameList = new ArrayList();
 
         String line;
         while (sc.hasNextLine()) {
@@ -38,6 +41,8 @@ public class PasswordCrack {
              * + encryptedPassword); System.out.println("salt = " + salt + "\n");
              */
             temp.put(encryptedPassword, salt);
+
+            nameList.add(username[0]);
         }
 
         sc.close();
@@ -66,14 +71,15 @@ public class PasswordCrack {
             userPasswords = getPasswords(passwords);
 
         } catch (Exception e) {
-            // TO D O: handle exception
         }
-        /*
-         * for (int i = 0; i < dictList.size(); i++)
-         * System.out.println(dictList.get(i));
-         * 
-         * System.out.println(Arrays.asList(userPasswords));
-         */
+
+        dictList.addAll(nameList);
+
+        //for (int i = 0; i < dictList.size(); i++)
+           //System.out.println(dictList.get(i));
+
+        // System.out.println(Arrays.asList(userPasswords));
+
     }
 
 }
