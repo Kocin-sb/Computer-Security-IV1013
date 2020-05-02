@@ -35,13 +35,17 @@ public class PasswordCrack {
         String dictionary = args[0];
         String passwords = args[1];
 
+        ArrayList<String> dictList = new ArrayList<String>();
+
         try {
-            ArrayList<String> dictList = getDict(dictionary);
+            dictList = getDict(dictionary);
             // getPasswords(passwords);
-            
+
         } catch (Exception e) {
-            //TODO: handle exception
+            // TO D O: handle exception
         }
+        for (int i = 0; i < dictList.size(); i++)
+            System.out.println(dictList.get(i));
     }
 
 }
