@@ -85,16 +85,15 @@ public class PasswordCrack {
 
         dictList.addAll(nameList);
 
-        for (int i = 0; i < nameList.size(); i++)
-            System.out.println(nameList.get(i));
+        // for (int i = 0; i < nameList.size(); i++)
+        // System.out.println(nameList.get(i));
 
         // System.out.println(Arrays.asList(userPasswords));
 
-        // int threads = 4;
-        // pc.checkPass(1, threads, dictList);
+        int threads = 4;
 
-        // for (int id = 0; id < threads; id++)
-        // pc.checkPass(id, threads, dictList);
+        for (int id = 0; id < threads; id++)
+            pc.checkPass(id, threads, dictList);
     }
 }
 
