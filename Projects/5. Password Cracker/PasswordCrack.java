@@ -91,10 +91,15 @@ public class PasswordCrack {
 
         dictList.addAll(nameList);
 
-        // for (int i = 0; i < dictList.size(); i++)
-        // System.out.println(dictList.get(i));
-
-        // System.out.println(Arrays.asList(userPasswords));
+        /*
+         * for (int i = 0; i < dictList.size(); i++)
+         * System.out.println(dictList.get(i));
+         * 
+         * for (int i = 0; i < nameList.size(); i++)
+         * System.out.println(nameList.get(i));
+         * 
+         * System.out.println(Arrays.asList(userPasswords));
+         */
 
         int threads = 4;
 
