@@ -68,7 +68,7 @@ public class PasswordCrack {
             System.exit(1);
         }
 
-        PasswordCrack pc = new PasswordCrack();
+        PasswordCrack pCrack = new PasswordCrack();
 
         String dictionary = args[0];
         String passwords = args[1];
@@ -92,19 +92,23 @@ public class PasswordCrack {
 
         int threads = 4;
 
-        for (int id = 0; id < threads; id++)
-            pc.checkPass(id, threads, dictList);
+        for (int id = 0; id < threads; id++) {
+            final Worker worker = new Worker(id, threads, dictList, pCrack);
+            worker.start();
+
+        }
+
     }
 }
 
-class worker extends Thread {
+class Worker extends Thread {
 
     int id;
     int threads;
     ArrayList<String> dictList;
     PasswordCrack pCrack;
 
-    public worker(int id, int threads, ArrayList<String> dictList, PasswordCrack pCrack) {
+    public Worker(int id, int threads, ArrayList<String> dictList, PasswordCrack pCrack) {
         this.id = id;
         this.threads = threads;
         this.dictList = dictList;
