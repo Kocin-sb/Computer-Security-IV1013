@@ -7,6 +7,7 @@ import java.util.Arrays;
 public class PasswordCrack {
 
     public static ArrayList<String> nameList;
+    public static HashMap<String, String> userPasswords;
 
     public static ArrayList<String> getDict(String dictionary) throws IOException {
 
@@ -23,10 +24,10 @@ public class PasswordCrack {
 
     }
 
-    public static HashMap<String, String> getPasswords(String passwords) throws IOException {
+    public static void getPasswords(String passwords) throws IOException {
 
         Scanner sc = new Scanner(new File(passwords));
-        HashMap<String, String> temp = new HashMap<String, String>();
+        userPasswords = new HashMap<String, String>();
         nameList = new ArrayList();
 
         String line;
@@ -40,25 +41,22 @@ public class PasswordCrack {
              * System.out.println("name = " + username[0]); System.out.println("password = "
              * + encryptedPassword); System.out.println("salt = " + salt + "\n");
              */
-            temp.put(encryptedPassword, salt);
+            userPasswords.put(encryptedPassword, salt);
 
             nameList.add(username[0]);
         }
 
         sc.close();
+    }
 
-        return temp;
+    public void checkPassword(String word) {
 
     }
 
-    public void checkPassword(String word, HashMap<String, String> userPasswords) {
-
-    }
-
-    public void crackPassword(int id, int threads, ArrayList<String> dictList, HashMap<String, String> userPasswords) {
+    public void crackPassword(int id, int threads, ArrayList<String> dictList) {
 
         for (int i = id; i < dictList.size(); i += threads) {
-            checkPassword(dictList.get(i).toString(), userPasswords);
+            checkPassword(dictList.get(i).toString());
             // System.out.println("Thread nr: " + id + " word = " + word);
         }
     }
@@ -76,11 +74,10 @@ public class PasswordCrack {
         String passwords = args[1];
 
         ArrayList<String> dictList = new ArrayList<String>();
-        HashMap<String, String> userPasswords = new HashMap<>();
 
         try {
             dictList = getDict(dictionary);
-            userPasswords = getPasswords(passwords);
+            getPasswords(passwords);
 
         } catch (Exception e) {
         }
@@ -90,12 +87,12 @@ public class PasswordCrack {
         // for (int i = 0; i < dictList.size(); i++)
         // System.out.println(dictList.get(i));
 
-        // System.out.println(Arrays.asList(userPasswords));
+        System.out.println(Arrays.asList(userPasswords));
 
         int threads = 4;
 
         for (int id = 0; id < threads; id++) {
-            final Worker worker = new Worker(id, threads, dictList, userPasswords, pCrack);
+            final Worker worker = new Worker(id, threads, dictList, pCrack);
             worker.start();
         }
     }
@@ -106,20 +103,17 @@ class Worker extends Thread {
     int id;
     int threads;
     ArrayList<String> dictList;
-    HashMap<String, String> userPasswords;
     PasswordCrack pCrack;
 
-    public Worker(int id, int threads, ArrayList<String> dictList, HashMap<String, String> userPasswords,
-            PasswordCrack pCrack) {
+    public Worker(int id, int threads, ArrayList<String> dictList, PasswordCrack pCrack) {
         this.id = id;
         this.threads = threads;
         this.dictList = dictList;
-        this.userPasswords = userPasswords;
         this.pCrack = pCrack;
     }
 
     public void run() {
 
-        pCrack.crackPassword(id, threads, dictList, userPasswords);
+        pCrack.crackPassword(id, threads, dictList);
     }
 }
