@@ -51,10 +51,15 @@ public class PasswordCrack {
 
     }
 
-    public void checkPass(int id, int threads, ArrayList dictList) {
+    public void checkPassword(String word, HashMap<String, String> userPasswords) {
+
+    }
+
+    public void crackPassword(int id, int threads, ArrayList<String> dictList, HashMap<String, String> userPasswords) {
 
         for (int i = id; i < dictList.size(); i += threads) {
-            System.out.println("Thread nr: " + id + " word = " + dictList.get(i));
+            checkPassword(dictList.get(i).toString(), userPasswords);
+            // System.out.println("Thread nr: " + id + " word = " + word);
         }
     }
 
@@ -90,7 +95,7 @@ public class PasswordCrack {
         int threads = 4;
 
         for (int id = 0; id < threads; id++) {
-            final Worker worker = new Worker(id, threads, dictList, pCrack);
+            final Worker worker = new Worker(id, threads, dictList, userPasswords, pCrack);
             worker.start();
         }
     }
@@ -101,17 +106,20 @@ class Worker extends Thread {
     int id;
     int threads;
     ArrayList<String> dictList;
+    HashMap<String, String> userPasswords;
     PasswordCrack pCrack;
 
-    public Worker(int id, int threads, ArrayList<String> dictList, PasswordCrack pCrack) {
+    public Worker(int id, int threads, ArrayList<String> dictList, HashMap<String, String> userPasswords,
+            PasswordCrack pCrack) {
         this.id = id;
         this.threads = threads;
         this.dictList = dictList;
+        this.userPasswords = userPasswords;
         this.pCrack = pCrack;
     }
 
     public void run() {
 
-        pCrack.checkPass(id, threads, dictList);
+        pCrack.crackPassword(id, threads, dictList, userPasswords);
     }
 }
