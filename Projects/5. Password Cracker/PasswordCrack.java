@@ -49,14 +49,21 @@ public class PasswordCrack {
         sc.close();
     }
 
-    public void checkPassword(String word) {
+    public void checkPassword(String word, int id) {
+
+        for (String password : userPasswords.keySet()) {
+            String hash = jcrypt.crypt(userPasswords.get(password), word);
+            if (userPasswords.containsKey(hash)) {
+                System.out.println("Thread nr: " + id + " found a match: " + word);
+            }
+        }
 
     }
 
     public void crackPassword(int id, int threads, ArrayList<String> dictList) {
 
         for (int i = id; i < dictList.size(); i += threads) {
-            checkPassword(dictList.get(i).toString());
+            checkPassword(dictList.get(i).toString(), id);
             // System.out.println("Thread nr: " + id + " word = " + word);
         }
     }
@@ -87,7 +94,7 @@ public class PasswordCrack {
         // for (int i = 0; i < dictList.size(); i++)
         // System.out.println(dictList.get(i));
 
-        System.out.println(Arrays.asList(userPasswords));
+        // System.out.println(Arrays.asList(userPasswords));
 
         int threads = 4;
 
