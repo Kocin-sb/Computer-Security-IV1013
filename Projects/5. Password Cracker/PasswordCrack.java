@@ -1,14 +1,12 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.HashMap;
 import java.util.Arrays;
 
 public class PasswordCrack {
 
     public static ArrayList<String> nameList;
-    AtomicInteger c = new AtomicInteger();
 
     public static ArrayList<String> getDict(String dictionary) throws IOException {
 
