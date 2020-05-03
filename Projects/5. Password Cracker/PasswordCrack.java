@@ -11,17 +11,15 @@ public class PasswordCrack {
 
     public static ArrayList<String> getDict(String dictionary) throws IOException {
 
-        Scanner sc = new Scanner(new File(dictionary));
         ArrayList<String> temp = new ArrayList<String>();
 
-        while (sc.hasNextLine()) {
-            temp.add(sc.nextLine());
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(dictionary))) {
+            String line;
+            while((line = bufferedReader.readLine()) != null) {
+              temp.add(line);
+            }
         }
-
-        sc.close();
-
         return temp;
-
     }
 
     public static void getPasswords(String passwords) throws IOException {
@@ -102,6 +100,8 @@ public class PasswordCrack {
          */
 
         int threads = 4;
+
+        System.out.println("Size of dictList: " + dictList.size());
 
         for (int id = 0; id < threads; id++) {
             final Worker worker = new Worker(id, threads, dictList, pCrack);
