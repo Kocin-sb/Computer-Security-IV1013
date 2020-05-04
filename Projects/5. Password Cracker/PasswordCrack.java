@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Arrays;
 
 public class PasswordCrack {
@@ -15,8 +16,8 @@ public class PasswordCrack {
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(dictionary))) {
             String line;
-            while((line = bufferedReader.readLine()) != null) {
-              temp.add(line);
+            while ((line = bufferedReader.readLine()) != null) {
+                temp.add(line);
             }
         }
         return temp;
@@ -49,11 +50,17 @@ public class PasswordCrack {
 
     public void checkPassword(String word, int id) {
 
-        for (String password : userPasswords.keySet()) {
+        Iterator<String> iterator = userPasswords.keySet().iterator();
+
+        while (iterator.hasNext()) {
+
+            String password = iterator.next();
             String hash = jcrypt.crypt(userPasswords.get(password), word);
+
             if (userPasswords.containsKey(hash)) {
                 System.out.println("Thread nr: " + id + " found a match: " + word);
             }
+
         }
 
     }
