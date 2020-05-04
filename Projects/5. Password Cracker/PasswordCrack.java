@@ -50,6 +50,7 @@ public class PasswordCrack {
 
     public void checkPassword(String word, int id) {
 
+        ArrayList<String> toRemove = new ArrayList<String>();
         Iterator<String> iterator = userPasswords.keySet().iterator();
 
         while (iterator.hasNext()) {
@@ -59,8 +60,15 @@ public class PasswordCrack {
 
             if (userPasswords.containsKey(hash)) {
                 System.out.println("Thread nr: " + id + " found a match: " + word);
+                toRemove.add(hash);
             }
-
+        }
+        while (iterator.hasNext()) {
+            String line = iterator.next();
+            for (String p : toRemove) {
+                if (line.contains(p))
+                    iterator.remove();
+            }
         }
 
     }
