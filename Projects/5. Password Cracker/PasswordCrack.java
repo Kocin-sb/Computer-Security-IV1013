@@ -1,6 +1,9 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import javafx.print.Collation;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Arrays;
@@ -9,6 +12,7 @@ public class PasswordCrack {
 
     public static ArrayList<String> nameList;
     public static HashMap<String, String> userPasswords;
+    ArrayList<String> hashes = new ArrayList<String>();
 
     public static ArrayList<String> getDict(String dictionary) throws IOException {
 
@@ -48,9 +52,8 @@ public class PasswordCrack {
         sc.close();
     }
 
-    public void checkPassword(String word, int id) {
+    public String checkPassword(String word, int id) {
 
-        ArrayList<String> toRemove = new ArrayList<String>();
         Iterator<String> iterator = userPasswords.keySet().iterator();
 
         while (iterator.hasNext()) {
@@ -59,17 +62,13 @@ public class PasswordCrack {
             String hash = jcrypt.crypt(userPasswords.get(password), word);
 
             if (userPasswords.containsKey(hash)) {
-                System.out.println("Thread nr: " + id + " found a match: " + word);
-                toRemove.add(hash);
+                if (!hashes.contains(hash)) {
+                    System.out.println("Thread nr: " + id + " found a match: " + word + ": hash: " + hash);
+                    hashes.add(hash);
+                }
             }
         }
-        while (iterator.hasNext()) {
-            String line = iterator.next();
-            for (String p : toRemove) {
-                if (line.contains(p))
-                    iterator.remove();
-            }
-        }
+        return word;
 
     }
 
@@ -79,6 +78,98 @@ public class PasswordCrack {
             checkPassword(dictList.get(i).toString(), id);
             // System.out.println("Thread nr: " + id + " word = " + word);
         }
+        if (hashes.size() != 20) {
+            crackPassword(id, threads, mangle(id, threads, dictList));
+        }
+    }
+
+    public ArrayList<String> mangle(int id, int threads, ArrayList<String> dictList) {
+
+        ArrayList<String> mangleList = new ArrayList<String>();
+
+        for (String word : dictList) {
+
+            mangleList.add(checkPassword(toLower(word), id));
+            mangleList.add(checkPassword(toUpper(word), id));
+            mangleList.add(checkPassword(capitalize(word), id));
+            mangleList.add(checkPassword(ncapitalize(word), id));
+            mangleList.add(checkPassword(reverse(word), id));
+            mangleList.add(checkPassword(mirror1(word), id));
+            mangleList.add(checkPassword(mirror2(word), id));
+            mangleList.add(checkPassword(toggle(word), id));
+            mangleList.add(checkPassword(toggle2(word), id));
+
+        }
+
+        return mangleList;
+    }
+
+    public String toUpper(String word) {
+        return word.toUpperCase();
+
+    }
+
+    public String toLower(String word) {
+        return word.toLowerCase();
+
+    }
+
+    public String deleteLast(String word) {
+        return word.substring(0, word.length() - 1);
+    }
+
+    public String deleteFirst(String word) {
+        return word.substring(1);
+    }
+
+    public String reverse(String word) {
+        return new StringBuilder(word).reverse().toString();
+    }
+
+    public String duplicate(String word) {
+        return word + word;
+    }
+
+    public String mirror1(String word) {
+        return reverse(word) + word;
+    }
+
+    public String mirror2(String word) {
+        return word + reverse(word);
+    }
+
+    public String capitalize(String word) {
+        return word.substring(0, 1).toUpperCase() + word.substring(1);
+    }
+
+    public String ncapitalize(String word) {
+        return word.substring(0, 1).toLowerCase() + word.substring(1).toUpperCase();
+    }
+
+    public String toggle(String word) {
+        String toggled = "";
+
+        for (int i = 0; i < word.length(); i++) {
+            if (i % 2 == 0) {
+                toggled += word.substring(i, i + 1).toUpperCase();
+            } else {
+                toggled += word.substring(i, i + 1);
+            }
+        }
+
+        return toggled;
+    }
+
+    public String toggle2(String word) {
+        String toggled = "";
+        for (int i = 0; i < word.length(); i++) {
+            if (i % 2 != 0) {
+                toggled += word.substring(i, i + 1).toUpperCase();
+            } else {
+                toggled += word.substring(i, i + 1);
+            }
+        }
+        return toggled;
     }
 
     public static void main(String[] args) {
@@ -114,7 +205,7 @@ public class PasswordCrack {
          * System.out.println(Arrays.asList(userPasswords));
          */
 
-        int threads = 4;
+        int threads = 24;
 
         System.out.println("Size of dictList: " + dictList.size());
 
