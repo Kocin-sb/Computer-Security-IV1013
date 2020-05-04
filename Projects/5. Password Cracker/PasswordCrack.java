@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javafx.print.Collation;
 
@@ -13,6 +14,7 @@ public class PasswordCrack {
     public static ArrayList<String> nameList;
     public static HashMap<String, String> userPasswords;
     ArrayList<String> hashes = new ArrayList<String>();
+    AtomicInteger c = new AtomicInteger();
 
     public static ArrayList<String> getDict(String dictionary) throws IOException {
 
@@ -63,7 +65,8 @@ public class PasswordCrack {
 
             if (userPasswords.containsKey(hash)) {
                 if (!hashes.contains(hash)) {
-                    System.out.println("Thread nr: " + id + " found a match: " + word + ": hash: " + hash);
+                    c.incrementAndGet();
+                    System.out.println(c + ": Thread nr: " + id + " found a match: " + word + ": hash: " + hash);
                     hashes.add(hash);
                 }
             }
