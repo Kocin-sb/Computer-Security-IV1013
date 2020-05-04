@@ -195,7 +195,28 @@ public class PasswordCrack {
 
         dictList.addAll(nameList);
 
+        // Add common passwords
+        dictList.add("1234");
+        dictList.add("12345");
+        dictList.add("123456");
+        dictList.add("1234567");
+        dictList.add("12345678");
+        dictList.add("123456789");
+        dictList.add("1234567890");
+        dictList.add("qwerty");
+        dictList.add("abc123");
+        dictList.add("111111");
+        dictList.add("1qaz2wsx");
+        dictList.add("letmein");
+        dictList.add("qwertyuiop");
+        dictList.add("starwars");
+        dictList.add("login");
+        dictList.add("passw0rd");
+
         /*
+         * for (int i = 0; i <= 999; i++) { String s = String.valueOf(i);
+         * dictList.add(s); }
+         * 
          * for (int i = 0; i < dictList.size(); i++)
          * System.out.println(dictList.get(i));
          * 
@@ -205,7 +226,7 @@ public class PasswordCrack {
          * System.out.println(Arrays.asList(userPasswords));
          */
 
-        int threads = 4;
+        int threads = 8;
 
         System.out.println("Size of dictList: " + dictList.size());
 
