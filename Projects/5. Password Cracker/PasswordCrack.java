@@ -7,7 +7,7 @@ import java.util.Arrays;
 public class PasswordCrack {
 
     public static ArrayList<String> nameList;
-    public static HashMap<String, String> userPasswords;
+    public static HashMap<String, String> globalUserPasswords;
 
     public static ArrayList<String> getDict(String dictionary) throws IOException {
 
@@ -15,17 +15,17 @@ public class PasswordCrack {
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(dictionary))) {
             String line;
-            while((line = bufferedReader.readLine()) != null) {
-              temp.add(line);
+            while ((line = bufferedReader.readLine()) != null) {
+                temp.add(line);
             }
         }
         return temp;
     }
 
-    public static void getPasswords(String passwords) throws IOException {
+    public static HashMap<String, String> getPasswords(String passwords) throws IOException {
 
         Scanner sc = new Scanner(new File(passwords));
-        userPasswords = new HashMap<String, String>();
+        HashMap<String, String> temp = new HashMap<String, String>();
         nameList = new ArrayList();
 
         String line;
@@ -39,15 +39,17 @@ public class PasswordCrack {
              * System.out.println("name = " + username[0]); System.out.println("password = "
              * + encryptedPassword); System.out.println("salt = " + salt + "\n");
              */
-            userPasswords.put(encryptedPassword, salt);
+            temp.put(encryptedPassword, salt);
 
             nameList.add(username[0]);
         }
 
         sc.close();
+
+        return temp;
     }
 
-    public void checkPassword(String word, int id) {
+    public void checkPassword(String word, HashMap<String, String> userPasswords, int id) {
 
         for (String password : userPasswords.keySet()) {
             String hash = jcrypt.crypt(userPasswords.get(password), word);
@@ -58,10 +60,10 @@ public class PasswordCrack {
 
     }
 
-    public void crackPassword(int id, int threads, ArrayList<String> dictList) {
+    public void crackPassword(int id, int threads, ArrayList<String> dictList, HashMap<String, String> userPasswords) {
 
         for (int i = id; i < dictList.size(); i += threads) {
-            checkPassword(dictList.get(i).toString(), id);
+            checkPassword(dictList.get(i).toString(), userPasswords, id);
             // System.out.println("Thread nr: " + id + " word = " + word);
         }
     }
@@ -79,15 +81,17 @@ public class PasswordCrack {
         String passwords = args[1];
 
         ArrayList<String> dictList = new ArrayList<String>();
+        HashMap<String, String> userPasswords = new HashMap<String, String>();
 
         try {
             dictList = getDict(dictionary);
-            getPasswords(passwords);
+            userPasswords = getPasswords(passwords);
 
         } catch (Exception e) {
         }
 
         dictList.addAll(nameList);
+        globalUserPasswords = userPasswords;
 
         /*
          * for (int i = 0; i < dictList.size(); i++)
@@ -104,7 +108,7 @@ public class PasswordCrack {
         System.out.println("Size of dictList: " + dictList.size());
 
         for (int id = 0; id < threads; id++) {
-            final Worker worker = new Worker(id, threads, dictList, pCrack);
+            final Worker worker = new Worker(id, threads, dictList, userPasswords, pCrack);
             worker.start();
         }
     }
@@ -115,17 +119,20 @@ class Worker extends Thread {
     int id;
     int threads;
     ArrayList<String> dictList;
+    HashMap<String, String> userPasswords;
     PasswordCrack pCrack;
 
-    public Worker(int id, int threads, ArrayList<String> dictList, PasswordCrack pCrack) {
+    public Worker(int id, int threads, ArrayList<String> dictList, HashMap<String, String> userPasswords,
+            PasswordCrack pCrack) {
         this.id = id;
         this.threads = threads;
         this.dictList = dictList;
+        this.userPasswords = userPasswords;
         this.pCrack = pCrack;
     }
 
     public void run() {
 
-        pCrack.crackPassword(id, threads, dictList);
+        pCrack.crackPassword(id, threads, dictList, userPasswords);
     }
 }
