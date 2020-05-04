@@ -1,6 +1,9 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import javafx.print.Collation;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Arrays;
@@ -202,7 +205,7 @@ public class PasswordCrack {
          * System.out.println(Arrays.asList(userPasswords));
          */
 
-        int threads = 24;
+        int threads = 4;
 
         System.out.println("Size of dictList: " + dictList.size());
 
