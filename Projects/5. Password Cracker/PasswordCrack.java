@@ -60,16 +60,13 @@ public class PasswordCrack {
             String password = iterator.next();
             String hash = jcrypt.crypt(userPasswords.get(password), word);
 
-            if (userPasswords.containsKey(hash)) {
-                if (!hashes.contains(hash)) {
-                    c.incrementAndGet();
-                    System.out.println(c + ": Thread nr: " + id + " found a match: " + word + ": hash: " + hash);
-                    hashes.add(hash);
-                }
+            if (userPasswords.containsKey(hash) && !hashes.contains(hash)) {
+                c.incrementAndGet();
+                System.out.println(c + ": Thread nr: " + id + " found a match: " + word + ": hash: " + hash);
+                hashes.add(hash);
             }
         }
         return word;
-
     }
 
     public void crackPassword(int id, int threads, ArrayList<String> dictList) {
@@ -87,17 +84,17 @@ public class PasswordCrack {
 
         ArrayList<String> mangleList = new ArrayList<String>();
 
-        for (String word : dictList) {
+        for (int i = id; i < dictList.size(); i += threads) {
 
-            mangleList.add(checkPassword(toLower(word), id));
-            mangleList.add(checkPassword(toUpper(word), id));
-            mangleList.add(checkPassword(capitalize(word), id));
-            mangleList.add(checkPassword(ncapitalize(word), id));
-            mangleList.add(checkPassword(reverse(word), id));
-            mangleList.add(checkPassword(mirror1(word), id));
-            mangleList.add(checkPassword(mirror2(word), id));
-            mangleList.add(checkPassword(toggle(word), id));
-            mangleList.add(checkPassword(toggle2(word), id));
+            mangleList.add(checkPassword(toLower(dictList.get(i).toString()), id));
+            mangleList.add(checkPassword(toUpper(dictList.get(i).toString()), id));
+            mangleList.add(checkPassword(capitalize(dictList.get(i).toString()), id));
+            mangleList.add(checkPassword(ncapitalize(dictList.get(i).toString()), id));
+            mangleList.add(checkPassword(reverse(dictList.get(i).toString()), id));
+            mangleList.add(checkPassword(mirror1(dictList.get(i).toString()), id));
+            mangleList.add(checkPassword(mirror2(dictList.get(i).toString()), id));
+            mangleList.add(checkPassword(toggle(dictList.get(i).toString()), id));
+            mangleList.add(checkPassword(toggle2(dictList.get(i).toString()), id));
 
         }
 
