@@ -47,7 +47,6 @@ public class PasswordCrack {
 
             nameList.add(username[0]);
         }
-
         sc.close();
     }
 
