@@ -68,7 +68,7 @@ public class PasswordCrack {
         return word;
     }
 
-    public void mangle(int id, int threads, ArrayList<String> dictList) {
+    public void mangle(int id, ArrayList<String> dictList) {
 
         ArrayList<String> mangleList = new ArrayList<String>();
 
@@ -85,7 +85,7 @@ public class PasswordCrack {
             mangleList.add(checkPassword(toggle2(dictList.get(i).toString()), id));
 
         }
-        mangle(id, threads, mangleList);
+        mangle(id, mangleList);
     }
 
     public String toUpper(String word) {
@@ -180,6 +180,7 @@ public class PasswordCrack {
         dictList.addAll(nameList);
 
         // Add common passwords
+        /*
         dictList.add("1234");
         dictList.add("12345");
         dictList.add("123456");
@@ -197,7 +198,6 @@ public class PasswordCrack {
         dictList.add("login");
         dictList.add("passw0rd");
 
-        /*
          * for (int i = 0; i <= 999; i++) { String s = String.valueOf(i);
          * dictList.add(s); }
          * 
@@ -245,6 +245,6 @@ class Worker extends Thread {
         }
         System.out.println("Size of splitted: " + splitted.size());
 
-        pCrack.mangle(id, threads, splitted);
-}
+        pCrack.mangle(id, splitted);
+    }
 }
