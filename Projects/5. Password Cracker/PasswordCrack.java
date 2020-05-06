@@ -72,7 +72,7 @@ public class PasswordCrack {
 
         ArrayList<String> mangleList = new ArrayList<String>();
 
-        for (int i = id; i < dictList.size(); i += threads) {
+        for (int i = 0; i < dictList.size(); i++) {
 
             mangleList.add(checkPassword(toLower(dictList.get(i).toString()), id));
             mangleList.add(checkPassword(toUpper(dictList.get(i).toString()), id));
@@ -236,11 +236,15 @@ class Worker extends Thread {
     }
 
     public void run() {
-
+        
+        ArrayList<String> splitted = new ArrayList<String>();
+        
         for (int i = id; i < dictList.size(); i += threads) {
             pCrack.checkPassword(dictList.get(i).toString(), id);
+            splitted.add(dictList.get(i).toString());
         }
-        
-        pCrack.mangle(id, threads, dictList);
+        System.out.println("Size of splitted: " + splitted.size());
+
+        pCrack.mangle(id, threads, splitted);
 }
 }
