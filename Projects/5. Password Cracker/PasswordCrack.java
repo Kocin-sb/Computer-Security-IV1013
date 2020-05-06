@@ -92,8 +92,7 @@ public class PasswordCrack {
             //System.out.println("first loop after switch : i = " + i + " word = " + word);
 
              ArrayList<String> list = new ArrayList<String>();
-            for(int j = 1; j < 4; j++) {
-                System.out.println("second loop before switch: i = " + i + ": " + word);
+            for(int j = 1; j < 10; j++) {
                 switch(j) {
 
                     case 1:
@@ -108,7 +107,38 @@ public class PasswordCrack {
                         list.add(reverse(word));
                         System.out.println("second loop: reverse: " + reverse(word));
                         break;
-
+                    case 4:
+                        list.add(toLower(word));
+                        System.out.println("second loop: toLower: " + toLower(word));
+                        break;
+                    case 5:
+                        list.add(toUpper(word));
+                        System.out.println("second loop: toUpper: " + toUpper(word));
+                        break;
+                    case 6:
+                        list.add(capitalize(word));
+                        System.out.println("second loop: capitalize: " + capitalize(word));
+                        break;
+                    case 7:
+                        list.add(ncapitalize(word));
+                        System.out.println("second loop: ncapitalize: " + ncapitalize(word));
+                        break;
+                    case 8:
+                        list.add(mirror1(word));
+                        System.out.println("second loop: mirror1: " + mirror1(word));
+                        break;
+                    case 9:
+                        list.add(mirror2(word));
+                        System.out.println("second loop: mirror2: " + mirror2(word));
+                        break;
+                    case 10:
+                        list.add(toggle(word));
+                        System.out.println("second loop: toggle: " + toggle(word));
+                        break;
+                    case 11:
+                        list.add(toggle2(word));
+                        System.out.println("second loop: toggle2: " + toggle2(word));
+                        break;
                 }
             }
 
