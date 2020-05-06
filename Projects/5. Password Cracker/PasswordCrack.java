@@ -74,21 +74,58 @@ public class PasswordCrack {
 
         for (int w = 0; w < dictList.size(); w++) {
 
-        String word = dictList.get(w).toString();
+        String word = "";
         //System.out.println(word);
 
 
-         for(int i = 1; i < 2; i++) {
+         for(int i = 1; i <= 13; i++) {
             System.out.println("first loop before switch: " + word);
             switch(i) {
-                 case 1:
-                    word = word;
+
+                case 1:
+                    word = (dictList.get(w).toString());
                 break;
                 case 2:
-                    word = duplicate(word);
-                    System.out.println("first loop: duplicate: " + word);
-                break;
-             }
+                   word = (duplicate(dictList.get(w).toString()));
+                   break;
+                case 3: 
+                    word = (reverse(dictList.get(w).toString()));
+                    break;
+                case 4:
+                    word = (toLower(dictList.get(w).toString()));
+                    break;
+                case 5:
+                    word = (toUpper(dictList.get(w).toString()));
+                    break;
+                case 6:
+                    word = (capitalize(dictList.get(w).toString()));
+                    break;
+                case 7:
+                    word = (ncapitalize(dictList.get(w).toString()));
+                    break;
+                case 8:
+                    word = (mirror1(dictList.get(w).toString()));
+                    break;
+                case 9:
+                    word = (mirror2(dictList.get(w).toString()));
+                    break;
+                case 10:
+                    word = (toggle(dictList.get(w).toString()));
+                    break;
+                case 11:
+                    word = (toggle2(dictList.get(w).toString()));
+                    break;
+                case 12:
+                    for(int e = 0; e<=9; e++) {
+                        word = (addNumberFirst(dictList.get(w).toString(), e));
+                    }
+                    break;
+                case 13:
+                    for(int e = 0; e<=9; e++) {
+                        word = (addNumberLast(dictList.get(w).toString(), e));
+                    }
+                    break;
+            }
 
              ArrayList<String> list = new ArrayList<String>();
             for(int j = 1; j <= 13; j++) {
