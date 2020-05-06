@@ -92,7 +92,7 @@ public class PasswordCrack {
             //System.out.println("first loop after switch : i = " + i + " word = " + word);
 
              ArrayList<String> list = new ArrayList<String>();
-            for(int j = 1; j < 10; j++) {
+            for(int j = 1; j <= 12; j++) {
                 switch(j) {
 
                     case 1:
@@ -139,20 +139,21 @@ public class PasswordCrack {
                         list.add(toggle2(word));
                         System.out.println("second loop: toggle2: " + toggle2(word));
                         break;
+                    case 12:
+                        for(int e = 0; e<=9; e++) {
+                            list.add(addNumberFirst(word, e));
+                            System.out.println("second loop: addNumberFirst: " + addNumberFirst(word, e));
+                        }
+                        break;
                 }
             }
+            System.out.println("Size of list: " + list.size());
 
 
             }
          }
         }
-            /*
-            if(dictList.get(i).toString().length() <= 15) {
-                for(int j = 0; j<9; j++) {
-                    mangleList.add(checkPassword(addNumberFirst(dictList.get(i).toString(), j), id));
-                    mangleList.add(checkPassword(addNumberLast(dictList.get(i).toString(), j), id));
-            }
-        }*/
+        
 
     public String addNumberFirst(String word, int i) { 
         return String.valueOf(i) + word;
