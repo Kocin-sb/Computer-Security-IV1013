@@ -65,28 +65,30 @@ public class PasswordCrack {
                 hashes.add(hash);
             }
         }
-        //System.out.println(word);
         return word;
     }
 
     public void mangle(int id, ArrayList<String> dictList) {
 
-        ArrayList<String> mangleList = new ArrayList<String>();
         //System.out.println("Thread: " + id + " Size of dict: " + dictList.size());
 
-        for (int i = 0; i < dictList.size(); i++) {
+        for (int w = 0; w < dictList.size(); w++) {
 
-            
-            mangleList.add(checkPassword(toLower(dictList.get(i).toString()), id));
-            mangleList.add(checkPassword(toUpper(dictList.get(i).toString()), id));
-            mangleList.add(checkPassword(capitalize(dictList.get(i).toString()), id));
-            mangleList.add(checkPassword(ncapitalize(dictList.get(i).toString()), id));
-            mangleList.add(checkPassword(reverse(dictList.get(i).toString()), id));
-            mangleList.add(checkPassword(mirror1(dictList.get(i).toString()), id));
-            mangleList.add(checkPassword(mirror2(dictList.get(i).toString()), id));
-            mangleList.add(checkPassword(toggle(dictList.get(i).toString()), id));
-            mangleList.add(checkPassword(toggle2(dictList.get(i).toString()), id));
-            
+        String word = dictList.get(w).toString();
+        //System.out.println(word);
+
+
+         for(int i = 1; i < 2; i++) {
+            System.out.println("first loop: " + word);
+
+ 
+            for(int j = 1; j < 2; j++) {
+                System.out.println("second loop: " + word);
+            }
+
+            }
+         }
+        }
             /*
             if(dictList.get(i).toString().length() <= 15) {
                 for(int j = 0; j<9; j++) {
@@ -94,10 +96,6 @@ public class PasswordCrack {
                     mangleList.add(checkPassword(addNumberLast(dictList.get(i).toString(), j), id));
             }
         }*/
-
-        }
-        mangle(id, mangleList);
-    }
 
     public String addNumberFirst(String word, int i) { 
         return String.valueOf(i) + word;
@@ -234,10 +232,12 @@ public class PasswordCrack {
 
         System.out.println("Size of dictList: " + dictList.size());
 
+        pCrack.mangle(1, dictList);
+            /*
         for (int id = 0; id < threads; id++) {
             final Worker worker = new Worker(id, threads, dictList, pCrack);
             worker.start();
-        }
+        }*/
     }
 }
 
