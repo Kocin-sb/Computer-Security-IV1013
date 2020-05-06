@@ -68,18 +68,7 @@ public class PasswordCrack {
         return word;
     }
 
-    public void crackPassword(int id, int threads, ArrayList<String> dictList) {
-
-        for (int i = id; i < dictList.size(); i += threads) {
-            checkPassword(dictList.get(i).toString(), id);
-            // System.out.println("Thread nr: " + id + " word = " + word);
-        }
-        if (hashes.size() != 20) {
-            crackPassword(id, threads, mangle(id, threads, dictList));
-        }
-    }
-
-    public ArrayList<String> mangle(int id, int threads, ArrayList<String> dictList) {
+    public void mangle(int id, int threads, ArrayList<String> dictList) {
 
         ArrayList<String> mangleList = new ArrayList<String>();
 
@@ -96,8 +85,7 @@ public class PasswordCrack {
             mangleList.add(checkPassword(toggle2(dictList.get(i).toString()), id));
 
         }
-
-        return mangleList;
+        mangle(id, threads, mangleList);
     }
 
     public String toUpper(String word) {
@@ -249,6 +237,10 @@ class Worker extends Thread {
 
     public void run() {
 
-        pCrack.crackPassword(id, threads, dictList);
-    }
+        for (int i = id; i < dictList.size(); i += threads) {
+            pCrack.checkPassword(dictList.get(i).toString(), id);
+        }
+        
+        pCrack.mangle(id, threads, dictList);
+}
 }
