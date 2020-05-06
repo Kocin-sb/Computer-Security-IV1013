@@ -89,10 +89,9 @@ public class PasswordCrack {
                     System.out.println("first loop: duplicate: " + word);
                 break;
              }
-            //System.out.println("first loop after switch : i = " + i + " word = " + word);
 
              ArrayList<String> list = new ArrayList<String>();
-            for(int j = 1; j <= 12; j++) {
+            for(int j = 1; j <= 13; j++) {
                 switch(j) {
 
                     case 1:
@@ -143,6 +142,12 @@ public class PasswordCrack {
                         for(int e = 0; e<=9; e++) {
                             list.add(addNumberFirst(word, e));
                             System.out.println("second loop: addNumberFirst: " + addNumberFirst(word, e));
+                        }
+                        break;
+                    case 13:
+                        for(int e = 0; e<=9; e++) {
+                            list.add(addNumberLast(word, e));
+                            System.out.println("second loop: addNumberLast: " + addNumberLast(word, e));
                         }
                         break;
                 }
