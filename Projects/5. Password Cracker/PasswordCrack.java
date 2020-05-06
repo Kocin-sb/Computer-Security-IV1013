@@ -65,15 +65,18 @@ public class PasswordCrack {
                 hashes.add(hash);
             }
         }
+        //System.out.println(word);
         return word;
     }
 
     public void mangle(int id, ArrayList<String> dictList) {
 
         ArrayList<String> mangleList = new ArrayList<String>();
+        System.out.println("Thread: " + id + " Size of dict: " + dictList.size());
 
         for (int i = 0; i < dictList.size(); i++) {
 
+            
             mangleList.add(checkPassword(toLower(dictList.get(i).toString()), id));
             mangleList.add(checkPassword(toUpper(dictList.get(i).toString()), id));
             mangleList.add(checkPassword(capitalize(dictList.get(i).toString()), id));
@@ -83,10 +86,26 @@ public class PasswordCrack {
             mangleList.add(checkPassword(mirror2(dictList.get(i).toString()), id));
             mangleList.add(checkPassword(toggle(dictList.get(i).toString()), id));
             mangleList.add(checkPassword(toggle2(dictList.get(i).toString()), id));
+            
+            if(dictList.get(i).toString().length() <= 15) {
+                for(int j = 0; j<9; j++) {
+                    mangleList.add(checkPassword(addNumberFirst(dictList.get(i).toString(), j), id));
+                    mangleList.add(checkPassword(addNumberLast(dictList.get(i).toString(), j), id));
+            }
+        }
 
         }
         mangle(id, mangleList);
     }
+
+    public String addNumberFirst(String word, int i) { 
+        return String.valueOf(i) + word;
+        }
+    
+    public String addNumberLast(String word, int i) { 
+        return word + String.valueOf(i);
+        }
+
 
     public String toUpper(String word) {
         return word.toUpperCase();
@@ -243,7 +262,7 @@ class Worker extends Thread {
             pCrack.checkPassword(dictList.get(i).toString(), id);
             splitted.add(dictList.get(i).toString());
         }
-        System.out.println("Size of splitted: " + splitted.size());
+        //System.out.println("Size of splitted: " + splitted.size());
 
         pCrack.mangle(id, splitted);
     }
