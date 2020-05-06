@@ -78,25 +78,32 @@ public class PasswordCrack {
         //System.out.println(word);
 
 
-         for(int i = 1; i < 3; i++) {
+         for(int i = 1; i < 2; i++) {
             System.out.println("first loop before switch: " + word);
             switch(i) {
                  case 1:
                     word = word;
+                break;
                 case 2:
                     word = duplicate(word);
+                    System.out.println("first loop: duplicate: " + word);
+                    break;
              }
             System.out.println("first loop after switch : i = " + i + " word = " + word);
 
  
             for(int j = 1; j < 3; j++) {
                 System.out.println("second loop before switch: " + word);
-                switch(i) {
+                switch(j) {
                     case 1:
                        word = duplicate(word);
-                       System.out.println("second loop: " + word);
+                       System.out.println("second loop: duplicate: " + word);
+                       break;
                     case 2: 
                         word = reverse(word);
+                        System.out.println("second loop: reverse: " + word);
+                        break;
+
                 }
             }
 
