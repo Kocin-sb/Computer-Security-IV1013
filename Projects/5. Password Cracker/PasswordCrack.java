@@ -87,25 +87,31 @@ public class PasswordCrack {
                 case 2:
                     word = duplicate(word);
                     System.out.println("first loop: duplicate: " + word);
-                    break;
+                break;
              }
-            System.out.println("first loop after switch : i = " + i + " word = " + word);
+            //System.out.println("first loop after switch : i = " + i + " word = " + word);
 
- 
-            for(int j = 1; j < 3; j++) {
-                System.out.println("second loop before switch: " + word);
+             ArrayList<String> list = new ArrayList<String>();
+            for(int j = 1; j < 4; j++) {
+                System.out.println("second loop before switch: i = " + i + ": " + word);
                 switch(j) {
+
                     case 1:
-                       word = duplicate(word);
-                       System.out.println("second loop: duplicate: " + word);
+                        list.add(word);
+                        System.out.println("second loop: original: " + word);
+                    break;
+                    case 2:
+                       list.add(duplicate(word));
+                       System.out.println("second loop: duplicate: " + duplicate(word));
                        break;
-                    case 2: 
-                        word = reverse(word);
-                        System.out.println("second loop: reverse: " + word);
+                    case 3: 
+                        list.add(reverse(word));
+                        System.out.println("second loop: reverse: " + reverse(word));
                         break;
 
                 }
             }
+
 
             }
          }
@@ -216,6 +222,7 @@ public class PasswordCrack {
         } catch (Exception e) {
         }
 
+        /*
         dictList.addAll(nameList);
 
         // Add common passwords
@@ -236,7 +243,6 @@ public class PasswordCrack {
         dictList.add("login");
         dictList.add("passw0rd");
         
-        /*
          * for (int i = 0; i <= 999; i++) { String s = String.valueOf(i);
          * dictList.add(s); }
          * 
