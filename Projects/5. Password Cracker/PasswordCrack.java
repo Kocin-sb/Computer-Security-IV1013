@@ -72,7 +72,7 @@ public class PasswordCrack {
     public void mangle(int id, ArrayList<String> dictList) {
 
         ArrayList<String> mangleList = new ArrayList<String>();
-        System.out.println("Thread: " + id + " Size of dict: " + dictList.size());
+        //System.out.println("Thread: " + id + " Size of dict: " + dictList.size());
 
         for (int i = 0; i < dictList.size(); i++) {
 
@@ -87,12 +87,13 @@ public class PasswordCrack {
             mangleList.add(checkPassword(toggle(dictList.get(i).toString()), id));
             mangleList.add(checkPassword(toggle2(dictList.get(i).toString()), id));
             
+            /*
             if(dictList.get(i).toString().length() <= 15) {
                 for(int j = 0; j<9; j++) {
                     mangleList.add(checkPassword(addNumberFirst(dictList.get(i).toString(), j), id));
                     mangleList.add(checkPassword(addNumberLast(dictList.get(i).toString(), j), id));
             }
-        }
+        }*/
 
         }
         mangle(id, mangleList);
@@ -199,7 +200,6 @@ public class PasswordCrack {
         dictList.addAll(nameList);
 
         // Add common passwords
-        /*
         dictList.add("1234");
         dictList.add("12345");
         dictList.add("123456");
@@ -216,7 +216,8 @@ public class PasswordCrack {
         dictList.add("starwars");
         dictList.add("login");
         dictList.add("passw0rd");
-
+        
+        /*
          * for (int i = 0; i <= 999; i++) { String s = String.valueOf(i);
          * dictList.add(s); }
          * 
@@ -262,8 +263,6 @@ class Worker extends Thread {
             pCrack.checkPassword(dictList.get(i).toString(), id);
             splitted.add(dictList.get(i).toString());
         }
-        //System.out.println("Size of splitted: " + splitted.size());
-
         pCrack.mangle(id, splitted);
     }
 }
