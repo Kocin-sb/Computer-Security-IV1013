@@ -79,9 +79,8 @@ public class PasswordCrack {
 
 
          for(int i = 1; i <= 13; i++) {
-            System.out.println("first loop before switch: " + word);
+            //System.out.println("first loop before switch: " + word);
             switch(i) {
-
                 case 1:
                     word = (dictList.get(w).toString());
                 break;
@@ -127,69 +126,68 @@ public class PasswordCrack {
                     break;
             }
 
-             ArrayList<String> list = new ArrayList<String>();
+            ArrayList<String> list = new ArrayList<String>();
             for(int j = 1; j <= 13; j++) {
                 switch(j) {
 
                     case 1:
-                        list.add(word);
-                        System.out.println("second loop: original: " + word);
+                        checkPassword(word, id);
+                        //System.out.println("second loop: original: " + word);
                     break;
                     case 2:
-                       list.add(duplicate(word));
-                       System.out.println("second loop: duplicate: " + duplicate(word));
+                       checkPassword(duplicate(word), id);
+                       //System.out.println("second loop: duplicate: " + duplicate(word));
                        break;
                     case 3: 
-                        list.add(reverse(word));
-                        System.out.println("second loop: reverse: " + reverse(word));
+                        checkPassword(reverse(word), id);
+                        //System.out.println("second loop: reverse: " + reverse(word));
                         break;
                     case 4:
-                        list.add(toLower(word));
-                        System.out.println("second loop: toLower: " + toLower(word));
+                        checkPassword(toLower(word), id);
+                        //System.out.println("second loop: toLower: " + toLower(word));
                         break;
                     case 5:
-                        list.add(toUpper(word));
-                        System.out.println("second loop: toUpper: " + toUpper(word));
+                        checkPassword(toUpper(word), id);
+                        //System.out.println("second loop: toUpper: " + toUpper(word));
                         break;
                     case 6:
-                        list.add(capitalize(word));
-                        System.out.println("second loop: capitalize: " + capitalize(word));
+                        checkPassword(capitalize(word), id);
+                        //System.out.println("second loop: capitalize: " + capitalize(word));
                         break;
                     case 7:
-                        list.add(ncapitalize(word));
-                        System.out.println("second loop: ncapitalize: " + ncapitalize(word));
+                        checkPassword(ncapitalize(word), id);
+                        //System.out.println("second loop: ncapitalize: " + ncapitalize(word));
                         break;
                     case 8:
-                        list.add(mirror1(word));
-                        System.out.println("second loop: mirror1: " + mirror1(word));
+                        checkPassword(mirror1(word), id);
+                        //System.out.println("second loop: mirror1: " + mirror1(word));
                         break;
                     case 9:
-                        list.add(mirror2(word));
-                        System.out.println("second loop: mirror2: " + mirror2(word));
+                        checkPassword(mirror2(word), id);
+                        //System.out.println("second loop: mirror2: " + mirror2(word));
                         break;
                     case 10:
-                        list.add(toggle(word));
-                        System.out.println("second loop: toggle: " + toggle(word));
+                        checkPassword(toggle(word), id);
+                        //System.out.println("second loop: toggle: " + toggle(word));
                         break;
                     case 11:
-                        list.add(toggle2(word));
-                        System.out.println("second loop: toggle2: " + toggle2(word));
+                        checkPassword(toggle2(word), id);
+                        //System.out.println("second loop: toggle2: " + toggle2(word));
                         break;
                     case 12:
                         for(int e = 0; e<=9; e++) {
-                            list.add(addNumberFirst(word, e));
-                            System.out.println("second loop: addNumberFirst: " + addNumberFirst(word, e));
+                            checkPassword(addNumberFirst(word, e), id);
+                            //System.out.println("second loop: addNumberFirst: " + addNumberFirst(word, e));
                         }
                         break;
                     case 13:
                         for(int e = 0; e<=9; e++) {
-                            list.add(addNumberLast(word, e));
-                            System.out.println("second loop: addNumberLast: " + addNumberLast(word, e));
+                            checkPassword(addNumberLast(word, e), id);
+                            //System.out.println("second loop: addNumberLast: " + addNumberLast(word, e));
                         }
                         break;
                 }
             }
-            System.out.println("Size of list: " + list.size());
 
 
             }
@@ -295,9 +293,8 @@ public class PasswordCrack {
         } catch (Exception e) {
         }
 
-        /*
         dictList.addAll(nameList);
-
+        
         // Add common passwords
         dictList.add("1234");
         dictList.add("12345");
@@ -316,6 +313,7 @@ public class PasswordCrack {
         dictList.add("login");
         dictList.add("passw0rd");
         
+        /*
          * for (int i = 0; i <= 999; i++) { String s = String.valueOf(i);
          * dictList.add(s); }
          * 
@@ -331,13 +329,12 @@ public class PasswordCrack {
         int threads = 8;
 
         System.out.println("Size of dictList: " + dictList.size());
+    
 
-        pCrack.mangle(1, dictList);
-            /*
         for (int id = 0; id < threads; id++) {
             final Worker worker = new Worker(id, threads, dictList, pCrack);
             worker.start();
-        }*/
+        }
     }
 }
 
