@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Arrays;
@@ -9,8 +10,8 @@ import java.util.Arrays;
 public class PasswordCrack {
 
     public static ArrayList<String> nameList;
-    public static HashMap<String, String> userPasswords;
     public static char[] letters = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+    public static CopyOnWriteArrayList<String> userPasswords;
     ArrayList<String> hashes = new ArrayList<String>();
     AtomicInteger c = new AtomicInteger();
 
@@ -30,9 +31,9 @@ public class PasswordCrack {
     public static void getPasswords(String passwords) throws IOException {
 
         Scanner sc = new Scanner(new File(passwords));
-        userPasswords = new HashMap<String, String>();
+        ArrayList<String> temp = new ArrayList<String>();
         nameList = new ArrayList();
-
+        
         String line;
         while (sc.hasNextLine()) {
             line = sc.nextLine();
@@ -41,26 +42,28 @@ public class PasswordCrack {
             String encryptedPassword = splitted[1];
             String[] username = splitted[4].split(" ");
             /*
-             * System.out.println("name = " + username[0]); System.out.println("password = "
-             * + encryptedPassword); System.out.println("salt = " + salt + "\n");
-             */
-            userPasswords.put(encryptedPassword, salt);
-
+            * System.out.println("name = " + username[0]); System.out.println("password = "
+            * + encryptedPassword); System.out.println("salt = " + salt + "\n");
+            */
+            temp.add(encryptedPassword);
+            
             nameList.add(username[0]);
         }
+        userPasswords = new CopyOnWriteArrayList<String>(temp); 
+
         sc.close();
     }
 
     public String checkPassword(String word, int id) {
 
-        Iterator<String> iterator = userPasswords.keySet().iterator();
+        Iterator<String> iterator = userPasswords.iterator();
 
         while (iterator.hasNext()) {
 
             String password = iterator.next();
-            String hash = jcrypt.crypt(userPasswords.get(password), word);
+            String hash = jcrypt.crypt(password, word);
 
-            if (userPasswords.containsKey(hash) && !hashes.contains(hash)) {
+            if (userPasswords.contains(hash) && !hashes.contains(hash)) {
                 c.incrementAndGet();
                 System.out.println(c + ": Thread nr: " + id + " found a match: " + word + ": hash: " + hash);
                 hashes.add(hash);
