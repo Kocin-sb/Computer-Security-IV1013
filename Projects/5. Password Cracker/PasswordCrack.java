@@ -67,6 +67,8 @@ public class PasswordCrack {
                 c.incrementAndGet();
                 System.out.println(c + ": Thread nr: " + id + " found a match: " + word + ": hash: " + hash);
                 hashes.add(hash);
+                userPasswords.remove(hash);
+                System.out.println("Length of users: " + userPasswords.size());
             }
         }
         //System.out.println(word);
