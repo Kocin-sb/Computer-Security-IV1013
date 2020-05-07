@@ -10,6 +10,7 @@ public class PasswordCrack {
 
     public static ArrayList<String> nameList;
     public static HashMap<String, String> userPasswords;
+    public static char[] letters = "abcdefghijklmnopqrstuvwxyz".toCharArray();
     ArrayList<String> hashes = new ArrayList<String>();
     AtomicInteger c = new AtomicInteger();
 
@@ -97,9 +98,35 @@ public class PasswordCrack {
                     mangleList.add(checkPassword(addNumberFirst(word, j), id));
                     mangleList.add(checkPassword(addNumberLast(word, j), id));
                 }*/
+                for(int k =0; k<26; k++) {
+                    checkPassword(addLetterLast(dictList.get(i).toString(), k), id);
+                    checkPassword(addLetterFirst(dictList.get(i).toString(), k), id);
+                    checkPassword(addLetterLastCap(dictList.get(i).toString(), k), id);
+                    checkPassword(addLetterFirstCap(dictList.get(i).toString(), k), id);
+                }
             }
         }
         mangle(id, mangleList);
+    }
+
+    public static String addLetterLast(String word, int i) {
+        char c = letters[i];
+        return word + c;
+    }
+
+    public static String addLetterFirst(String word, int i) {
+        char c = letters[i];
+        return c + word;
+    }
+
+public static String addLetterLastCap(String word, int i) {
+        String c = String.valueOf(letters[i]);
+        return word + c.toUpperCase();
+    }
+
+    public static String addLetterFirstCap(String word, int i) {
+        String c = String.valueOf(letters[i]);
+        return c.toUpperCase() + word;
     }
 
     public String addNumberFirst(String word, int i) { 
