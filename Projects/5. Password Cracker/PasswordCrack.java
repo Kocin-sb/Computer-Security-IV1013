@@ -76,25 +76,28 @@ public class PasswordCrack {
 
         for (int i = 0; i < dictList.size(); i++) {
 
-            
-            mangleList.add(checkPassword(toLower(dictList.get(i).toString()), id));
-            mangleList.add(checkPassword(toUpper(dictList.get(i).toString()), id));
-            mangleList.add(checkPassword(capitalize(dictList.get(i).toString()), id));
-            mangleList.add(checkPassword(ncapitalize(dictList.get(i).toString()), id));
-            mangleList.add(checkPassword(reverse(dictList.get(i).toString()), id));
-            mangleList.add(checkPassword(mirror1(dictList.get(i).toString()), id));
-            mangleList.add(checkPassword(mirror2(dictList.get(i).toString()), id));
-            mangleList.add(checkPassword(toggle(dictList.get(i).toString()), id));
-            mangleList.add(checkPassword(toggle2(dictList.get(i).toString()), id));
-            
-            /*
-            if(dictList.get(i).toString().length() <= 15) {
-                for(int j = 0; j<9; j++) {
-                    mangleList.add(checkPassword(addNumberFirst(dictList.get(i).toString(), j), id));
-                    mangleList.add(checkPassword(addNumberLast(dictList.get(i).toString(), j), id));
-            }
-        }*/
+            String word = dictList.get(i).toString();
 
+            mangleList.add(checkPassword(toLower(word), id));
+            mangleList.add(checkPassword(toUpper(word), id));
+            mangleList.add(checkPassword(capitalize(word), id));
+            mangleList.add(checkPassword(ncapitalize(word), id));
+            mangleList.add(checkPassword(reverse(word), id));
+            mangleList.add(checkPassword(mirror1(word), id));
+            mangleList.add(checkPassword(mirror2(word), id));
+            mangleList.add(checkPassword(toggle(word), id));
+            mangleList.add(checkPassword(toggle2(word), id));
+
+            // If the word is bigger than eight, a duplicate word or a added letter won't change the hash.
+            if (word.length() <= 8) {
+                mangleList.add(checkPassword(deleteLast(word), id));
+                mangleList.add(checkPassword(deleteFirst(word), id));
+                mangleList.add(checkPassword(duplicate(word), id));
+                /*for(int j = 0; j<9; j++) {
+                    mangleList.add(checkPassword(addNumberFirst(word, j), id));
+                    mangleList.add(checkPassword(addNumberLast(word, j), id));
+                }*/
+            }
         }
         mangle(id, mangleList);
     }
@@ -198,7 +201,7 @@ public class PasswordCrack {
         }
 
         dictList.addAll(nameList);
-
+        
         // Add common passwords
         dictList.add("1234");
         dictList.add("12345");
@@ -216,8 +219,8 @@ public class PasswordCrack {
         dictList.add("starwars");
         dictList.add("login");
         dictList.add("passw0rd");
-        
         /*
+        
          * for (int i = 0; i <= 999; i++) { String s = String.valueOf(i);
          * dictList.add(s); }
          * 
