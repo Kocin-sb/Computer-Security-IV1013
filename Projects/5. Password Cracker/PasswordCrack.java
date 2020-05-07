@@ -12,7 +12,6 @@ public class PasswordCrack {
     public static ArrayList<String> nameList;
     public static char[] letters = "abcdefghijklmnopqrstuvwxyz".toCharArray();
     public static CopyOnWriteArrayList<String> userPasswords;
-    ArrayList<String> hashes = new ArrayList<String>();
     AtomicInteger c = new AtomicInteger();
 
     public static ArrayList<String> getDict(String dictionary) throws IOException {
@@ -63,10 +62,9 @@ public class PasswordCrack {
             String password = iterator.next();
             String hash = jcrypt.crypt(password, word);
 
-            if (userPasswords.contains(hash) && !hashes.contains(hash)) {
+            if (userPasswords.contains(hash)) {
                 c.incrementAndGet();
                 System.out.println(c + ": Thread nr: " + id + " found a match: " + word + ": hash: " + hash);
-                hashes.add(hash);
                 userPasswords.remove(hash);
                 System.out.println("Length of users: " + userPasswords.size());
             }
@@ -77,12 +75,16 @@ public class PasswordCrack {
 
     public void mangle(int id, ArrayList<String> dictList) {
 
+        while(userPasswords.size() !=0) {
+
         ArrayList<String> mangleList = new ArrayList<String>();
         //System.out.println("Thread: " + id + " Size of dict: " + dictList.size());
 
         for (int i = 0; i < dictList.size(); i++) {
 
             String word = dictList.get(i).toString();
+
+            if(word.length() != 0) {
 
             mangleList.add(checkPassword(toLower(word), id));
             mangleList.add(checkPassword(toUpper(word), id));
@@ -110,8 +112,10 @@ public class PasswordCrack {
                     checkPassword(addLetterFirstCap(dictList.get(i).toString(), k), id);
                 }
             }
+            }
         }
         mangle(id, mangleList);
+    }
     }
 
     public static String addLetterLast(String word, int i) {
