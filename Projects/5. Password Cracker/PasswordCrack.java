@@ -117,7 +117,7 @@ public class PasswordCrack {
         return c + word;
     }
 
-public static String addLetterLastCap(String word, int i) {
+    public static String addLetterLastCap(String word, int i) {
         String c = String.valueOf(letters[i]);
         return word + c.toUpperCase();
     }
@@ -129,21 +129,18 @@ public static String addLetterLastCap(String word, int i) {
 
     public String addNumberFirst(String word, int i) { 
         return String.valueOf(i) + word;
-        }
+    }
     
     public String addNumberLast(String word, int i) { 
         return word + String.valueOf(i);
-        }
-
+    }
 
     public String toUpper(String word) {
         return word.toUpperCase();
-
     }
 
     public String toLower(String word) {
         return word.toLowerCase();
-
     }
 
     public String deleteLast(String word) {
@@ -188,7 +185,6 @@ public static String addLetterLastCap(String word, int i) {
                 toggled += word.substring(i, i + 1);
             }
         }
-
         return toggled;
     }
 
