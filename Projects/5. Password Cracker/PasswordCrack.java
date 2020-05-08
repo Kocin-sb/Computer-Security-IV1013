@@ -68,7 +68,7 @@ public class PasswordCrack {
         return word;
     }
 
-    public void mangle(int id, ArrayList<String> dictList) {
+    public void mangle(ArrayList<String> dictList, int id) {
 
         while(userPasswords.size() !=0) {
 
@@ -109,7 +109,7 @@ public class PasswordCrack {
             }
             }
         }
-        mangle(id, mangleList);
+        mangle(mangleList, id);
     }
     }
 
@@ -297,6 +297,6 @@ class Worker extends Thread {
             pCrack.checkPassword(dictList.get(i).toString(), id);
             splitted.add(dictList.get(i).toString());
         }
-        pCrack.mangle(id, splitted);
+        pCrack.mangle(splitted, id);
     }
 }
