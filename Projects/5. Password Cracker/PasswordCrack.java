@@ -1,17 +1,16 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PasswordCrack {
 
-    public static ArrayList<String> nameList;
-    public static char[] letters = "abcdefghijklmnopqrstuvwxyz".toCharArray();
-    public static CopyOnWriteArrayList<String> userPasswords;
     AtomicInteger c = new AtomicInteger();
+    public static ArrayList<String> nameList;
+    public static CopyOnWriteArrayList<String> userPasswords;
+    public static char[] letters = "abcdefghijklmnopqrstuvwxyz".toCharArray();
 
     public static ArrayList<String> getDict(String dictionary) throws IOException {
 
