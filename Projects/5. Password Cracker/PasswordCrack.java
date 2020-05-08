@@ -12,7 +12,7 @@ public class PasswordCrack {
     public static CopyOnWriteArrayList<String> userPasswords;
     public static char[] letters = "abcdefghijklmnopqrstuvwxyz".toCharArray();
 
-    public static ArrayList<String> getDict(String dictionary) throws IOException {
+    public static ArrayList<String> getDict(String dictionary) {
 
         ArrayList<String> temp = new ArrayList<String>();
 
@@ -21,11 +21,14 @@ public class PasswordCrack {
             while ((line = bufferedReader.readLine()) != null) {
                 temp.add(line);
             }
+        } catch(Exception e) {
+            System.out.println("\nAn error occured while reading from file " + dictionary); 
+            System.exit(1);
         }
         return temp;
     }
 
-    public static void getPasswords(String passwords) throws IOException {
+    public static void getPasswords(String passwords) {
 
         userPasswords = new CopyOnWriteArrayList<String>(); 
         nameList = new ArrayList();
@@ -42,6 +45,9 @@ public class PasswordCrack {
             
                 nameList.add(username[0]);
             }
+        } catch(Exception e) {
+            System.out.println("\nAn error occured while reading from file " + passwords); 
+            System.exit(1);
         }
     }
 
