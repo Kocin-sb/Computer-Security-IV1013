@@ -96,10 +96,10 @@ public class PasswordCrack {
                         mangleList.add(checkPassword(addNumberLast(word, j), id));
                     }*/
                     for(int k =0; k<26; k++) {
-                        checkPassword(addLetterLast(dictList.get(i).toString(), k), id);
-                        checkPassword(addLetterFirst(dictList.get(i).toString(), k), id);
-                        checkPassword(addLetterLastCap(dictList.get(i).toString(), k), id);
-                        checkPassword(addLetterFirstCap(dictList.get(i).toString(), k), id);
+                        checkPassword(addLetterLast(word, k), id);
+                        checkPassword(addLetterFirst(word, k), id);
+                        checkPassword(addLetterLastCap(word, k), id);
+                        checkPassword(addLetterFirstCap(word, k), id);
                     }
                 }
             }
