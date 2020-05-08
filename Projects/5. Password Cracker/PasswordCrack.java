@@ -30,7 +30,7 @@ public class PasswordCrack {
     public static void getPasswords(String passwords) throws IOException {
 
         Scanner sc = new Scanner(new File(passwords));
-        ArrayList<String> temp = new ArrayList<String>();
+        userPasswords = new CopyOnWriteArrayList<String>(); 
         nameList = new ArrayList();
         
         String line;
@@ -40,11 +40,10 @@ public class PasswordCrack {
             String encryptedPassword = splitted[1];
             String[] username = splitted[4].split(" ");
             
-            temp.add(encryptedPassword);
+            userPasswords.add(encryptedPassword);
             
             nameList.add(username[0]);
         }
-        userPasswords = new CopyOnWriteArrayList<String>(temp); 
 
         sc.close();
     }
