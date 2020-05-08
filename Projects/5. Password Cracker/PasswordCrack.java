@@ -220,14 +220,8 @@ public class PasswordCrack {
 
         ArrayList<String> dictList = new ArrayList<String>();
 
-        try {
-            dictList = getDict(dictionary);
-            getPasswords(passwords);
-
-        } catch (Exception e) { 
-            System.out.println("\nAn error occured while reading from file\n"); 
-            System.exit(1); 
-        }
+        dictList = getDict(dictionary);
+        getPasswords(passwords);
 
         dictList.addAll(nameList);
         
