@@ -37,13 +37,9 @@ public class PasswordCrack {
         while (sc.hasNextLine()) {
             line = sc.nextLine();
             String splitted[] = line.split(":");
-            String salt = splitted[1].substring(0, 2);
             String encryptedPassword = splitted[1];
             String[] username = splitted[4].split(" ");
-            /*
-            * System.out.println("name = " + username[0]); System.out.println("password = "
-            * + encryptedPassword); System.out.println("salt = " + salt + "\n");
-            */
+            
             temp.add(encryptedPassword);
             
             nameList.add(username[0]);
