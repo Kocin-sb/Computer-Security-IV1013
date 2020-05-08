@@ -29,23 +29,22 @@ public class PasswordCrack {
 
     public static void getPasswords(String passwords) throws IOException {
 
-        Scanner sc = new Scanner(new File(passwords));
         userPasswords = new CopyOnWriteArrayList<String>(); 
         nameList = new ArrayList();
         
-        String line;
-        while (sc.hasNextLine()) {
-            line = sc.nextLine();
-            String splitted[] = line.split(":");
-            String encryptedPassword = splitted[1];
-            String[] username = splitted[4].split(" ");
-            
-            userPasswords.add(encryptedPassword);
-            
-            nameList.add(username[0]);
-        }
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(passwords))) {
 
-        sc.close();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                String splitted[] = line.split(":");
+                String encryptedPassword = splitted[1];
+                String[] username = splitted[4].split(" ");
+            
+                userPasswords.add(encryptedPassword);
+            
+                nameList.add(username[0]);
+            }
+        }
     }
 
     public String checkPassword(String word, int id) {
