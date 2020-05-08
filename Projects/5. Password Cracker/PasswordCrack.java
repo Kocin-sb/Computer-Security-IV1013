@@ -97,10 +97,11 @@ public class PasswordCrack {
                     mangleList.add(checkPassword(deleteLast(word), id));
                     mangleList.add(checkPassword(deleteFirst(word), id));
                     mangleList.add(checkPassword(duplicate(word), id));
-                    /*for(int j = 0; j<=9; j++) {
+                    
+                    for(int j = 0; j<=9; j++) {
                         mangleList.add(checkPassword(addNumberFirst(word, j), id));
                         mangleList.add(checkPassword(addNumberLast(word, j), id));
-                    }*/
+                    }
                     for(int k =0; k<26; k++) {
                         checkPassword(addLetterLast(word, k), id);
                         checkPassword(addLetterFirst(word, k), id);
@@ -256,7 +257,7 @@ public class PasswordCrack {
          * System.out.println(Arrays.asList(userPasswords));
          */
 
-        int threads = 8;
+        int threads = 24;
 
         System.out.println("Size of dictList: " + dictList.size());
 
