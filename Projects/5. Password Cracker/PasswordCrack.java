@@ -67,8 +67,6 @@ public class PasswordCrack {
 
     public void mangle(ArrayList<String> dictList, int id) {
 
-        while(userPasswords.size() !=0) {
-
         ArrayList<String> mangleList = new ArrayList<String>();
         //System.out.println("Thread: " + id + " Size of dict: " + dictList.size());
 
@@ -78,36 +76,35 @@ public class PasswordCrack {
 
             if(word.length() != 0) {
 
-            mangleList.add(checkPassword(toLower(word), id));
-            mangleList.add(checkPassword(toUpper(word), id));
-            mangleList.add(checkPassword(capitalize(word), id));
-            mangleList.add(checkPassword(ncapitalize(word), id));
-            mangleList.add(checkPassword(reverse(word), id));
-            mangleList.add(checkPassword(mirror1(word), id));
-            mangleList.add(checkPassword(mirror2(word), id));
-            mangleList.add(checkPassword(toggle(word), id));
-            mangleList.add(checkPassword(toggle2(word), id));
+                mangleList.add(checkPassword(toLower(word), id));
+                mangleList.add(checkPassword(toUpper(word), id));
+                mangleList.add(checkPassword(capitalize(word), id));
+                mangleList.add(checkPassword(ncapitalize(word), id));
+                mangleList.add(checkPassword(reverse(word), id));
+                mangleList.add(checkPassword(mirror1(word), id));
+                mangleList.add(checkPassword(mirror2(word), id));
+                mangleList.add(checkPassword(toggle(word), id));
+                mangleList.add(checkPassword(toggle2(word), id));
 
-            // If the word is bigger than eight, a duplicate word or a added letter won't change the hash.
-            if (word.length() <= 8) {
-                mangleList.add(checkPassword(deleteLast(word), id));
-                mangleList.add(checkPassword(deleteFirst(word), id));
-                mangleList.add(checkPassword(duplicate(word), id));
-                /*for(int j = 0; j<9; j++) {
-                    mangleList.add(checkPassword(addNumberFirst(word, j), id));
-                    mangleList.add(checkPassword(addNumberLast(word, j), id));
-                }*/
-                for(int k =0; k<26; k++) {
-                    checkPassword(addLetterLast(dictList.get(i).toString(), k), id);
-                    checkPassword(addLetterFirst(dictList.get(i).toString(), k), id);
-                    checkPassword(addLetterLastCap(dictList.get(i).toString(), k), id);
-                    checkPassword(addLetterFirstCap(dictList.get(i).toString(), k), id);
+                // If the word is bigger than eight, a duplicate word or a added letter won't change the hash.
+                if (word.length() <= 8) {
+                    mangleList.add(checkPassword(deleteLast(word), id));
+                    mangleList.add(checkPassword(deleteFirst(word), id));
+                    mangleList.add(checkPassword(duplicate(word), id));
+                    /*for(int j = 0; j<9; j++) {
+                        mangleList.add(checkPassword(addNumberFirst(word, j), id));
+                        mangleList.add(checkPassword(addNumberLast(word, j), id));
+                    }*/
+                    for(int k =0; k<26; k++) {
+                        checkPassword(addLetterLast(dictList.get(i).toString(), k), id);
+                        checkPassword(addLetterFirst(dictList.get(i).toString(), k), id);
+                        checkPassword(addLetterLastCap(dictList.get(i).toString(), k), id);
+                        checkPassword(addLetterFirstCap(dictList.get(i).toString(), k), id);
+                    }
                 }
-            }
             }
         }
         mangle(mangleList, id);
-    }
     }
 
     public static String addLetterLast(String word, int i) {
