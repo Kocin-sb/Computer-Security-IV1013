@@ -1,18 +1,16 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PasswordCrack {
 
-    public static ArrayList<String> nameList;
-    public static char[] letters = "abcdefghijklmnopqrstuvwxyz".toCharArray();
-    public static CopyOnWriteArrayList<String> userPasswords;
     AtomicInteger c = new AtomicInteger();
+    public static ArrayList<String> nameList;
+    public static CopyOnWriteArrayList<String> userPasswords;
+    public static char[] letters = "abcdefghijklmnopqrstuvwxyz".toCharArray();
 
     public static ArrayList<String> getDict(String dictionary) throws IOException {
 
@@ -29,28 +27,22 @@ public class PasswordCrack {
 
     public static void getPasswords(String passwords) throws IOException {
 
-        Scanner sc = new Scanner(new File(passwords));
-        ArrayList<String> temp = new ArrayList<String>();
+        userPasswords = new CopyOnWriteArrayList<String>(); 
         nameList = new ArrayList();
         
-        String line;
-        while (sc.hasNextLine()) {
-            line = sc.nextLine();
-            String splitted[] = line.split(":");
-            String salt = splitted[1].substring(0, 2);
-            String encryptedPassword = splitted[1];
-            String[] username = splitted[4].split(" ");
-            /*
-            * System.out.println("name = " + username[0]); System.out.println("password = "
-            * + encryptedPassword); System.out.println("salt = " + salt + "\n");
-            */
-            temp.add(encryptedPassword);
-            
-            nameList.add(username[0]);
-        }
-        userPasswords = new CopyOnWriteArrayList<String>(temp); 
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(passwords))) {
 
-        sc.close();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                String splitted[] = line.split(":");
+                String encryptedPassword = splitted[1];
+                String[] username = splitted[4].split(" ");
+            
+                userPasswords.add(encryptedPassword);
+            
+                nameList.add(username[0]);
+            }
+        }
     }
 
     public String checkPassword(String word, int id) {
@@ -73,7 +65,7 @@ public class PasswordCrack {
         return word;
     }
 
-    public void mangle(int id, ArrayList<String> dictList) {
+    public void mangle(ArrayList<String> dictList, int id) {
 
         while(userPasswords.size() !=0) {
 
@@ -114,7 +106,7 @@ public class PasswordCrack {
             }
             }
         }
-        mangle(id, mangleList);
+        mangle(mangleList, id);
     }
     }
 
@@ -302,6 +294,6 @@ class Worker extends Thread {
             pCrack.checkPassword(dictList.get(i).toString(), id);
             splitted.add(dictList.get(i).toString());
         }
-        pCrack.mangle(id, splitted);
+        pCrack.mangle(splitted, id);
     }
 }
