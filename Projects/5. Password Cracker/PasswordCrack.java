@@ -218,7 +218,9 @@ public class PasswordCrack {
             dictList = getDict(dictionary);
             getPasswords(passwords);
 
-        } catch (Exception e) {
+        } catch (Exception e) { 
+            System.out.println("\nAn error occured while reading from file\n"); 
+            System.exit(1); 
         }
 
         dictList.addAll(nameList);
