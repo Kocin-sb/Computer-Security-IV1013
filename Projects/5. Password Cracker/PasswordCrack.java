@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Arrays;
@@ -9,8 +10,8 @@ import java.util.Arrays;
 public class PasswordCrack {
 
     public static ArrayList<String> nameList;
-    public static HashMap<String, String> userPasswords;
-    ArrayList<String> hashes = new ArrayList<String>();
+    public static char[] letters = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+    public static CopyOnWriteArrayList<String> userPasswords;
     AtomicInteger c = new AtomicInteger();
 
     public static ArrayList<String> getDict(String dictionary) throws IOException {
@@ -29,9 +30,9 @@ public class PasswordCrack {
     public static void getPasswords(String passwords) throws IOException {
 
         Scanner sc = new Scanner(new File(passwords));
-        userPasswords = new HashMap<String, String>();
+        ArrayList<String> temp = new ArrayList<String>();
         nameList = new ArrayList();
-
+        
         String line;
         while (sc.hasNextLine()) {
             line = sc.nextLine();
@@ -40,65 +41,111 @@ public class PasswordCrack {
             String encryptedPassword = splitted[1];
             String[] username = splitted[4].split(" ");
             /*
-             * System.out.println("name = " + username[0]); System.out.println("password = "
-             * + encryptedPassword); System.out.println("salt = " + salt + "\n");
-             */
-            userPasswords.put(encryptedPassword, salt);
-
+            * System.out.println("name = " + username[0]); System.out.println("password = "
+            * + encryptedPassword); System.out.println("salt = " + salt + "\n");
+            */
+            temp.add(encryptedPassword);
+            
             nameList.add(username[0]);
         }
+        userPasswords = new CopyOnWriteArrayList<String>(temp); 
+
         sc.close();
     }
 
     public String checkPassword(String word, int id) {
 
-        Iterator<String> iterator = userPasswords.keySet().iterator();
+        Iterator<String> iterator = userPasswords.iterator();
 
         while (iterator.hasNext()) {
 
             String password = iterator.next();
-            String hash = jcrypt.crypt(userPasswords.get(password), word);
+            String hash = jcrypt.crypt(password, word);
 
-            if (userPasswords.containsKey(hash) && !hashes.contains(hash)) {
+            if (userPasswords.contains(hash)) {
                 c.incrementAndGet();
                 System.out.println(c + ": Thread nr: " + id + " found a match: " + word + ": hash: " + hash);
-                hashes.add(hash);
+                userPasswords.remove(hash);
+                System.out.println("Length of users: " + userPasswords.size());
             }
         }
+        //System.out.println(word);
         return word;
     }
 
-    public void crackPassword(int id, int threads, ArrayList<String> dictList) {
+    public void mangle(int id, ArrayList<String> dictList) {
 
-        for (int i = id; i < dictList.size(); i += threads) {
-            checkPassword(dictList.get(i).toString(), id);
-            // System.out.println("Thread nr: " + id + " word = " + word);
-        }
-        if (hashes.size() != 20) {
-            crackPassword(id, threads, mangle(id, threads, dictList));
-        }
-    }
-
-    public ArrayList<String> mangle(int id, int threads, ArrayList<String> dictList) {
+        while(userPasswords.size() !=0) {
 
         ArrayList<String> mangleList = new ArrayList<String>();
+        //System.out.println("Thread: " + id + " Size of dict: " + dictList.size());
 
-        for (int i = id; i < dictList.size(); i += threads) {
+        for (int i = 0; i < dictList.size(); i++) {
 
-            mangleList.add(checkPassword(toLower(dictList.get(i).toString()), id));
-            mangleList.add(checkPassword(toUpper(dictList.get(i).toString()), id));
-            mangleList.add(checkPassword(capitalize(dictList.get(i).toString()), id));
-            mangleList.add(checkPassword(ncapitalize(dictList.get(i).toString()), id));
-            mangleList.add(checkPassword(reverse(dictList.get(i).toString()), id));
-            mangleList.add(checkPassword(mirror1(dictList.get(i).toString()), id));
-            mangleList.add(checkPassword(mirror2(dictList.get(i).toString()), id));
-            mangleList.add(checkPassword(toggle(dictList.get(i).toString()), id));
-            mangleList.add(checkPassword(toggle2(dictList.get(i).toString()), id));
+            String word = dictList.get(i).toString();
 
+            if(word.length() != 0) {
+
+            mangleList.add(checkPassword(toLower(word), id));
+            mangleList.add(checkPassword(toUpper(word), id));
+            mangleList.add(checkPassword(capitalize(word), id));
+            mangleList.add(checkPassword(ncapitalize(word), id));
+            mangleList.add(checkPassword(reverse(word), id));
+            mangleList.add(checkPassword(mirror1(word), id));
+            mangleList.add(checkPassword(mirror2(word), id));
+            mangleList.add(checkPassword(toggle(word), id));
+            mangleList.add(checkPassword(toggle2(word), id));
+
+            // If the word is bigger than eight, a duplicate word or a added letter won't change the hash.
+            if (word.length() <= 8) {
+                mangleList.add(checkPassword(deleteLast(word), id));
+                mangleList.add(checkPassword(deleteFirst(word), id));
+                mangleList.add(checkPassword(duplicate(word), id));
+                /*for(int j = 0; j<9; j++) {
+                    mangleList.add(checkPassword(addNumberFirst(word, j), id));
+                    mangleList.add(checkPassword(addNumberLast(word, j), id));
+                }*/
+                for(int k =0; k<26; k++) {
+                    checkPassword(addLetterLast(dictList.get(i).toString(), k), id);
+                    checkPassword(addLetterFirst(dictList.get(i).toString(), k), id);
+                    checkPassword(addLetterLastCap(dictList.get(i).toString(), k), id);
+                    checkPassword(addLetterFirstCap(dictList.get(i).toString(), k), id);
+                }
+            }
+            }
+        }
+        mangle(id, mangleList);
+    }
+    }
+
+    public static String addLetterLast(String word, int i) {
+        char c = letters[i];
+        return word + c;
+    }
+
+    public static String addLetterFirst(String word, int i) {
+        char c = letters[i];
+        return c + word;
+    }
+
+public static String addLetterLastCap(String word, int i) {
+        String c = String.valueOf(letters[i]);
+        return word + c.toUpperCase();
+    }
+
+    public static String addLetterFirstCap(String word, int i) {
+        String c = String.valueOf(letters[i]);
+        return c.toUpperCase() + word;
+    }
+
+    public String addNumberFirst(String word, int i) { 
+        return String.valueOf(i) + word;
+        }
+    
+    public String addNumberLast(String word, int i) { 
+        return word + String.valueOf(i);
         }
 
-        return mangleList;
-    }
 
     public String toUpper(String word) {
         return word.toUpperCase();
@@ -190,7 +237,7 @@ public class PasswordCrack {
         }
 
         dictList.addAll(nameList);
-
+        
         // Add common passwords
         dictList.add("1234");
         dictList.add("12345");
@@ -208,8 +255,8 @@ public class PasswordCrack {
         dictList.add("starwars");
         dictList.add("login");
         dictList.add("passw0rd");
-
         /*
+        
          * for (int i = 0; i <= 999; i++) { String s = String.valueOf(i);
          * dictList.add(s); }
          * 
@@ -248,7 +295,13 @@ class Worker extends Thread {
     }
 
     public void run() {
-
-        pCrack.crackPassword(id, threads, dictList);
+        
+        ArrayList<String> splitted = new ArrayList<String>();
+        
+        for (int i = id; i < dictList.size(); i += threads) {
+            pCrack.checkPassword(dictList.get(i).toString(), id);
+            splitted.add(dictList.get(i).toString());
+        }
+        pCrack.mangle(id, splitted);
     }
 }
