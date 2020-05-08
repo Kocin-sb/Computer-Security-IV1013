@@ -97,7 +97,7 @@ public class PasswordCrack {
                     mangleList.add(checkPassword(deleteLast(word), id));
                     mangleList.add(checkPassword(deleteFirst(word), id));
                     mangleList.add(checkPassword(duplicate(word), id));
-                    /*for(int j = 0; j<9; j++) {
+                    /*for(int j = 0; j<=9; j++) {
                         mangleList.add(checkPassword(addNumberFirst(word, j), id));
                         mangleList.add(checkPassword(addNumberLast(word, j), id));
                     }*/
