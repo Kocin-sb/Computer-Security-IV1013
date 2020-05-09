@@ -100,8 +100,7 @@ public class PasswordCrack {
                 mangleList.add(checkPassword(toggle(word), id));
                 mangleList.add(checkPassword(toggle2(word), id));
 
-                // If the word is bigger than eight, a duplicate word or a added letter won't
-                // change the hash.
+                // If the word is bigger than eight, a duplicate word or a added letter won't change the hash.
                 if (word.length() <= 8) {
                     mangleList.add(checkPassword(deleteLast(word), id));
                     mangleList.add(checkPassword(deleteFirst(word), id));
