@@ -61,10 +61,11 @@ public class PasswordCrack {
             String hash = jcrypt.crypt(password, word);
 
             if (userPasswords.contains(hash)) {
-                c.incrementAndGet();
-                System.out.println(c + ": Thread nr: " + id + " found a match: " + word + ": hash: " + hash);
+                //c.incrementAndGet();
+                //System.out.println(c + ": Thread nr: " + id + " found a match: " + word + ": hash: " + hash);
+                System.out.println(word);
                 userPasswords.remove(hash);
-                System.out.println("Length of users: " + userPasswords.size());
+                //System.out.println("Length of users: " + userPasswords.size());
             }
         }
         return word;
@@ -253,9 +254,9 @@ public class PasswordCrack {
    
         int threads = Runtime.getRuntime().availableProcessors();
 
-        System.out.println("Size of dictList: " + dictList.size());
+        //System.out.println("Size of dictList: " + dictList.size());
 
-        System.out.println("Nr of threads: " + threads);
+        //System.out.println("Nr of threads: " + threads);
 
         for (int id = 0; id < threads; id++) {
             final Worker worker = new Worker(id, threads, dictList, pCrack);
