@@ -104,10 +104,10 @@ public class PasswordCrack {
                      * j), id)); mangleList.add(checkPassword(addNumberLast(word, j), id)); }
                      */
                     for (int k = 0; k < 26; k++) {
-                        checkPassword(addLetterLast(word, k), id);
-                        checkPassword(addLetterFirst(word, k), id);
-                        checkPassword(addLetterLastCap(word, k), id);
-                        checkPassword(addLetterFirstCap(word, k), id);
+                        mangleList.add(checkPassword(addLetterLast(word, k), id));
+                        mangleList.add(checkPassword(addLetterFirst(word, k), id));
+                        mangleList.add(checkPassword(addLetterLastCap(word, k), id));
+                        mangleList.add(checkPassword(addLetterFirstCap(word, k), id));
                     }
                 }
             }
