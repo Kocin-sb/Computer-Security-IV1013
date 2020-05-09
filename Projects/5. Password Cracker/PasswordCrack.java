@@ -99,10 +99,11 @@ public class PasswordCrack {
                     mangleList.add(checkPassword(deleteFirst(word), id));
                     mangleList.add(checkPassword(duplicate(word), id));
 
-                    /*
-                     * for(int j = 0; j<=9; j++) { mangleList.add(checkPassword(addNumberFirst(word,
-                     * j), id)); mangleList.add(checkPassword(addNumberLast(word, j), id)); }
-                     */
+                    for (int j = 0; j <= 9; j++) {
+                        checkPassword(addNumberFirst(word, j), id);
+                        checkPassword(addNumberLast(word, j), id);
+                    }
+
                     for (int k = 0; k < 26; k++) {
                         checkPassword(addLetterLast(word, k), id);
                         checkPassword(addLetterFirst(word, k), id);
