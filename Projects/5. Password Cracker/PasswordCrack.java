@@ -99,10 +99,11 @@ public class PasswordCrack {
                     mangleList.add(checkPassword(deleteFirst(word), id));
                     mangleList.add(checkPassword(duplicate(word), id));
 
-                    /*
-                     * for(int j = 0; j<=9; j++) { mangleList.add(checkPassword(addNumberFirst(word,
-                     * j), id)); mangleList.add(checkPassword(addNumberLast(word, j), id)); }
-                     */
+                    for (int j = 0; j <= 9; j++) {
+                        checkPassword(addNumberFirst(word, j), id);
+                        checkPassword(addNumberLast(word, j), id);
+                    }
+
                     for (int k = 0; k < 26; k++) {
                         checkPassword(addLetterLast(word, k), id);
                         checkPassword(addLetterFirst(word, k), id);
@@ -208,6 +209,29 @@ public class PasswordCrack {
         return toggled;
     }
 
+    public static ArrayList<String> addCommons(ArrayList<String> temp) {
+
+        // Add common passwords
+        temp.add("1234");
+        temp.add("12345");
+        temp.add("123456");
+        temp.add("1234567");
+        temp.add("12345678");
+        temp.add("123456789");
+        temp.add("1234567890");
+        temp.add("qwerty");
+        temp.add("abc123");
+        temp.add("111111");
+        temp.add("1qaz2wsx");
+        temp.add("letmein");
+        temp.add("qwertyuiop");
+        temp.add("starwars");
+        temp.add("login");
+        temp.add("passw0rd");
+
+        return temp;
+    }
+
     public static void main(String[] args) {
 
         if (args.length != 2) {
@@ -227,37 +251,8 @@ public class PasswordCrack {
 
         dictList.addAll(nameList);
 
-        // Add common passwords
-        dictList.add("1234");
-        dictList.add("12345");
-        dictList.add("123456");
-        dictList.add("1234567");
-        dictList.add("12345678");
-        dictList.add("123456789");
-        dictList.add("1234567890");
-        dictList.add("qwerty");
-        dictList.add("abc123");
-        dictList.add("111111");
-        dictList.add("1qaz2wsx");
-        dictList.add("letmein");
-        dictList.add("qwertyuiop");
-        dictList.add("starwars");
-        dictList.add("login");
-        dictList.add("passw0rd");
-        /*
-         * 
-         * for (int i = 0; i <= 999; i++) { String s = String.valueOf(i);
-         * dictList.add(s); }
-         * 
-         * for (int i = 0; i < dictList.size(); i++)
-         * System.out.println(dictList.get(i));
-         * 
-         * for (int i = 0; i < nameList.size(); i++)
-         * System.out.println(nameList.get(i));
-         * 
-         * System.out.println(Arrays.asList(userPasswords));
-         */
-
+        dictList = addCommons(dictList);
+   
         int threads = Runtime.getRuntime().availableProcessors();
 
         System.out.println("Size of dictList: " + dictList.size());
