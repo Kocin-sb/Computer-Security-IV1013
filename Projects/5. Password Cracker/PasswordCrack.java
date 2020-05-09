@@ -1,13 +1,25 @@
+/*  This program cracks passwords with a dictionary brute force attack. Each word in the dictionary
+    is hashed and compared to all encrypted entries in a given password file. After the initial search thru 
+    each word is mangled with a number of algorithms. The mangled wordlist is then once again searched for matches
+    and recursively mangles itself. The program has support for multithreading. The dictionary file is splitted up
+    equally amongst the number of threads and each thread searches and mangles its own part of the dictionary. 
+    
+    Usage under UNIX: 
+        javac PasswordCrack.java
+        java PasswordCrack <dictionary> <passwd>
+    
+    @author Emil Stahl
+    Date: May 09, 2020
+*/
+
 import java.io.*;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class PasswordCrack {
 
-    AtomicInteger c = new AtomicInteger();
     public static ArrayList<String> nameList;
     public static CopyOnWriteArrayList<String> userPasswords;
     public static char[] letters = "abcdefghijklmnopqrstuvwxyz".toCharArray();
@@ -61,11 +73,8 @@ public class PasswordCrack {
             String hash = jcrypt.crypt(password, word);
 
             if (userPasswords.contains(hash)) {
-                //c.incrementAndGet();
-                //System.out.println(c + ": Thread nr: " + id + " found a match: " + word + ": hash: " + hash);
                 System.out.println(word);
                 userPasswords.remove(hash);
-                //System.out.println("Length of users: " + userPasswords.size());
             }
         }
         return word;
@@ -91,8 +100,7 @@ public class PasswordCrack {
                 mangleList.add(checkPassword(toggle(word), id));
                 mangleList.add(checkPassword(toggle2(word), id));
 
-                // If the word is bigger than eight, a duplicate word or a added letter won't
-                // change the hash.
+                // If the word is bigger than eight, a duplicate word or a added letter won't change the hash.
                 if (word.length() <= 8) {
                     mangleList.add(checkPassword(deleteLast(word), id));
                     mangleList.add(checkPassword(deleteFirst(word), id));
@@ -253,10 +261,6 @@ public class PasswordCrack {
         dictList = addCommons(dictList);
    
         int threads = Runtime.getRuntime().availableProcessors();
-
-        //System.out.println("Size of dictList: " + dictList.size());
-
-        //System.out.println("Nr of threads: " + threads);
 
         for (int id = 0; id < threads; id++) {
             final Worker worker = new Worker(id, threads, dictList, pCrack);
