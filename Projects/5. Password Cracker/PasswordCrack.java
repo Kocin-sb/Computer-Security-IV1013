@@ -20,7 +20,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class PasswordCrack {
 
-    AtomicInteger c = new AtomicInteger();
     public static ArrayList<String> nameList;
     public static CopyOnWriteArrayList<String> userPasswords;
     public static char[] letters = "abcdefghijklmnopqrstuvwxyz".toCharArray();
