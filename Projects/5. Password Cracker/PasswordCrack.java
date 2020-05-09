@@ -73,11 +73,8 @@ public class PasswordCrack {
             String hash = jcrypt.crypt(password, word);
 
             if (userPasswords.contains(hash)) {
-                //c.incrementAndGet();
-                //System.out.println(c + ": Thread nr: " + id + " found a match: " + word + ": hash: " + hash);
                 System.out.println(word);
                 userPasswords.remove(hash);
-                //System.out.println("Length of users: " + userPasswords.size());
             }
         }
         return word;
