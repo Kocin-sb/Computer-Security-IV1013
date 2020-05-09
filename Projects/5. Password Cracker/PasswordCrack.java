@@ -262,10 +262,6 @@ public class PasswordCrack {
    
         int threads = Runtime.getRuntime().availableProcessors();
 
-        //System.out.println("Size of dictList: " + dictList.size());
-
-        //System.out.println("Nr of threads: " + threads);
-
         for (int id = 0; id < threads; id++) {
             final Worker worker = new Worker(id, threads, dictList, pCrack);
             worker.start();
