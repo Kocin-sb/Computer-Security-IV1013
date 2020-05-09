@@ -12,7 +12,7 @@ public class PasswordCrack {
     public static CopyOnWriteArrayList<String> userPasswords;
     public static char[] letters = "abcdefghijklmnopqrstuvwxyz".toCharArray();
 
-    public static ArrayList<String> getDict(String dictionary) throws IOException {
+    public static ArrayList<String> getDict(String dictionary) {
 
         ArrayList<String> temp = new ArrayList<String>();
 
@@ -21,11 +21,14 @@ public class PasswordCrack {
             while ((line = bufferedReader.readLine()) != null) {
                 temp.add(line);
             }
+        } catch(Exception e) {
+            System.out.println("\nAn error occured while reading from file " + dictionary); 
+            System.exit(1);
         }
         return temp;
     }
 
-    public static void getPasswords(String passwords) throws IOException {
+    public static void getPasswords(String passwords) {
 
         userPasswords = new CopyOnWriteArrayList<String>(); 
         nameList = new ArrayList();
@@ -42,6 +45,9 @@ public class PasswordCrack {
             
                 nameList.add(username[0]);
             }
+        } catch(Exception e) {
+            System.out.println("\nAn error occured while reading from file " + passwords); 
+            System.exit(1);
         }
     }
 
@@ -67,8 +73,6 @@ public class PasswordCrack {
 
     public void mangle(ArrayList<String> dictList, int id) {
 
-        while(userPasswords.size() !=0) {
-
         ArrayList<String> mangleList = new ArrayList<String>();
         //System.out.println("Thread: " + id + " Size of dict: " + dictList.size());
 
@@ -78,36 +82,36 @@ public class PasswordCrack {
 
             if(word.length() != 0) {
 
-            mangleList.add(checkPassword(toLower(word), id));
-            mangleList.add(checkPassword(toUpper(word), id));
-            mangleList.add(checkPassword(capitalize(word), id));
-            mangleList.add(checkPassword(ncapitalize(word), id));
-            mangleList.add(checkPassword(reverse(word), id));
-            mangleList.add(checkPassword(mirror1(word), id));
-            mangleList.add(checkPassword(mirror2(word), id));
-            mangleList.add(checkPassword(toggle(word), id));
-            mangleList.add(checkPassword(toggle2(word), id));
+                mangleList.add(checkPassword(toLower(word), id));
+                mangleList.add(checkPassword(toUpper(word), id));
+                mangleList.add(checkPassword(capitalize(word), id));
+                mangleList.add(checkPassword(ncapitalize(word), id));
+                mangleList.add(checkPassword(reverse(word), id));
+                mangleList.add(checkPassword(mirror1(word), id));
+                mangleList.add(checkPassword(mirror2(word), id));
+                mangleList.add(checkPassword(toggle(word), id));
+                mangleList.add(checkPassword(toggle2(word), id));
 
-            // If the word is bigger than eight, a duplicate word or a added letter won't change the hash.
-            if (word.length() <= 8) {
-                mangleList.add(checkPassword(deleteLast(word), id));
-                mangleList.add(checkPassword(deleteFirst(word), id));
-                mangleList.add(checkPassword(duplicate(word), id));
-                /*for(int j = 0; j<9; j++) {
-                    mangleList.add(checkPassword(addNumberFirst(word, j), id));
-                    mangleList.add(checkPassword(addNumberLast(word, j), id));
-                }*/
-                for(int k =0; k<26; k++) {
-                    checkPassword(addLetterLast(dictList.get(i).toString(), k), id);
-                    checkPassword(addLetterFirst(dictList.get(i).toString(), k), id);
-                    checkPassword(addLetterLastCap(dictList.get(i).toString(), k), id);
-                    checkPassword(addLetterFirstCap(dictList.get(i).toString(), k), id);
+                // If the word is bigger than eight, a duplicate word or a added letter won't change the hash.
+                if (word.length() <= 8) {
+                    mangleList.add(checkPassword(deleteLast(word), id));
+                    mangleList.add(checkPassword(deleteFirst(word), id));
+                    mangleList.add(checkPassword(duplicate(word), id));
+                    
+                    /*for(int j = 0; j<=9; j++) {
+                        mangleList.add(checkPassword(addNumberFirst(word, j), id));
+                        mangleList.add(checkPassword(addNumberLast(word, j), id));
+                    }*/
+                    for(int k =0; k<26; k++) {
+                        checkPassword(addLetterLast(word, k), id);
+                        checkPassword(addLetterFirst(word, k), id);
+                        checkPassword(addLetterLastCap(word, k), id);
+                        checkPassword(addLetterFirstCap(word, k), id);
+                    }
                 }
-            }
             }
         }
         mangle(mangleList, id);
-    }
     }
 
     public static String addLetterLast(String word, int i) {
@@ -120,7 +124,7 @@ public class PasswordCrack {
         return c + word;
     }
 
-public static String addLetterLastCap(String word, int i) {
+    public static String addLetterLastCap(String word, int i) {
         String c = String.valueOf(letters[i]);
         return word + c.toUpperCase();
     }
@@ -132,21 +136,18 @@ public static String addLetterLastCap(String word, int i) {
 
     public String addNumberFirst(String word, int i) { 
         return String.valueOf(i) + word;
-        }
+    }
     
     public String addNumberLast(String word, int i) { 
         return word + String.valueOf(i);
-        }
-
+    }
 
     public String toUpper(String word) {
         return word.toUpperCase();
-
     }
 
     public String toLower(String word) {
         return word.toLowerCase();
-
     }
 
     public String deleteLast(String word) {
@@ -191,7 +192,6 @@ public static String addLetterLastCap(String word, int i) {
                 toggled += word.substring(i, i + 1);
             }
         }
-
         return toggled;
     }
 
@@ -209,7 +209,7 @@ public static String addLetterLastCap(String word, int i) {
 
     public static void main(String[] args) {
 
-        if (args.length < 2) {
+        if (args.length != 2) {
             System.out.println("Usage: <dictionary> <passwords>");
             System.exit(1);
         }
@@ -221,12 +221,8 @@ public static String addLetterLastCap(String word, int i) {
 
         ArrayList<String> dictList = new ArrayList<String>();
 
-        try {
-            dictList = getDict(dictionary);
-            getPasswords(passwords);
-
-        } catch (Exception e) {
-        }
+        dictList = getDict(dictionary);
+        getPasswords(passwords);
 
         dictList.addAll(nameList);
         
@@ -261,7 +257,7 @@ public static String addLetterLastCap(String word, int i) {
          * System.out.println(Arrays.asList(userPasswords));
          */
 
-        int threads = 8;
+        int threads = 24;
 
         System.out.println("Size of dictList: " + dictList.size());
 
