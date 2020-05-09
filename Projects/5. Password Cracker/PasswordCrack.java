@@ -67,14 +67,12 @@ public class PasswordCrack {
                 System.out.println("Length of users: " + userPasswords.size());
             }
         }
-        // System.out.println(word);
         return word;
     }
 
     public void mangle(ArrayList<String> dictList, int id) {
 
         ArrayList<String> mangleList = new ArrayList<String>();
-        // System.out.println("Thread: " + id + " Size of dict: " + dictList.size());
 
         for (int i = 0; i < dictList.size(); i++) {
 
