@@ -1,3 +1,17 @@
+/*  This program cracks passwords with a dictionary brute force attack. Each word in the dictionary
+    is hashed and compared to all encrypted entries in a given password file. After the initial search thru 
+    each word is mangled with a number of algorithms. The mangled wordlist is then once again searched for matches
+    and recursively mangles itself. The program has support for multithreading. The dictionary file is splitted up
+    equally amongst the number of threads and each thread searches and mangles its own part of the dictionary. 
+    
+    Usage under UNIX: 
+        javac PasswordCrack.java
+        java PasswordCrack <dictionary> <passwd>
+    
+    @author Emil Stahl
+    Date: May 09, 2020
+*/
+
 import java.io.*;
 import java.util.Arrays;
 import java.util.ArrayList;
