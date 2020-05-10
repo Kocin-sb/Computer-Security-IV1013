@@ -154,17 +154,15 @@ public class PasswordCrack {
 
         PasswordCrack pCrack = new PasswordCrack();
         Algorithms algorithms = new Algorithms();
+        ArrayList<String> dictList = new ArrayList<String>();
 
         String dictionary = args[0];
         String passwords = args[1];
-
-        ArrayList<String> dictList = new ArrayList<String>();
-
+        
         dictList = getDict(dictionary);
         getPasswords(passwords);
 
         dictList.addAll(nameList);
-
         dictList = addCommons(dictList);
    
         int threads = Runtime.getRuntime().availableProcessors();
