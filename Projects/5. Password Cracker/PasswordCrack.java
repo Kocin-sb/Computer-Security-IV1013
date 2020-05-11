@@ -22,7 +22,6 @@ public class PasswordCrack {
 
     public static ArrayList<String> nameList;
     public static CopyOnWriteArrayList<String> userPasswords;
-    public static char[] letters = "abcdefghijklmnopqrstuvwxyz".toCharArray();
 
     public static ArrayList<String> getDict(String dictionary) {
 
@@ -80,7 +79,7 @@ public class PasswordCrack {
         return word;
     }
 
-    public void mangle(ArrayList<String> dictList, int id) {
+    public void mangle(ArrayList<String> dictList, int id, Algorithms algorithms) {
 
         ArrayList<String> mangleList = new ArrayList<String>();
 
@@ -90,55 +89,143 @@ public class PasswordCrack {
 
             if (word.length() != 0) {
 
-                mangleList.add(checkPassword(toLower(word), id));
-                mangleList.add(checkPassword(toUpper(word), id));
-                mangleList.add(checkPassword(capitalize(word), id));
-                mangleList.add(checkPassword(ncapitalize(word), id));
-                mangleList.add(checkPassword(reverse(word), id));
-                mangleList.add(checkPassword(mirror1(word), id));
-                mangleList.add(checkPassword(mirror2(word), id));
-                mangleList.add(checkPassword(toggle(word), id));
-                mangleList.add(checkPassword(toggle2(word), id));
+                mangleList.add(checkPassword(algorithms.toLower(word), id));
+                mangleList.add(checkPassword(algorithms.toUpper(word), id));
+                mangleList.add(checkPassword(algorithms.capitalize(word), id));
+                mangleList.add(checkPassword(algorithms.ncapitalize(word), id));
+                mangleList.add(checkPassword(algorithms.reverse(word), id));
+                mangleList.add(checkPassword(algorithms.mirror1(word), id));
+                mangleList.add(checkPassword(algorithms.mirror2(word), id));
+                mangleList.add(checkPassword(algorithms.toggle(word), id));
+                mangleList.add(checkPassword(algorithms.toggle2(word), id));
 
                 // If the word is bigger than eight, a duplicate word or a added letter won't change the hash.
                 if (word.length() <= 8) {
-                    mangleList.add(checkPassword(deleteLast(word), id));
-                    mangleList.add(checkPassword(deleteFirst(word), id));
-                    mangleList.add(checkPassword(duplicate(word), id));
+                    mangleList.add(checkPassword(algorithms.deleteLast(word), id));
+                    mangleList.add(checkPassword(algorithms.deleteFirst(word), id));
+                    mangleList.add(checkPassword(algorithms.duplicate(word), id));
 
                     for (int j = 0; j <= 9; j++) {
-                        checkPassword(addNumberFirst(word, j), id);
-                        checkPassword(addNumberLast(word, j), id);
+                        checkPassword(algorithms.addNumberFirst(word, j), id);
+                        checkPassword(algorithms.addNumberLast(word, j), id);
                     }
 
                     for (int k = 0; k < 26; k++) {
-                        checkPassword(addLetterLast(word, k), id);
-                        checkPassword(addLetterFirst(word, k), id);
-                        checkPassword(addLetterLastCap(word, k), id);
-                        checkPassword(addLetterFirstCap(word, k), id);
+                        checkPassword(algorithms.addLetterLast(word, k), id);
+                        checkPassword(algorithms.addLetterFirst(word, k), id);
+                        checkPassword(algorithms.addLetterLastCap(word, k), id);
+                        checkPassword(algorithms.addLetterFirstCap(word, k), id);
                     }
                 }
             }
         }
-        mangle(mangleList, id);
+        mangle(mangleList, id, algorithms);
     }
 
-    public static String addLetterLast(String word, int i) {
+    public static ArrayList<String> addCommons(ArrayList<String> temp) {
+
+        // Add common passwords
+        temp.add("1234");
+        temp.add("12345");
+        temp.add("123456");
+        temp.add("1234567");
+        temp.add("12345678");
+        temp.add("123456789");
+        temp.add("1234567890");
+        temp.add("qwerty");
+        temp.add("abc123");
+        temp.add("111111");
+        temp.add("1qaz2wsx");
+        temp.add("letmein");
+        temp.add("qwertyuiop");
+        temp.add("starwars");
+        temp.add("login");
+        temp.add("passw0rd");
+
+        return temp;
+    }
+
+    public static void main(String[] args) {
+
+        if (args.length != 2) {
+            System.out.println("Usage: <dictionary> <passwords>");
+            System.exit(1);
+        }
+
+        PasswordCrack pCrack = new PasswordCrack();
+        Algorithms algorithms = new Algorithms();
+        ArrayList<String> dictList = new ArrayList<String>();
+
+        String dictionary = args[0];
+        String passwords = args[1];
+        
+        dictList = getDict(dictionary);
+        getPasswords(passwords);
+
+        dictList.addAll(nameList);
+        dictList = addCommons(dictList);
+   
+        int threads = Runtime.getRuntime().availableProcessors();
+
+        for (int id = 0; id < threads; id++) {
+            final Worker worker = new Worker(id, threads, dictList, pCrack, algorithms);
+            worker.start();
+        }
+    }
+}
+
+class Worker extends Thread {
+
+    int id;
+    int threads;
+    ArrayList<String> dictList;
+    PasswordCrack pCrack;
+    Algorithms algorithms;
+
+    public Worker(int id, int threads, ArrayList<String> dictList, PasswordCrack pCrack, Algorithms algorithms) {
+        this.id = id;
+        this.threads = threads;
+        this.dictList = dictList;
+        this.pCrack = pCrack;
+        this.algorithms = algorithms;
+    }
+
+    public void run() {
+
+        ArrayList<String> splitted = new ArrayList<String>();
+
+        for (int i = id; i < dictList.size(); i += threads) {
+            pCrack.checkPassword(dictList.get(i).toString(), id);
+            splitted.add(dictList.get(i).toString());
+        }
+        pCrack.mangle(splitted, id, algorithms);
+    }
+}
+
+class Algorithms {
+
+    public static char[] letters = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+
+    public void algorithms() {
+
+    }
+
+    public String addLetterLast(String word, int i) {
         char c = letters[i];
         return word + c;
     }
 
-    public static String addLetterFirst(String word, int i) {
+    public String addLetterFirst(String word, int i) {
         char c = letters[i];
         return c + word;
     }
 
-    public static String addLetterLastCap(String word, int i) {
+    public String addLetterLastCap(String word, int i) {
         String c = String.valueOf(letters[i]);
         return word + c.toUpperCase();
     }
 
-    public static String addLetterFirstCap(String word, int i) {
+    public String addLetterFirstCap(String word, int i) {
         String c = String.valueOf(letters[i]);
         return c.toUpperCase() + word;
     }
@@ -214,83 +301,5 @@ public class PasswordCrack {
             }
         }
         return toggled;
-    }
-
-    public static ArrayList<String> addCommons(ArrayList<String> temp) {
-
-        // Add common passwords
-        temp.add("1234");
-        temp.add("12345");
-        temp.add("123456");
-        temp.add("1234567");
-        temp.add("12345678");
-        temp.add("123456789");
-        temp.add("1234567890");
-        temp.add("qwerty");
-        temp.add("abc123");
-        temp.add("111111");
-        temp.add("1qaz2wsx");
-        temp.add("letmein");
-        temp.add("qwertyuiop");
-        temp.add("starwars");
-        temp.add("login");
-        temp.add("passw0rd");
-
-        return temp;
-    }
-
-    public static void main(String[] args) {
-
-        if (args.length != 2) {
-            System.out.println("Usage: <dictionary> <passwords>");
-            System.exit(1);
-        }
-
-        PasswordCrack pCrack = new PasswordCrack();
-
-        String dictionary = args[0];
-        String passwords = args[1];
-
-        ArrayList<String> dictList = new ArrayList<String>();
-
-        dictList = getDict(dictionary);
-        getPasswords(passwords);
-
-        dictList.addAll(nameList);
-
-        dictList = addCommons(dictList);
-   
-        int threads = Runtime.getRuntime().availableProcessors();
-
-        for (int id = 0; id < threads; id++) {
-            final Worker worker = new Worker(id, threads, dictList, pCrack);
-            worker.start();
-        }
-    }
-}
-
-class Worker extends Thread {
-
-    int id;
-    int threads;
-    ArrayList<String> dictList;
-    PasswordCrack pCrack;
-
-    public Worker(int id, int threads, ArrayList<String> dictList, PasswordCrack pCrack) {
-        this.id = id;
-        this.threads = threads;
-        this.dictList = dictList;
-        this.pCrack = pCrack;
-    }
-
-    public void run() {
-
-        ArrayList<String> splitted = new ArrayList<String>();
-
-        for (int i = id; i < dictList.size(); i += threads) {
-            pCrack.checkPassword(dictList.get(i).toString(), id);
-            splitted.add(dictList.get(i).toString());
-        }
-        pCrack.mangle(splitted, id);
     }
 }
