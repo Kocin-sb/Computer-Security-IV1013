@@ -88,16 +88,40 @@ public class Hiddec {
         md.update(key);
         byte[] digest = md.digest();
 
+        System.out.println("Returning hash");
         return digest;
     }
 
     public static void ctr(byte[] key, byte[] encryptedKey, byte[] input, String output) {
 
-        findKey(input, encryptedKey);
+        System.out.println("Got to ctr");
+
+        byte[] data = extractData(input, key, findKey(input, encryptedKey, true), findKey(input, encryptedKey, false));
+
+        try {
+        byte[] verifyData = cipher.doFinal(Arrays.copyOfRange(input, findKey(input, encryptedKey, false) + 16, findKey(input, encryptedKey, false) + 32));
+        byte[] hashOfData = hashKey(data);
+            
+        if(Arrays.equals(verifyData,hashOfData)){
+            System.out.println("Data found!");
+        }
+        else System.out.println("No match");
+        } 
+        catch (IllegalBlockSizeException blockSizeException) {}
+        catch(NoSuchAlgorithmException algorithmException) {}
+        catch(BadPaddingException paddingException) {}
     }
 
-    public static int findKey(byte[] input, byte[] encryptedKey) {
+    public static byte[] extractData(byte[] input, byte[] key, int start, int end) {
+
+        init();
+        cipher.update((Arrays.copyOfRange(input, start, start + 16)));
+        return cipher.update((Arrays.copyOfRange(input, start + 16, end)));
+    }
+
+    public static int findKey(byte[] input, byte[] encryptedKey, Boolean start) {
         for(int i = 0; i <= input.length; i+= 16) {
+            if(start = true)
             init();
             byte[] decrypted = cipher.update((Arrays.copyOfRange(input, i, i + 16)));
             if(Arrays.equals(decrypted,encryptedKey)){
@@ -135,10 +159,16 @@ public class Hiddec {
 
         loadArgs(args);
 
-        if(CTR = true) { 
+        System.out.println("Calling ctr");
+        byte[] enc = null;
+ 
+
             try {
-            ctr(key, hashKey(key), input, output);
+                System.out.println("inside try");
+               enc = hashKey(key);
+               System.out.println("hashkey called");
             } catch(NoSuchAlgorithmException algorithmException) {}
-    }
+            
+            ctr(key, enc, input, output);
 } 
 }
