@@ -1,4 +1,6 @@
-# Introduction
+# Hidden Encryption
+
+## Introduction
 
 In this lab you will gain insights into the problems of hidden encryption and plausible deniability. You will also get first-hand experience with tools and methods for symmetric-key encryption and decryption, and for cryptographic hashing.
 
