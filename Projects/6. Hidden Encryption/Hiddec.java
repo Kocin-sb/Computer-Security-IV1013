@@ -47,8 +47,9 @@ public class Hiddec {
 
     public static byte[] hashKey(byte[] key) throws NoSuchAlgorithmException {
         
+        System.out.println("inside hashkey");
+
         MessageDigest md = MessageDigest.getInstance("MD5");
-        System.exit(0);
         
         md.update(key);
         byte[] digest = md.digest();
@@ -127,8 +128,12 @@ public class Hiddec {
         input = readFile(args[2]);
         output = args[3];
 
+        System.out.println(key);
+        System.out.println(ctr);
+        System.out.println(input);
+        System.out.println(output);
+
         System.out.println("Calling ctr");
- 
 
             try {
                 System.out.println("inside try");
