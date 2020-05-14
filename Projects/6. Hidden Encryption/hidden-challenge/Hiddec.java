@@ -12,48 +12,11 @@ import java.util.Arrays;
 
 public class Hiddec {
 
-    public static byte[] key, ctr, input;
-    public static boolean CTR;
-    static String output;
     static String algorithm = "MD5";
     public static Cipher cipher;
+    public static byte[] globalCTR;
+    public static byte[] globalKEY;
 
-    
-    public static void loadArgs(String[] args) {
-
-        final String KEY_FLAG = "--key=";
-        final String CTR_FLAG = "--ctr=";
-        final String INPUT_FLAG = "--input=";
-        final String OUTPUT_FLAG = "--output=";
-
-        for(String arg : args) {
-            String[] splitted = arg.split("=");
-
-            switch(splitted[0]) {
-
-                case KEY_FLAG:
-                    key = stringToHex(splitted[1]);
-                    break;
-                
-                case CTR_FLAG:
-                    CTR = true;
-                    ctr = stringToHex(splitted[1]);
-                    break;
-                
-                case INPUT_FLAG:
-                    input = readFile(splitted[1]);;
-                    break;
-                
-                case OUTPUT_FLAG:
-                    output = splitted[1];
-                    break;
-                
-                
-            }
-            System.out.println("load");
-        }
-
-    }
     private static byte[] stringToHex(String str){
 
         char ch[] = str.toCharArray();
@@ -118,6 +81,7 @@ public class Hiddec {
     }
 
     public static int findKey(byte[] input, byte[] encryptedKey, Boolean start) {
+        System.out.println("Got into findkey");
         for(int i = 0; i <= input.length; i+= 16) {
             if(start = true)
             init();
@@ -132,8 +96,8 @@ public class Hiddec {
     public static void init() {
 
         try {
-        SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
-        IvParameterSpec iv = new IvParameterSpec(ctr);
+        SecretKeySpec secretKey = new SecretKeySpec(globalKEY, "AES");
+        IvParameterSpec iv = new IvParameterSpec(globalCTR);
         cipher = Cipher.getInstance("AES/CTR/NoPadding");
         cipher.init(Cipher.DECRYPT_MODE, secretKey, iv);
         }
@@ -155,20 +119,45 @@ public class Hiddec {
             System.exit(1);
         }
 
-        loadArgs(args);
+     byte[] key = null, ctr = null, input = null;
+     boolean CTR;
+     String output = null;
 
-        byte[] key = null;
+     final String KEY_FLAG = "--key=";
+     final String CTR_FLAG = "--ctr=";
+     final String INPUT_FLAG = "--input=";
+     final String OUTPUT_FLAG = "--output=";
 
-        for(String arg : args) {
-            String[] splitted = arg.split("=");
+     for(String arg : args) {
+        String[] splitted = arg.split("=");
 
-            switch(splitted[0]) {
+        switch(splitted[0]) {
 
-                case "--key":
-                    key = stringToHex(splitted[1]);
-                    break;
-            }
+            case KEY_FLAG:
+                key = stringToHex(splitted[1]);
+                globalKEY = key;
+                break;
+            
+            case CTR_FLAG:
+                CTR = true;
+                globalCTR = stringToHex(splitted[1]);
+                break;
+            
+            case INPUT_FLAG:
+                input = readFile(splitted[1]);;
+                break;
+            
+            case OUTPUT_FLAG:
+                output = splitted[1];
+                break;
+            
+            
         }
+        System.out.println("load");
+    }
+    System.out.println(key);
+    System.out.println(ctr);
+    
             try {
                 System.out.println("inside try");
 
