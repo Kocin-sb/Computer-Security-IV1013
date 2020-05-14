@@ -83,12 +83,10 @@ public class Hiddec {
     public static byte[] hashKey(byte[] key) throws NoSuchAlgorithmException {
         
         MessageDigest md = MessageDigest.getInstance("MD5");
-        System.exit(0);
         
         md.update(key);
         byte[] digest = md.digest();
 
-        System.out.println("Returning hash");
         return digest;
     }
 
@@ -159,16 +157,23 @@ public class Hiddec {
 
         loadArgs(args);
 
-        System.out.println("Calling ctr");
-        byte[] enc = null;
- 
+        byte[] key = null;
 
+        for(String arg : args) {
+            String[] splitted = arg.split("=");
+
+            switch(splitted[0]) {
+
+                case "--key":
+                    key = stringToHex(splitted[1]);
+                    break;
+            }
+        }
             try {
                 System.out.println("inside try");
-               enc = hashKey(key);
-               System.out.println("hashkey called");
+
+            ctr(key, hashKey(key), input, output);
             } catch(NoSuchAlgorithmException algorithmException) {}
-            
-            ctr(key, enc, input, output);
+    
 } 
 }
