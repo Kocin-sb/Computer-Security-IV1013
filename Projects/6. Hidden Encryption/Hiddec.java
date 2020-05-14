@@ -12,10 +12,12 @@ import java.util.Arrays;
 
 public class Hiddec {
 
+    public static byte[] key, ctr, input;
+    public static boolean CTR;
+    static String output;
     static String algorithm = "MD5";
     public static Cipher cipher;
-    public static byte[] globalCTR;
-    public static byte[] globalKEY;
+
 
     private static byte[] stringToHex(String str){
 
@@ -46,10 +48,12 @@ public class Hiddec {
     public static byte[] hashKey(byte[] key) throws NoSuchAlgorithmException {
         
         MessageDigest md = MessageDigest.getInstance("MD5");
+        System.exit(0);
         
         md.update(key);
         byte[] digest = md.digest();
 
+        System.out.println("Returning hash");
         return digest;
     }
 
@@ -81,7 +85,6 @@ public class Hiddec {
     }
 
     public static int findKey(byte[] input, byte[] encryptedKey, Boolean start) {
-        System.out.println("Got into findkey");
         for(int i = 0; i <= input.length; i+= 16) {
             if(start = true)
             init();
@@ -96,8 +99,8 @@ public class Hiddec {
     public static void init() {
 
         try {
-        SecretKeySpec secretKey = new SecretKeySpec(globalKEY, "AES");
-        IvParameterSpec iv = new IvParameterSpec(globalCTR);
+        SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
+        IvParameterSpec iv = new IvParameterSpec(ctr);
         cipher = Cipher.getInstance("AES/CTR/NoPadding");
         cipher.init(Cipher.DECRYPT_MODE, secretKey, iv);
         }
@@ -119,50 +122,19 @@ public class Hiddec {
             System.exit(1);
         }
 
-     byte[] key = null, ctr = null, input = null;
-     boolean CTR;
-     String output = null;
+        key = stringToHex(args[0]);
+        ctr = stringToHex(args[1]);
+        input = readFile(args[2]);
+        output = args[3];
 
-     final String KEY_FLAG = "--key=";
-     final String CTR_FLAG = "--ctr=";
-     final String INPUT_FLAG = "--input=";
-     final String OUTPUT_FLAG = "--output=";
+        System.out.println("Calling ctr");
+ 
 
-     for(String arg : args) {
-        String[] splitted = arg.split("=");
-
-        switch(splitted[0]) {
-
-            case KEY_FLAG:
-                key = stringToHex(splitted[1]);
-                globalKEY = key;
-                break;
-            
-            case CTR_FLAG:
-                CTR = true;
-                globalCTR = stringToHex(splitted[1]);
-                break;
-            
-            case INPUT_FLAG:
-                input = readFile(splitted[1]);;
-                break;
-            
-            case OUTPUT_FLAG:
-                output = splitted[1];
-                break;
-            
-            
-        }
-        System.out.println("load");
-    }
-    System.out.println(key);
-    System.out.println(ctr);
-    
             try {
                 System.out.println("inside try");
-
-            ctr(key, hashKey(key), input, output);
+                ctr(key, hashKey(key), input, output);
+               System.out.println("hashkey called");
             } catch(NoSuchAlgorithmException algorithmException) {}
-    
+            
 } 
 }
