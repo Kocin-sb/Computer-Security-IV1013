@@ -27,9 +27,15 @@ public class Hiddec {
         for (int i = 0; i < ch.length; i++) {
             sb.append(Integer.toHexString((int) ch[i]));
         }
-        String s =sb.toString();
-        byte[] b = s.getBytes(); 
-        return b;
+
+        String hexString =sb.toString();
+        System.out.println(hexString);
+        int len = hexString.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(hexString.charAt(i), 16) << 4) + Character.digit(hexString.charAt(i+1), 16));
+        }
+        return data;
     }
 
     public static byte[] readFile(String input) {
@@ -80,6 +86,7 @@ public class Hiddec {
 
     public static byte[] extractData(byte[] input, byte[] key, int start, int end) {
 
+        System.out.println("inside extractData");
         init();
         cipher.update((Arrays.copyOfRange(input, start, start + 16)));
         return cipher.update((Arrays.copyOfRange(input, start + 16, end)));
@@ -87,8 +94,10 @@ public class Hiddec {
 
     public static int findKey(byte[] input, byte[] encryptedKey, Boolean start) {
         for(int i = 0; i <= input.length; i+= 16) {
-            if(start = true)
+            if(start = true) {
             init();
+            System.out.println("init() called");
+            }
             byte[] decrypted = cipher.update((Arrays.copyOfRange(input, i, i + 16)));
             if(Arrays.equals(decrypted,encryptedKey)){
                 return i;
@@ -99,11 +108,17 @@ public class Hiddec {
 
     public static void init() {
 
+        System.out.println("inside init()");
         try {
         SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
+        System.out.println("inside try");
         IvParameterSpec iv = new IvParameterSpec(ctr);
+        System.out.println("inside try");
         cipher = Cipher.getInstance("AES/CTR/NoPadding");
+        System.out.println("inside try");
         cipher.init(Cipher.DECRYPT_MODE, secretKey, iv);
+        System.out.println("inside try");
+
         }
         catch (InvalidKeyException exception) {}
         catch (NoSuchPaddingException ePaddingException) {}
@@ -128,10 +143,11 @@ public class Hiddec {
         input = readFile(args[2]);
         output = args[3];
 
-        System.out.println(key);
-        System.out.println(ctr);
-        System.out.println(input);
-        System.out.println(output);
+        for(int i=0; i< ctr.length ; i++) {
+            System.out.print(ctr[i] +" ");
+         }
+
+        System.out.println("\n"+output);
 
         System.out.println("Calling ctr");
 
