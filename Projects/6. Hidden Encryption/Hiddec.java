@@ -63,9 +63,10 @@ public class Hiddec {
             byte[] data = hiddec.findDataCTR(stringToHexByteArray(hiddec.key), readFile(hiddec.input), hashKey(stringToHexByteArray(hiddec.key)), stringToHexByteArray(hiddec.ctr));            
             writeToFile(data, hiddec.output); 
         }
-
+        else {
         byte[] data = hiddec.findDataECB(stringToHexByteArray(hiddec.key), readFile(hiddec.input), hashKey(stringToHexByteArray(hiddec.key)));
         writeToFile(data, hiddec.output); 
+        }
     }
 
     public static byte[] hashKey(byte[] key) throws NoSuchAlgorithmException {
