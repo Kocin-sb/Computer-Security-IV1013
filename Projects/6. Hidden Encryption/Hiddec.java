@@ -93,38 +93,20 @@ public class Hiddec {
         BigInteger hex = new BigInteger(data, 16);
         byte[] hexByteArray = hex.toByteArray();
 
-        if (hexByteArray.length > 16)
-          hexByteArray = Arrays.copyOfRange(hexByteArray, hexByteArray.length - 16, hexByteArray.length);
-
         return hexByteArray;
     }
 
-    public static List<String> readFile(String fileName) throws IOException{
-        Path file = Paths.get(fileName);
-        List<String> lines;
+    public static byte[] readBinaryFile(String input) throws IOException{
+        
+        byte[] byteArray = null;
         try {
-          lines = Files.readAllLines(file, Charset.defaultCharset());
-        } catch (IOException e) {
-          throw new IOException(String.format("Couldn't read the file: \"%s\"\n", fileName));
+            byteArray = Files.readAllBytes(Paths.get(input));
+        } 
+        catch(Exception e) {
+            System.out.println("\nAn error occured while reading from file " + input);
+            System.exit(1);
         }
-        List<String> emptyLines = new ArrayList<>();
-        for (String line : lines){
-            if (line.equals("")){
-                emptyLines.add(line);
-            }
-        }
-        lines.removeAll(emptyLines);
-        return lines;
-    }
-    public static byte[] readBinaryFile(String fileName) throws IOException{
-        Path file = Paths.get(fileName);
-        byte[] lines;
-        try {
-          lines = Files.readAllBytes(file);
-        } catch (IOException e) {
-          throw new IOException(String.format("Couldn't read the file: \"%s\"\n", fileName));
-        }
-        return lines;
+        return byteArray;
     }
 
     public static void writeToFile(byte[] output, String outputFileName) throws IOException{
