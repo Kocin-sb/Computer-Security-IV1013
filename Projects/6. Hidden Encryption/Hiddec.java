@@ -12,7 +12,8 @@ import javax.crypto.BadPaddingException;
 public class Hiddec {
 
     String key, ctr, input, output;
-    boolean isCTR = false;
+    public static boolean isCTR = false;
+    public static byte[] globalCTR;
 
     public static void main(String[] args) throws Exception{
         
@@ -33,7 +34,6 @@ public class Hiddec {
                 
                 case "--ctr":
                 hiddec.ctr = argument[1];
-                hiddec.isCTR = true;
                 break;
                 
                 case "--input":
@@ -45,13 +45,21 @@ public class Hiddec {
                 break;
             }
         }
+
+        if(hiddec.ctr != null) {
+            isCTR = true;
+            globalCTR = stringToHexByteArray(hiddec.ctr);
+        }
+
         System.out.println(hiddec.key);
         System.out.println(hiddec.ctr);
         System.out.println(hiddec.input);
         System.out.println(hiddec.output);
-        System.out.println(hiddec.isCTR);
+        System.out.println(isCTR);
 
-        if(hiddec.ctr != null) {
+        
+
+        if(isCTR) {
             byte[] data = hiddec.findDataCTR(stringToHexByteArray(hiddec.key), readFile(hiddec.input), hashKey(stringToHexByteArray(hiddec.key)), stringToHexByteArray(hiddec.ctr));            
             writeToFile(data, hiddec.output); 
         }
@@ -101,7 +109,7 @@ public class Hiddec {
     public byte[] findDataCTR(byte[] key, byte[] input, byte[] hash, byte[] ctr) throws Exception{
         byte[] encData = {};
         for(int i=0; i<input.length; i+=16){
-            encData = decryptCTR(key, ctr, Arrays.copyOfRange(input,i,input.length));
+            encData = decrypt(key, Arrays.copyOfRange(input,i,input.length));
             if(testBlob(encData, hash)){
                 break;
             }
@@ -129,7 +137,7 @@ public class Hiddec {
     public byte[] findDataECB(byte[] key, byte[] input, byte[] hash) throws Exception{
         byte[] encData = {};
         for(int i=0; i<input.length; i+=16){
-            encData = decryptECB(key, Arrays.copyOfRange(input,i,input.length));
+            encData = decrypt(key, Arrays.copyOfRange(input,i,input.length));
             if(testBlob(encData, hash)){
                 break;
             }
@@ -166,25 +174,21 @@ public class Hiddec {
         return Arrays.equals(data,validationData);
     }
 
-    public static byte[] decryptCTR(byte[] key, byte[] ctr, byte[] encrypted) throws Exception{
+    public static byte[] decrypt(byte[] key, byte[] encrypted) throws Exception{
         try{
-            Cipher cipher = Cipher.getInstance("AES/CTR/NoPadding");
-            IvParameterSpec ivSpec = new IvParameterSpec(ctr);
-            SecretKeySpec sKey = new SecretKeySpec(key, "AES");
-            cipher.init(Cipher.DECRYPT_MODE, sKey, ivSpec);
-            return cipher.doFinal(encrypted);
-
-        } catch(BadPaddingException e){
-            throw new BadPaddingException(e.getMessage());
-        }
-    }
-
-    public static byte[] decryptECB(byte[] key, byte[] encrypted) throws Exception{
-        try{
-            Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding");
-            SecretKeySpec sKey = new SecretKeySpec(key, "AES");
-            cipher.init(Cipher.DECRYPT_MODE, sKey);
-            return cipher.doFinal(encrypted);
+            if(isCTR) {
+                Cipher cipher = Cipher.getInstance("AES/CTR/NoPadding");
+                IvParameterSpec ivSpec = new IvParameterSpec(globalCTR);
+                SecretKeySpec sKey = new SecretKeySpec(key, "AES");
+                cipher.init(Cipher.DECRYPT_MODE, sKey, ivSpec);
+                return cipher.doFinal(encrypted);
+            }
+            else {
+                Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding");
+                SecretKeySpec sKey = new SecretKeySpec(key, "AES");
+                cipher.init(Cipher.DECRYPT_MODE, sKey);
+                return cipher.doFinal(encrypted);
+            }
 
         } catch(BadPaddingException e){
             throw new BadPaddingException(e.getMessage());
