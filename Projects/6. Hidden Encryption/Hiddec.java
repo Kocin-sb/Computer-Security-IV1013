@@ -122,7 +122,7 @@ public class Hiddec {
     public byte[] findDataECB(byte[] key, byte[] input, byte[] hash) throws Exception{
         byte[] encData = {};
         for(int i=0; i<input.length; i+=16){
-            encData = AESEncryptor.decryptECB(key, Arrays.copyOfRange(input,i,input.length));
+            encData = decryptECB(key, Arrays.copyOfRange(input,i,input.length));
             if(testBlob(encData, hash)){
                 break;
             }
@@ -159,8 +159,7 @@ public class Hiddec {
         return Arrays.equals(data,validationData);
     }
 
-    private static class AESEncryptor{
-        public static byte[] decryptCTR(byte[] key, byte[] ctr, byte[] encrypted) throws Exception{
+    public static byte[] decryptCTR(byte[] key, byte[] ctr, byte[] encrypted) throws Exception{
             try{
                 Cipher cipher = Cipher.getInstance("AES/CTR/NoPadding");
                 IvParameterSpec ivSpec = new IvParameterSpec(ctr);
@@ -173,7 +172,7 @@ public class Hiddec {
             }
         }
 
-        public static byte[] decryptECB(byte[] key, byte[] encrypted) throws Exception{
+    public static byte[] decryptECB(byte[] key, byte[] encrypted) throws Exception{
             try{
                 Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding");
                 SecretKeySpec sKey = new SecretKeySpec(key, "AES");
@@ -184,5 +183,4 @@ public class Hiddec {
                 throw new BadPaddingException(e.getMessage());
             }
         }
-    }
 }
