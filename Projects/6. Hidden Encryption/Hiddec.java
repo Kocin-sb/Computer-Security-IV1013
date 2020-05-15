@@ -1,9 +1,52 @@
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.*;
+import javax.crypto.*;
+import java.security.NoSuchAlgorithmException;
+
 
 public class Hiddec {
 
     String key, ctr, input, output;
+
+    public static byte[] readFile(String input) {
+
+        byte[] byteArray = null;
+        try {
+            byteArray = Files.readAllBytes(Paths.get(input));
+        } 
+        catch(Exception e) {
+            System.out.println("\nAn error occured while reading from file " + input);
+            System.exit(1);
+        }
+        return byteArray;
+    }
+
+    private static byte[] hexStringToByte(String str){
+
+        char ch[] = str.toCharArray();
+        StringBuilder sb = new StringBuilder();
+        
+        for (int i = 0; i < ch.length; i++) {
+            sb.append(Integer.toHexString((int) ch[i]));
+        }
+
+        String hexString =sb.toString();
+        int len = hexString.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(hexString.charAt(i), 16) << 4) + Character.digit(hexString.charAt(i+1), 16));
+        }
+        return data;
+    }
+
+    public byte[] hashKey(byte[] key) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        
+        md.update(key);
+        byte[] digest = md.digest();
+        return digest;
+    }
 
     public static void main(String args[]) {
 
@@ -40,18 +83,16 @@ public class Hiddec {
         System.out.println(hiddec.output);
 
         byte[] byteInput = readFile(hiddec.input);
-
-    }
-    public static byte[] readFile(String input) {
-
-        byte[] byteArray = null;
-        try {
-            byteArray = Files.readAllBytes(Paths.get(input));
-        } 
-        catch(Exception e) {
-            System.out.println("\nAn error occured while reading from file " + input);
-            System.exit(1);
+        byte[] byteKey = hexStringToByte(hiddec.key);
+        byte[] hashedKey;
+        try{
+            hashedKey = hiddec.hashKey(byteKey);
+        }catch(NoSuchAlgorithmException e){
+            System.out.println("Could not create MD5 hash");
         }
-        return byteArray;
+        
+        if(hiddec.ctr != null) {
+            byte[] byteCTR = hexStringToByte(hiddec.ctr);
+        }
     }
 }
