@@ -59,31 +59,16 @@ public class Hiddec {
         System.out.println(hiddec.input);
         System.out.println(hiddec.output);
 
-        byte[] byteInput = readFile(hiddec.input);
-        byte[] byteKey = hex2Byte(hiddec.key);
-        byte[] hashedKey;
-        try{
-            hashedKey = hiddec.hashKey(byteKey);
-        }catch(NoSuchAlgorithmException e){
-            System.out.println("Could not create MD5 hash");
-        }
-        
-        if(hiddec.ctr != null) {
-            byte[] byteCTR = hex2Byte(hiddec.ctr);
-        }
-
         try {
-            hashedKey = hiddec.hashKey(byteKey);
-            byte[] data = hiddec.findDataECB(byteKey, byteInput, hashedKey);
+            byte[] data = hiddec.findDataECB(stringToHexByteArray(hiddec.key), readFile(hiddec.input), hashKey(stringToHexByteArray(hiddec.key)));
             writeToFile(data, hiddec.output);
     
         }catch(Exception e){
             throw new Exception(e.getMessage());
-        }
-        
+        }    
 }
 
-    public byte[] hashKey(byte[] key) throws NoSuchAlgorithmException {
+    public static byte[] hashKey(byte[] key) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("MD5");
         
         md.update(key);
@@ -91,11 +76,13 @@ public class Hiddec {
         return digest;
     }
 
-    static byte[] hex2Byte(String data) {
-        BigInteger hex = new BigInteger(data, 16);
-        byte[] hexByteArray = hex.toByteArray();
-
-        return hexByteArray;
+    static byte[] stringToHexByteArray(String string) {
+        int len = string.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(string.charAt(i), 16) << 4) + Character.digit(string.charAt(i+1), 16));
+        }
+        return data;
     }
 
     public static byte[] readFile(String input) throws IOException{
