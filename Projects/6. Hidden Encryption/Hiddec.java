@@ -1,5 +1,5 @@
-
-
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class Hiddec {
 
@@ -39,5 +39,19 @@ public class Hiddec {
         System.out.println(hiddec.input);
         System.out.println(hiddec.output);
 
+        byte[] byteInput = readFile(hiddec.input);
+
+    }
+    public static byte[] readFile(String input) {
+
+        byte[] byteArray = null;
+        try {
+            byteArray = Files.readAllBytes(Paths.get(input));
+        } 
+        catch(Exception e) {
+            System.out.println("\nAn error occured while reading from file " + input);
+            System.exit(1);
+        }
+        return byteArray;
     }
 }
