@@ -59,7 +59,7 @@ public class Hiddec {
         System.out.println(hiddec.input);
         System.out.println(hiddec.output);
 
-        byte[] byteInput = readBinaryFile(hiddec.input);
+        byte[] byteInput = readFile(hiddec.input);
         byte[] byteKey = hex2Byte(hiddec.key);
         byte[] hashedKey;
         try{
@@ -73,12 +73,14 @@ public class Hiddec {
         }
 
         try {
-           EncodeFinder encFinder = new EncodeFinder(byteKey, byteInput);
-                writeToFile(encFinder.findDataECB(), hiddec.output);
+            hashedKey = hiddec.hashKey(byteKey);
+            byte[] data = hiddec.findDataECB(byteKey, byteInput, hashedKey);
+            writeToFile(data, hiddec.output);
     
         }catch(Exception e){
             throw new Exception(e.getMessage());
         }
+        
 }
 
     public byte[] hashKey(byte[] key) throws NoSuchAlgorithmException {
@@ -96,7 +98,7 @@ public class Hiddec {
         return hexByteArray;
     }
 
-    public static byte[] readBinaryFile(String input) throws IOException{
+    public static byte[] readFile(String input) throws IOException{
         
         byte[] byteArray = null;
         try {
@@ -117,98 +119,44 @@ public class Hiddec {
         }
     }
 
-    private static class EncodeFinder{
-        byte[] key,ctr,input,hash;
-        EncodeFinder(byte[] key, byte[] ctr, byte[] input)throws NoSuchAlgorithmException{
-            this.key=key;
-            this.ctr=ctr;
-            this.input=input;
-            try{
-                this.hash=MessageDigest.getInstance("MD5").digest(key);
-            }catch(NoSuchAlgorithmException e){
-                throw new NoSuchAlgorithmException("Could not create MD5 hash");
-            }
-
-        }
-
-        EncodeFinder(byte[] key, byte[] input) throws NoSuchAlgorithmException{
-            this.key=key;
-            this.input=input;
-            try{
-                this.hash=MessageDigest.getInstance("MD5").digest(key);
-            }catch(NoSuchAlgorithmException e){
-                throw new NoSuchAlgorithmException("Could not create MD5 hash");
+    public byte[] findDataECB(byte[] key, byte[] input, byte[] hash) throws Exception{
+        byte[] encData = {};
+        for(int i=0; i<input.length; i+=16){
+            encData = AESEncryptor.decryptECB(key, Arrays.copyOfRange(input,i,input.length));
+            if(testBlob(encData, hash)){
+                break;
             }
         }
-
-        public byte[] findDataCTR() throws Exception{
-            byte[] encData = {};
-            for(int i=0; i<input.length; i+=16){
-                encData = AESEncryptor.decryptCTR(key, ctr, Arrays.copyOfRange(input,i,input.length));
-                if(testBlob(encData)){
-                    break;
+        if(!testBlob(encData, hash)){
+            throw new Exception("Could not find blob");
+        }
+        for(int i=hash.length; i<encData.length; i++){
+            if(testBlob(encData,i, hash)){
+                byte[] foundData = Arrays.copyOfRange(encData,hash.length,i);
+                int start = i;
+                start += hash.length;
+                byte[] validationData = Arrays.copyOfRange(encData,start,start+hash.length);
+                if(validate(MessageDigest.getInstance("MD5").digest(foundData),validationData)){
+                    return foundData;
+                }
+                else{
+                    throw new Exception("Data could not be validated");
                 }
             }
-            if(!testBlob(encData)){
-                throw new Exception("Could not find blob");
-            }
-            for(int i=hash.length; i<encData.length; i++){
-                if(testBlob(encData,i)){
-                    byte[] foundData = Arrays.copyOfRange(encData,hash.length,i);
-                    int start = i;
-                    start += hash.length;
-                    byte[] validationData = Arrays.copyOfRange(encData,start,start+hash.length);
-                    if(validate(MessageDigest.getInstance("MD5").digest(foundData),validationData)){
-                        return foundData;
-                    }
-                    else{
-                        throw new Exception("Data could not be validated");
-                    }
-                }
-            }
-            throw new Exception("Data could not be found in the blob");
         }
+        throw new Exception("Data could not be found in the blob");
+    }
 
-        public byte[] findDataECB() throws Exception{
-            byte[] encData = {};
-            for(int i=0; i<input.length; i+=16){
-                encData = AESEncryptor.decryptECB(key, Arrays.copyOfRange(input,i,input.length));
-                if(testBlob(encData)){
-                    break;
-                }
-            }
-            if(!testBlob(encData)){
-                throw new Exception("Could not find blob");
-            }
-            for(int i=hash.length; i<encData.length; i++){
-                if(testBlob(encData,i)){
-                    byte[] foundData = Arrays.copyOfRange(encData,hash.length,i);
-                    int start = i;
-                    start += hash.length;
-                    byte[] validationData = Arrays.copyOfRange(encData,start,start+hash.length);
-                    if(validate(MessageDigest.getInstance("MD5").digest(foundData),validationData)){
-                        return foundData;
-                    }
-                    else{
-                        throw new Exception("Data could not be validated");
-                    }
-                }
-            }
-            throw new Exception("Data could not be found in the blob");
-        }
+    public boolean testBlob(byte[] data, byte[] hash){
+        return Arrays.equals(hash, Arrays.copyOfRange(data,0,hash.length));
+    }
 
-        public boolean testBlob(byte[] data){
-            return Arrays.equals(hash, Arrays.copyOfRange(data,0,hash.length));
-        }
+    public boolean testBlob(byte[] data, int offset, byte[] hash){
+        return Arrays.equals(hash,Arrays.copyOfRange(data,offset,offset+hash.length));
+    }
 
-        public boolean testBlob(byte[] data, int offset){
-            return Arrays.equals(hash,Arrays.copyOfRange(data,offset,offset+hash.length));
-        }
-
-        public boolean validate(byte[] data, byte[] validationData){
-            return Arrays.equals(data,validationData);
-        }
-
+    public boolean validate(byte[] data, byte[] validationData){
+        return Arrays.equals(data,validationData);
     }
 
     private static class AESEncryptor{
