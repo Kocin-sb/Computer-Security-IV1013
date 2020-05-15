@@ -55,18 +55,10 @@ public class Hiddec {
         System.out.println(hiddec.ctr);
         System.out.println(hiddec.input);
         System.out.println(hiddec.output);
-        System.out.println(isCTR);
+        System.out.println("CTR: " + isCTR);
 
-        
-
-        if(isCTR) {
-            byte[] data = hiddec.findDataCTR(stringToHexByteArray(hiddec.key), readFile(hiddec.input), hashKey(stringToHexByteArray(hiddec.key)), stringToHexByteArray(hiddec.ctr));            
-            writeToFile(data, hiddec.output); 
-        }
-        else {
-        byte[] data = hiddec.findDataECB(stringToHexByteArray(hiddec.key), readFile(hiddec.input), hashKey(stringToHexByteArray(hiddec.key)));
+        byte[] data = hiddec.findData(stringToHexByteArray(hiddec.key), readFile(hiddec.input), hashKey(stringToHexByteArray(hiddec.key)));
         writeToFile(data, hiddec.output); 
-        }
     }
 
     public static byte[] hashKey(byte[] key) throws NoSuchAlgorithmException {
@@ -106,35 +98,8 @@ public class Hiddec {
           throw new IOException(String.format("Couldn't write data to the file: \"%s\"", outputFileName));
         }
     }
-    public byte[] findDataCTR(byte[] key, byte[] input, byte[] hash, byte[] ctr) throws Exception{
-        byte[] encData = {};
-        for(int i=0; i<input.length; i+=16){
-            encData = decrypt(key, Arrays.copyOfRange(input,i,input.length));
-            if(testBlob(encData, hash)){
-                break;
-            }
-        }
-        if(!testBlob(encData, hash)){
-            throw new Exception("Could not find blob");
-        }
-        for(int i=hash.length; i<encData.length; i++){
-            if(testBlob(encData,i, hash)){
-                byte[] foundData = Arrays.copyOfRange(encData,hash.length,i);
-                int start = i;
-                start += hash.length;
-                byte[] validationData = Arrays.copyOfRange(encData,start,start+hash.length);
-                if(validate(MessageDigest.getInstance("MD5").digest(foundData),validationData)){
-                    return foundData;
-                }
-                else{
-                    throw new Exception("Data could not be validated");
-                }
-            }
-        }
-        throw new Exception("Data could not be found in the blob");
-    }
 
-    public byte[] findDataECB(byte[] key, byte[] input, byte[] hash) throws Exception{
+    public byte[] findData(byte[] key, byte[] input, byte[] hash) throws Exception{
         byte[] encData = {};
         for(int i=0; i<input.length; i+=16){
             encData = decrypt(key, Arrays.copyOfRange(input,i,input.length));
