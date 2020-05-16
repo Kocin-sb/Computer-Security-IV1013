@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.Key;
 import java.security.MessageDigest;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -87,35 +88,35 @@ public class Hidenc {
         return blob;
     }
 
-    public static byte[] createBlob(byte[] key, byte[] hashedKey, int keyLength, byte[] input, byte[] hashedInput, int offset) {
+    public static byte[] createBlob(byte[] input, byte[] key)throws Exception{
+        try{
+            List<Byte> blob = new ArrayList<>(input.length + key.length*3);
+            byte[] hash = hashKey(key);
 
-        //create Arraylist to add to, length of input + key*3
-        List<Byte> blobList = new ArrayList<>(input.length + 3*keyLength);
+            for(byte b: hash){
+                blob.add(b);
+            }
+            for(byte b: input){
+                blob.add(b);
+            }
+            for(byte b: hash){
+                blob.add(b);
+            }
+            for(byte b : MessageDigest.getInstance("MD5").digest(input)){
+                blob.add(b);
+            }
 
-        //add hash to list
-        for(byte hk : hashedKey)
-            blobList.add(hk);
-        //add input to list
-        for(byte in : input)
-            blobList.add(in);
-        //add hash again 
-        for(byte hk : hashedKey)
-            blobList.add(hk);
-        //create hash of data and add too list
-        for(byte b : hashedInput)
-            blobList.add(b);
-        //create byte[] of size list and add content of list to it
-        byte[] blob = new byte[blobList.size()];
+            byte[] blobArray = new byte[blob.size()];
+            for(int i=0; i<blob.size(); i++){
+                blobArray[i] = blob.get(i);
+            }
 
-        for(int i = 0; i < blobList.size(); i++)
-            blob[i] = blobList.get(i);
-
-        try {
-        blob = pad(encrypt(key, blob), offset);
-        } catch (Exception e) {}
-
-        return blob;
+            return blobArray;
+        }catch(Exception e){
+          throw new Exception(e.getMessage());
+        }
     }
+
 
     public static void main(String[] args) throws Exception{
         
@@ -165,7 +166,14 @@ public class Hidenc {
         System.out.println(offset);
         System.out.println("CTR: " + isCTR);
 
-        byte[] encryptedBlob = createBlob(stringToHexByteArray(hiddec.key), hashKey(stringToHexByteArray(hiddec.key)), hiddec.key.length(), readFile(hiddec.input), hashKey(stringToHexByteArray(hiddec.input)), offset);
-        writeToFile(encryptedBlob, hiddec.output); 
+
+        byte[] blob = createBlob(readFile(hiddec.input), stringToHexByteArray(hiddec.key));
+
+        byte[] encryptedBlob = encrypt(stringToHexByteArray(hiddec.key), blob);
+
+        byte[] pad = pad(encryptedBlob, offset);
+
+
+        writeToFile(pad, hiddec.output); 
     }
 }
