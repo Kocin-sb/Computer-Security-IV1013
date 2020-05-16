@@ -1,4 +1,6 @@
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.nio.file.Files;
@@ -86,22 +88,31 @@ public class Hidenc {
         }
     }
 
-    public static byte[] createBlob(byte[] key, byte[] input) {
+    public static byte[] createBlob(byte[] hashedKey, int keyLength, byte[] input, byte[] hashedInput) {
 
         //create Arraylist to add to, length of input + key*3
+        List<Byte> blobList = new ArrayList<>(input.length + 3*keyLength);
 
         //add hash to list
-
+        for(byte hk : hashedKey)
+            blobList.add(hk);
         //add input to list
-
+        for(byte in : input)
+            blobList.add(in);
         //add hash again 
-
+        for(byte hk : hashedKey)
+            blobList.add(hk);
         //create hash of data and add too list
-
+        for(byte b : hashedInput)
+            blobList.add(b);
         //create byte[] of size list and add content of list to it
+        byte[] blob = new byte[blobList.size()];
 
-        // return byte[]
-        }
+        for(int i = 0; i < blobList.size(); i++)
+            blob[i] = blobList.get(i);
+
+        return blob;
+    }
 
     public static void main(String[] args) throws Exception{
         
@@ -151,7 +162,7 @@ public class Hidenc {
         System.out.println(offset);
         System.out.println("CTR: " + isCTR);
 
-        byte[] encryptedBlob = createBlob(hashKey(stringToHexByteArray(hiddec.key)), readFile(hiddec.input));
+        byte[] encryptedBlob = createBlob(hashKey(stringToHexByteArray(hiddec.key)), hiddec.key.length(), readFile(hiddec.input), hashKey(stringToHexByteArray(hiddec.input)));
         //writeToFile(data, hiddec.output); 
     }
 }
