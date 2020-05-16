@@ -53,34 +53,6 @@ public class Hidenc {
         }
     }
 
-    public byte[] findData(byte[] key, byte[] input, byte[] hash) throws Exception{
-        byte[] encData = {};
-        for(int i=0; i<input.length; i+=16){
-            encData = decrypt(key, Arrays.copyOfRange(input,i,input.length));
-            if(testBlob(encData, hash)){
-                break;
-            }
-        }
-        if(!testBlob(encData, hash)){
-            throw new Exception("Could not find blob");
-        }
-        for(int i=hash.length; i<encData.length; i++){
-            if(testBlob(encData,i, hash)){
-                byte[] foundData = Arrays.copyOfRange(encData,hash.length,i);
-                int start = i;
-                start += hash.length;
-                byte[] validationData = Arrays.copyOfRange(encData,start,start+hash.length);
-                if(validate(MessageDigest.getInstance("MD5").digest(foundData),validationData)){
-                    return foundData;
-                }
-                else{
-                    throw new Exception("Data could not be validated");
-                }
-            }
-        }
-        throw new Exception("Data could not be found in the blob");
-    }
-
     public boolean testBlob(byte[] data, byte[] hash){
         return Arrays.equals(hash, Arrays.copyOfRange(data,0,hash.length));
     }
@@ -113,6 +85,23 @@ public class Hidenc {
             throw new BadPaddingException(e.getMessage());
         }
     }
+
+    public static byte[] createBlob(byte[] key, byte[] input) {
+
+        //create Arraylist to add to, length of input + key*3
+
+        //add hash to list
+
+        //add input to list
+
+        //add hash again 
+
+        //create hash of data and add too list
+
+        //create byte[] of size list and add content of list to it
+
+        // return byte[]
+        }
 
     public static void main(String[] args) throws Exception{
         
@@ -162,7 +151,7 @@ public class Hidenc {
         System.out.println(offset);
         System.out.println("CTR: " + isCTR);
 
-        byte[] data = hiddec.findData(stringToHexByteArray(hiddec.key), readFile(hiddec.input), hashKey(stringToHexByteArray(hiddec.key)));
-        writeToFile(data, hiddec.output); 
+        byte[] encryptedBlob = createBlob(hashKey(stringToHexByteArray(hiddec.key)), readFile(hiddec.input));
+        //writeToFile(data, hiddec.output); 
     }
 }
