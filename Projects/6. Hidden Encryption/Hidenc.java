@@ -11,7 +11,7 @@ import javax.crypto.BadPaddingException;
 
 public class Hidenc {
 
-    String key, ctr, input, output, offset;
+    String key, ctr, input, output;
     public static boolean isCTR = false;
     public static byte[] globalCTR;
 
@@ -24,6 +24,7 @@ public class Hidenc {
         }
 
         Hiddec hiddec = new Hiddec();
+        String offset = "";
         
         for (String arg: args) {
             String[] argument = arg.split("=");
@@ -43,6 +44,10 @@ public class Hidenc {
                 case "--output":
                 hiddec.output = argument[1];
                 break;
+
+                case "--offset":
+                offset = argument[1];
+                break;
             }
         }
 
@@ -55,6 +60,7 @@ public class Hidenc {
         System.out.println(hiddec.ctr);
         System.out.println(hiddec.input);
         System.out.println(hiddec.output);
+        System.out.println(offset);
         System.out.println("CTR: " + isCTR);
 
         byte[] data = hiddec.findData(stringToHexByteArray(hiddec.key), readFile(hiddec.input), hashKey(stringToHexByteArray(hiddec.key)));
