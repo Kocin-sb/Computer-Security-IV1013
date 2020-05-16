@@ -55,32 +55,20 @@ public class Hidenc {
         }
     }
 
-    public boolean testBlob(byte[] data, byte[] hash){
-        return Arrays.equals(hash, Arrays.copyOfRange(data,0,hash.length));
-    }
-
-    public boolean testBlob(byte[] data, int offset, byte[] hash){
-        return Arrays.equals(hash,Arrays.copyOfRange(data,offset,offset+hash.length));
-    }
-
-    public boolean validate(byte[] data, byte[] validationData){
-        return Arrays.equals(data,validationData);
-    }
-
-    public static byte[] decrypt(byte[] key, byte[] encrypted) throws Exception{
+    public static byte[] encrypt(byte[] key, byte[] blob) throws Exception{
         try{
             if(isCTR) {
                 Cipher cipher = Cipher.getInstance("AES/CTR/NoPadding");
                 IvParameterSpec ivSpec = new IvParameterSpec(globalCTR);
                 SecretKeySpec sKey = new SecretKeySpec(key, "AES");
-                cipher.init(Cipher.DECRYPT_MODE, sKey, ivSpec);
-                return cipher.doFinal(encrypted);
+                cipher.init(Cipher.ENCRYPT_MODE, sKey, ivSpec);
+                return cipher.doFinal(blob);
             }
             else {
                 Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding");
                 SecretKeySpec sKey = new SecretKeySpec(key, "AES");
-                cipher.init(Cipher.DECRYPT_MODE, sKey);
-                return cipher.doFinal(encrypted);
+                cipher.init(Cipher.ENCRYPT_MODE, sKey);
+                return cipher.doFinal(blob);
             }
 
         } catch(BadPaddingException e){
@@ -88,7 +76,7 @@ public class Hidenc {
         }
     }
 
-    public static byte[] createBlob(byte[] hashedKey, int keyLength, byte[] input, byte[] hashedInput) {
+    public static byte[] createBlob(byte[] key, byte[] hashedKey, int keyLength, byte[] input, byte[] hashedInput) {
 
         //create Arraylist to add to, length of input + key*3
         List<Byte> blobList = new ArrayList<>(input.length + 3*keyLength);
@@ -110,6 +98,10 @@ public class Hidenc {
 
         for(int i = 0; i < blobList.size(); i++)
             blob[i] = blobList.get(i);
+
+        try {
+        blob = encrypt(key, blob);
+        } catch (Exception e) {}
 
         return blob;
     }
@@ -162,7 +154,7 @@ public class Hidenc {
         System.out.println(offset);
         System.out.println("CTR: " + isCTR);
 
-        byte[] encryptedBlob = createBlob(hashKey(stringToHexByteArray(hiddec.key)), hiddec.key.length(), readFile(hiddec.input), hashKey(stringToHexByteArray(hiddec.input)));
+        byte[] encryptedBlob = createBlob(stringToHexByteArray(hiddec.key), hashKey(stringToHexByteArray(hiddec.key)), hiddec.key.length(), readFile(hiddec.input), hashKey(stringToHexByteArray(hiddec.input)));
         //writeToFile(data, hiddec.output); 
     }
 }
