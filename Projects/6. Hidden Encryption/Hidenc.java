@@ -10,6 +10,7 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.BadPaddingException;
+import java.util.Random; 
 
 public class Hidenc {
 
@@ -76,7 +77,17 @@ public class Hidenc {
         }
     }
 
-    public static byte[] createBlob(byte[] key, byte[] hashedKey, int keyLength, byte[] input, byte[] hashedInput) {
+    public static byte[] pad(byte[] data, int offset){
+        Random rnd = new Random();
+        byte[] blob = new byte[2048];
+        rnd.nextBytes(blob);
+        for(int i=0; i<data.length; i++){
+            blob[i+offset] = data[i];
+        }
+        return blob;
+    }
+
+    public static byte[] createBlob(byte[] key, byte[] hashedKey, int keyLength, byte[] input, byte[] hashedInput, int offset) {
 
         //create Arraylist to add to, length of input + key*3
         List<Byte> blobList = new ArrayList<>(input.length + 3*keyLength);
@@ -100,7 +111,7 @@ public class Hidenc {
             blob[i] = blobList.get(i);
 
         try {
-        blob = encrypt(key, blob);
+        blob = pad(encrypt(key, blob), offset);
         } catch (Exception e) {}
 
         return blob;
@@ -154,7 +165,7 @@ public class Hidenc {
         System.out.println(offset);
         System.out.println("CTR: " + isCTR);
 
-        byte[] encryptedBlob = createBlob(stringToHexByteArray(hiddec.key), hashKey(stringToHexByteArray(hiddec.key)), hiddec.key.length(), readFile(hiddec.input), hashKey(stringToHexByteArray(hiddec.input)));
-        //writeToFile(data, hiddec.output); 
+        byte[] encryptedBlob = createBlob(stringToHexByteArray(hiddec.key), hashKey(stringToHexByteArray(hiddec.key)), hiddec.key.length(), readFile(hiddec.input), hashKey(stringToHexByteArray(hiddec.input)), offset);
+        writeToFile(encryptedBlob, hiddec.output); 
     }
 }
