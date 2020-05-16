@@ -15,58 +15,6 @@ public class Hidenc {
     public static boolean isCTR = false;
     public static byte[] globalCTR;
 
-    public static void main(String[] args) throws Exception{
-        
-
-        if(args.length < 3) {
-            System.out.println("Usage: --key=KEY --ctr=CTR --input=INPUT --output=OUTPUT");
-            System.exit(1);
-        }
-
-        Hiddec hiddec = new Hiddec();
-        String offset = "";
-        
-        for (String arg: args) {
-            String[] argument = arg.split("=");
-            switch (argument[0]) {
-                case "--key":
-                hiddec.key = argument[1];
-                break;
-                
-                case "--ctr":
-                hiddec.ctr = argument[1];
-                break;
-                
-                case "--input":
-                hiddec.input = argument[1];
-                break;
-                
-                case "--output":
-                hiddec.output = argument[1];
-                break;
-
-                case "--offset":
-                offset = argument[1];
-                break;
-            }
-        }
-
-        if(hiddec.ctr != null) {
-            isCTR = true;
-            globalCTR = stringToHexByteArray(hiddec.ctr);
-        }
-
-        System.out.println(hiddec.key);
-        System.out.println(hiddec.ctr);
-        System.out.println(hiddec.input);
-        System.out.println(hiddec.output);
-        System.out.println(offset);
-        System.out.println("CTR: " + isCTR);
-
-        byte[] data = hiddec.findData(stringToHexByteArray(hiddec.key), readFile(hiddec.input), hashKey(stringToHexByteArray(hiddec.key)));
-        writeToFile(data, hiddec.output); 
-    }
-
     public static byte[] hashKey(byte[] key) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("MD5");
         
@@ -164,5 +112,57 @@ public class Hidenc {
         } catch(BadPaddingException e){
             throw new BadPaddingException(e.getMessage());
         }
+    }
+
+    public static void main(String[] args) throws Exception{
+        
+
+        if(args.length < 3) {
+            System.out.println("Usage: --key=KEY --ctr=CTR --input=INPUT --output=OUTPUT");
+            System.exit(1);
+        }
+
+        Hiddec hiddec = new Hiddec();
+        int offset = 0;
+        
+        for (String arg: args) {
+            String[] argument = arg.split("=");
+            switch (argument[0]) {
+                case "--key":
+                hiddec.key = argument[1];
+                break;
+                
+                case "--ctr":
+                hiddec.ctr = argument[1];
+                break;
+                
+                case "--input":
+                hiddec.input = argument[1];
+                break;
+                
+                case "--output":
+                hiddec.output = argument[1];
+                break;
+
+                case "--offset":
+                offset = Integer.parseInt(argument[1]);
+                break;
+            }
+        }
+
+        if(hiddec.ctr != null) {
+            isCTR = true;
+            globalCTR = stringToHexByteArray(hiddec.ctr);
+        }
+
+        System.out.println(hiddec.key);
+        System.out.println(hiddec.ctr);
+        System.out.println(hiddec.input);
+        System.out.println(hiddec.output);
+        System.out.println(offset);
+        System.out.println("CTR: " + isCTR);
+
+        byte[] data = hiddec.findData(stringToHexByteArray(hiddec.key), readFile(hiddec.input), hashKey(stringToHexByteArray(hiddec.key)));
+        writeToFile(data, hiddec.output); 
     }
 }
