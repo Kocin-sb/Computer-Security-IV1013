@@ -87,7 +87,8 @@ public class Hiddec {
             }
         }
         throw new Exception("No data found");
-}
+    }
+    
     public boolean testBlob(byte[] data, byte[] hash, int offset){
         return Arrays.equals(hash,Arrays.copyOfRange(data,offset,offset+hash.length));
     }
