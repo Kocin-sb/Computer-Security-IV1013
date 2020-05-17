@@ -88,27 +88,23 @@ public class Hidenc {
         return cipher.doFinal(blob);
     }
 
+    static List<Byte> add(List<Byte> blobList, byte[] toAdd) {
+        for(byte b : toAdd)
+            blobList.add(b);
+
+        return blobList;
+    }
+
     static byte[] createBlob(byte[] input, byte[] key, int offset)throws Exception{
-        //create Arraylist to add to, length of input + key*3
+
         List<Byte> blobList = new ArrayList<>(input.length + 3*key.length);
         init(key);
 
-        byte[] hashedKey = hash(key);
-        byte[] hashedInput = hash(input);
+        blobList = add(blobList, hash(key));
+        blobList = add(blobList, input);
+        blobList = add(blobList, hash(key));
+        blobList = add(blobList, hash(input));
         
-        //add hash to list
-        for(byte hk : hashedKey)
-            blobList.add(hk);
-        //add input to list
-        for(byte in : input)
-            blobList.add(in);
-        //add hash again 
-        for(byte hk : hashedKey)
-            blobList.add(hk);
-        //create hash of data and add too list
-        for(byte b : hashedInput)
-            blobList.add(b);
-        //create byte[] of size list and add content of list to it
         byte[] blob = new byte[blobList.size()];
 
         for(int i = 0; i < blobList.size(); i++)
