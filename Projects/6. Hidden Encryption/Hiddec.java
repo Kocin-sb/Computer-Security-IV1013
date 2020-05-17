@@ -59,7 +59,7 @@ public class Hiddec {
         byte[] data = null;
         for(int i = 0; i<input.length; i+=16){
             data = decrypt(key, Arrays.copyOfRange(input,i,input.length));
-            if(testBlob(data, hash)){
+            if(testBlob(data, hash, 0)){
                 break;
             }
         }
@@ -72,7 +72,7 @@ public class Hiddec {
 
         for(offset = hashLength; offset < data.length; offset++){
 
-            if(testBlob(data,offset, hash)) {
+            if(testBlob(data, hash, offset)) {
                 
                 extractedData = Arrays.copyOfRange(data, hashLength, offset);
                 start = offset += hashLength;
@@ -88,12 +88,7 @@ public class Hiddec {
         }
         throw new Exception("No data found");
 }
-
-    public boolean testBlob(byte[] data, byte[] hash){
-        return Arrays.equals(hash, Arrays.copyOfRange(data,0,hash.length));
-    }
-
-    public boolean testBlob(byte[] data, int offset, byte[] hash){
+    public boolean testBlob(byte[] data, byte[] hash, int offset){
         return Arrays.equals(hash,Arrays.copyOfRange(data,offset,offset+hash.length));
     }
 
