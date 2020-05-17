@@ -55,16 +55,16 @@ public class Hiddec {
         }
     }
 
-    public byte[] findData(byte[] key, byte[] input, byte[] hash) throws Exception{
+    public byte[] extractData(byte[] key, byte[] input, byte[] hash) throws Exception{
         byte[] data = null;
-        for(int i = 0; i<input.length; i+=16){
-            data = decrypt(key, Arrays.copyOfRange(input,i,input.length));
-            if(testBlob(data, hash, 0)){
-                break;
-            }
+        for(int i = 0; i < input.length; i += 16) {
+            data = decrypt(key, Arrays.copyOfRange(input, i, input.length));
+            if(testBlob(data, hash, 0))
+                return verify(hash, data);
         }
-        return verify(hash, data);
+        throw new Exception("No data found");
     }
+
     public byte[] verify(byte[] hash, byte[] data) throws Exception { 
 
         int hashLength = hash.length, start, end, offset;
@@ -155,7 +155,7 @@ public class Hiddec {
         System.out.println(hiddec.output);
         System.out.println("CTR: " + isCTR);
 
-        byte[] data = hiddec.findData(stringToHexByteArray(hiddec.key), readFile(hiddec.input), hash(stringToHexByteArray(hiddec.key)));
+        byte[] data = hiddec.extractData(stringToHexByteArray(hiddec.key), readFile(hiddec.input), hash(stringToHexByteArray(hiddec.key)));
         writeToFile(data, hiddec.output); 
     }
 }
