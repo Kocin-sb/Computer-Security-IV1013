@@ -14,11 +14,10 @@ import java.util.Map;
 
 public class Hiddec {
 
-    String key, ctr, input, output;
-    public static boolean isCTR = false;
-    public static byte[] globalCTR;
+    static boolean isCTR = false;
+    static byte[] globalCTR;
 
-    public static byte[] hash(byte[] key) throws NoSuchAlgorithmException {
+    static byte[] hash(byte[] key) throws NoSuchAlgorithmException {
         
         MessageDigest md = MessageDigest.getInstance("MD5");
         md.update(key);
@@ -35,7 +34,7 @@ public class Hiddec {
         return data;
     }
 
-    public static byte[] readFile(String input) throws IOException{
+    static byte[] readFile(String input) throws IOException{
         
         byte[] byteArray = null;
         try {
@@ -48,7 +47,7 @@ public class Hiddec {
         return byteArray;
     }
 
-    public static void writeToFile(byte[] data, String output) throws IOException{
+    static void writeToFile(byte[] data, String output) throws IOException{
         try {
           Files.write(Paths.get(output), data);
         } 
@@ -58,7 +57,7 @@ public class Hiddec {
         }
     }
 
-    public byte[] extractData(byte[] key, byte[] input, byte[] hash) throws Exception{
+    static byte[] extractData(byte[] key, byte[] input, byte[] hash) throws Exception{
         byte[] data = null;
         for(int i = 0; i < input.length; i += 16) {
             data = decrypt(key, Arrays.copyOfRange(input, i, input.length));
@@ -68,7 +67,7 @@ public class Hiddec {
         throw new Exception("No data found");
     }
 
-    public byte[] verify(byte[] hash, byte[] data) throws Exception { 
+    static byte[] verify(byte[] hash, byte[] data) throws Exception { 
 
         int hashLength = hash.length, start, end, offset;
         byte[] extractedData, hashedData;
@@ -92,11 +91,11 @@ public class Hiddec {
         throw new Exception("No data found");
     }
     
-    public boolean match(byte[] data, byte[] hash, int offset) {
+    static boolean match(byte[] data, byte[] hash, int offset) {
         return Arrays.equals(hash, Arrays.copyOfRange(data,offset,offset+hash.length));
     }
 
-    public static byte[] decrypt(byte[] key, byte[] encrypted) throws Exception{
+    static byte[] decrypt(byte[] key, byte[] encrypted) throws Exception{
         try{
             if(isCTR) {
                 Cipher cipher = Cipher.getInstance("AES/CTR/NoPadding");
@@ -117,7 +116,7 @@ public class Hiddec {
         }
     }
 
-    public Map<String, String> getArgs(String args[]) {
+    static Map<String, String> getArgs(String args[]) {
 
         Map<String, String> argsList = new HashMap<String, String>();
 
@@ -152,9 +151,7 @@ public class Hiddec {
             System.exit(1);
         }
 
-        Hiddec hiddec = new Hiddec();
-
-        Map<String, String> argsList = hiddec.getArgs(args);
+        Map<String, String> argsList = getArgs(args);
 
         if(argsList.containsKey("ctr")) {
             isCTR = true;
@@ -171,7 +168,7 @@ public class Hiddec {
         String input = argsList.get("input");
         String output = argsList.get("output");
 
-        byte[] data = hiddec.extractData(stringToHexByteArray(key), readFile(input), hash(stringToHexByteArray(key)));
+        byte[] data = extractData(stringToHexByteArray(key), readFile(input), hash(stringToHexByteArray(key)));
         writeToFile(data, output); 
     }
 }
