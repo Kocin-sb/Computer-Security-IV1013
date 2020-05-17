@@ -63,9 +63,9 @@ public class Hiddec {
                 break;
             }
         }
-        return match(hash, data);
+        return verify(hash, data);
     }
-    public byte[] match(byte[] hash, byte[] data) throws Exception { 
+    public byte[] verify(byte[] hash, byte[] data) throws Exception { 
 
         int hashLength = hash.length, start, end, offset;
         byte[] foundData, hashedData;
