@@ -9,6 +9,8 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.BadPaddingException;
+import java.util.HashMap; 
+import java.util.Map;
 
 public class Hiddec {
 
@@ -115,7 +117,9 @@ public class Hiddec {
         }
     }
 
-    public HashMap<String, String> getArgs(String args[], HashMap<String, String> argsList) {
+    public Map<String, String> getArgs(String args[]) {
+
+        Map<String, String> argsList = new HashMap<String, String>();
 
         for (String arg: args) {
             String[] argument = arg.split("=");
@@ -149,6 +153,8 @@ public class Hiddec {
         }
 
         Hiddec hiddec = new Hiddec();
+
+        Map<String, String> argsList = hiddec.getArgs(args);
 
         if(hiddec.ctr != null) {
             isCTR = true;
