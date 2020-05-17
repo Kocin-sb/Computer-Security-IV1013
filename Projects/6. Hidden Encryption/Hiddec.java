@@ -16,8 +16,8 @@ public class Hiddec {
     public static byte[] globalCTR;
 
     public static byte[] hash(byte[] key) throws NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance("MD5");
         
+        MessageDigest md = MessageDigest.getInstance("MD5");
         md.update(key);
         byte[] digest = md.digest();
         return digest;
@@ -59,7 +59,7 @@ public class Hiddec {
         byte[] data = null;
         for(int i = 0; i < input.length; i += 16) {
             data = decrypt(key, Arrays.copyOfRange(input, i, input.length));
-            if(testBlob(data, hash, 0))
+            if(match(data, hash, 0))
                 return verify(hash, data);
         }
         throw new Exception("No data found");
@@ -72,7 +72,7 @@ public class Hiddec {
 
         for(offset = hashLength; offset < data.length; offset++){
 
-            if(testBlob(data, hash, offset)) {
+            if(match(data, hash, offset)) {
                 
                 extractedData = Arrays.copyOfRange(data, hashLength, offset);
                 start = offset += hashLength;
@@ -89,8 +89,8 @@ public class Hiddec {
         throw new Exception("No data found");
     }
     
-    public boolean testBlob(byte[] data, byte[] hash, int offset){
-        return Arrays.equals(hash,Arrays.copyOfRange(data,offset,offset+hash.length));
+    public boolean match(byte[] data, byte[] hash, int offset) {
+        return Arrays.equals(hash, Arrays.copyOfRange(data,offset,offset+hash.length));
     }
 
     public static byte[] decrypt(byte[] key, byte[] encrypted) throws Exception{
