@@ -67,23 +67,24 @@ public class Hiddec {
     }
     public byte[] match(byte[] hash, byte[] data) throws Exception { 
 
-        int hashLength = hash.length;
+        int hashLength = hash.length, start, end, offset;
+        byte[] foundData, hashedData;
 
-        for(int offset = hashLength; offset < data.length; offset++){
+        for(offset = hashLength; offset < data.length; offset++){
 
             if(testBlob(data,offset, hash)) {
                 
-                byte[] foundData = Arrays.copyOfRange(data, hashLength, offset);
-                int start = offset += hashLength;
-                int end = start + hashLength;
-                byte[] hashedData = Arrays.copyOfRange(data, start, end);
+                foundData = Arrays.copyOfRange(data, hashLength, offset);
+                start = offset += hashLength;
+                end = start + hashLength;
+                hashedData = Arrays.copyOfRange(data, start, end);
                 
-                if(Arrays.equals(hash(foundData), hashedData)){
+                if(Arrays.equals(hash(foundData), hashedData))
                     return foundData;
-                }
-                else{
+                
+                else
                     throw new Exception("Found data do not match verification data");
-                }
+                
             }
         }
         throw new Exception("Data could not be found in the blob");
