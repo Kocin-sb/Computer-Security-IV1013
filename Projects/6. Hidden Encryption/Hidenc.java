@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.BadPaddingException;
@@ -15,6 +16,7 @@ import java.util.HashMap;
 
 public class Hidenc {
 
+    static Cipher cipher;
     static byte[] globalCTR;
     static boolean isCTR = false;
 
@@ -57,25 +59,19 @@ public class Hidenc {
         }
     }
 
-    static byte[] encrypt(byte[] key, byte[] blob) throws Exception{
-        try{
+    static void init(byte[] key) throws Exception{
+
             if(isCTR) {
-                Cipher cipher = Cipher.getInstance("AES/CTR/NoPadding");
+                cipher = Cipher.getInstance("AES/CTR/NoPadding");
                 IvParameterSpec ivSpec = new IvParameterSpec(globalCTR);
                 SecretKeySpec sKey = new SecretKeySpec(key, "AES");
                 cipher.init(Cipher.ENCRYPT_MODE, sKey, ivSpec);
-                return cipher.doFinal(blob);
             }
             else {
-                Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding");
+                cipher = Cipher.getInstance("AES/ECB/NoPadding");
                 SecretKeySpec sKey = new SecretKeySpec(key, "AES");
                 cipher.init(Cipher.ENCRYPT_MODE, sKey);
-                return cipher.doFinal(blob);
             }
-
-        } catch(BadPaddingException e){
-            throw new BadPaddingException(e.getMessage());
-        }
     }
 
     static byte[] pad(byte[] data, int offset){
@@ -88,9 +84,14 @@ public class Hidenc {
         return blob;
     }
 
+    static byte[] encrypt(byte[] blob) throws BadPaddingException, IllegalBlockSizeException {
+        return cipher.doFinal(blob);
+    }
+
     static byte[] createBlob(byte[] input, byte[] key, int offset)throws Exception{
         //create Arraylist to add to, length of input + key*3
         List<Byte> blobList = new ArrayList<>(input.length + 3*key.length);
+        init(key);
 
         byte[] hashedKey = hash(key);
         byte[] hashedInput = hash(input);
@@ -114,7 +115,7 @@ public class Hidenc {
             blob[i] = blobList.get(i);
 
         try {
-        blob = pad(encrypt(key, blob), offset);
+        blob = pad(encrypt(blob), offset);
         } catch (Exception e) {}
 
         return blob;
