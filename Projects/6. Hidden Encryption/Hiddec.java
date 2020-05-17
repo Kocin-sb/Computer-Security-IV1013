@@ -167,9 +167,13 @@ public class Hiddec {
         System.out.println(argsList.get("output"));
         System.out.println("CTR: " + isCTR);
 
+        String key = argsList.get("key");
+        String input = argsList.get("input");
+        String output = argsList.get("output");
+
         System.exit(1);
 
-        byte[] data = hiddec.extractData(stringToHexByteArray(hiddec.key), readFile(hiddec.input), hash(stringToHexByteArray(hiddec.key)));
-        writeToFile(data, hiddec.output); 
+        byte[] data = hiddec.extractData(stringToHexByteArray(key), readFile(input), hash(stringToHexByteArray(key)));
+        writeToFile(data, output); 
     }
 }
