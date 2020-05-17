@@ -50,7 +50,7 @@ public class Hidenc {
         return byteArray;
     }
 
-    static void writeToFile(byte[] data, String output) {
+    static void writeFile(byte[] data, String output) {
         try {
           Files.write(Paths.get(output), data);
         } catch (IOException e) {
@@ -110,9 +110,7 @@ public class Hidenc {
         for(int i = 0; i < blobList.size(); i++)
             blob[i] = blobList.get(i);
 
-        try {
         blob = pad(encrypt(blob), offset);
-        } catch (Exception e) {}
 
         return blob;
     }
@@ -179,6 +177,6 @@ public class Hidenc {
         System.out.println("CTR: " + isCTR);
 
         blob = createBlob(readFile(input), byteKey, offset);
-        writeToFile(blob, output); 
+        writeFile(blob, output); 
     }
 }
