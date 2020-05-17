@@ -68,19 +68,19 @@ public class Hiddec {
     public byte[] verify(byte[] hash, byte[] data) throws Exception { 
 
         int hashLength = hash.length, start, end, offset;
-        byte[] foundData, hashedData;
+        byte[] extractedData, hashedData;
 
         for(offset = hashLength; offset < data.length; offset++){
 
             if(testBlob(data,offset, hash)) {
                 
-                foundData = Arrays.copyOfRange(data, hashLength, offset);
+                extractedData = Arrays.copyOfRange(data, hashLength, offset);
                 start = offset += hashLength;
                 end = start + hashLength;
                 hashedData = Arrays.copyOfRange(data, start, end);
                 
-                if(Arrays.equals(hash(foundData), hashedData))
-                    return foundData;
+                if(Arrays.equals(hash(extractedData), hashedData))
+                    return extractedData;
                 
                 else 
                     System.out.println("Extracted data do not match verification data"); System.exit(1);                 
