@@ -39,47 +39,50 @@ public class Hiddec {
             byteArray = Files.readAllBytes(Paths.get(input));
         } 
         catch(Exception e) {
-            System.out.println("\nAn error occured while reading from file " + input);
+            System.out.println("\nAn error occured while reading from file " + input + "\n" + e);
             System.exit(1);
         }
         return byteArray;
     }
 
-    public static void writeToFile(byte[] output, String outputFileName) throws IOException{
+    public static void writeToFile(byte[] data, String output) throws IOException{
         try {
-          Files.write(Paths.get(outputFileName), output);
-        } catch (IOException e) {
-          throw new IOException(String.format("Couldn't write data to the file: \"%s\"", outputFileName));
+          Files.write(Paths.get(output), data);
+        } 
+        catch (IOException e) {
+            System.out.println("\nAn error occured while writing to file " + output + "\n" + e);
+            System.exit(1);
         }
     }
 
     public byte[] findData(byte[] key, byte[] input, byte[] hash) throws Exception{
-        byte[] encData = {};
-        for(int i=0; i<input.length; i+=16){
-            encData = decrypt(key, Arrays.copyOfRange(input,i,input.length));
-            if(testBlob(encData, hash)){
+        byte[] data = null;
+        for(int i = 0; i<input.length; i+=16){
+            data = decrypt(key, Arrays.copyOfRange(input,i,input.length));
+            if(testBlob(data, hash)){
                 break;
             }
         }
-        if(!testBlob(encData, hash)){
-            throw new Exception("Could not find blob");
-        }
-
-        return match(hash, encData);
-
+        return match(hash, data);
     }
-    public byte[] match(byte[] hash, byte[] encData) throws Exception { 
-        for(int i=hash.length; i<encData.length; i++){
-            if(testBlob(encData,i, hash)){
-                byte[] foundData = Arrays.copyOfRange(encData,hash.length,i);
-                int start = i;
-                start += hash.length;
-                byte[] validationData = Arrays.copyOfRange(encData,start,start+hash.length);
-                if(validate(hash(foundData), validationData)){
+    public byte[] match(byte[] hash, byte[] data) throws Exception { 
+
+        int hashLength = hash.length;
+
+        for(int offset = hashLength; offset < data.length; offset++){
+
+            if(testBlob(data,offset, hash)) {
+                
+                byte[] foundData = Arrays.copyOfRange(data, hashLength, offset);
+                int start = offset += hashLength;
+                int end = start + hashLength;
+                byte[] hashedData = Arrays.copyOfRange(data, start, end);
+                
+                if(Arrays.equals(hash(foundData), hashedData)){
                     return foundData;
                 }
                 else{
-                    throw new Exception("Data could not be validated");
+                    throw new Exception("Found data do not match verification data");
                 }
             }
         }
@@ -92,10 +95,6 @@ public class Hiddec {
 
     public boolean testBlob(byte[] data, int offset, byte[] hash){
         return Arrays.equals(hash,Arrays.copyOfRange(data,offset,offset+hash.length));
-    }
-
-    public boolean validate(byte[] data, byte[] validationData){
-        return Arrays.equals(data,validationData);
     }
 
     public static byte[] decrypt(byte[] key, byte[] encrypted) throws Exception{
