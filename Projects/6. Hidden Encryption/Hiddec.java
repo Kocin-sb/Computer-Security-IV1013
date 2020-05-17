@@ -9,7 +9,6 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.BadPaddingException;
-import java.util.HashMap; 
 import java.util.Map;
 
 public class Hiddec {
@@ -34,20 +33,20 @@ public class Hiddec {
         return data;
     }
 
-    static byte[] readFile(String input) throws IOException{
+    static byte[] readFile(String input) {
         
         byte[] byteArray = null;
         try {
             byteArray = Files.readAllBytes(Paths.get(input));
         } 
-        catch(Exception e) {
+        catch(IOException e) {
             System.out.println("\nAn error occured while reading from file " + input + "\n" + e);
             System.exit(1);
         }
         return byteArray;
     }
 
-    static void writeToFile(byte[] data, String output) throws IOException{
+    static void writeToFile(byte[] data, String output) {
         try {
           Files.write(Paths.get(output), data);
         } 
@@ -144,13 +143,14 @@ public class Hiddec {
     }
 
     public static void main(String[] args) throws Exception{
-        
 
         if(args.length < 3) {
             System.out.println("Usage: --key=KEY --ctr=CTR --input=INPUT --output=OUTPUT");
             System.exit(1);
         }
 
+        byte[] data, byteKey;
+        String key, input, output;
         Map<String, String> argsList = getArgs(args);
 
         if(argsList.containsKey("ctr")) {
@@ -164,11 +164,12 @@ public class Hiddec {
         System.out.println(argsList.get("output"));
         System.out.println("CTR: " + isCTR);
 
-        String key = argsList.get("key");
-        String input = argsList.get("input");
-        String output = argsList.get("output");
+        key = argsList.get("key");
+        input = argsList.get("input");
+        output = argsList.get("output");
+        byteKey = stringToHexByteArray(key);
 
-        byte[] data = extractData(stringToHexByteArray(key), readFile(input), hash(stringToHexByteArray(key)));
+        data = extractData(byteKey, readFile(input), hash(byteKey));
         writeToFile(data, output); 
     }
 }
