@@ -156,16 +156,18 @@ public class Hiddec {
 
         Map<String, String> argsList = hiddec.getArgs(args);
 
-        if(hiddec.ctr != null) {
+        if(argsList.containsKey("ctr")) {
             isCTR = true;
-            globalCTR = stringToHexByteArray(hiddec.ctr);
+            globalCTR = stringToHexByteArray(argsList.get("ctr"));
         }
 
-        System.out.println(hiddec.key);
-        System.out.println(hiddec.ctr);
-        System.out.println(hiddec.input);
-        System.out.println(hiddec.output);
+        System.out.println(argsList.get("key"));
+        System.out.println(argsList.get("ctr"));
+        System.out.println(argsList.get("input"));
+        System.out.println(argsList.get("output"));
         System.out.println("CTR: " + isCTR);
+
+        System.exit(1);
 
         byte[] data = hiddec.extractData(stringToHexByteArray(hiddec.key), readFile(hiddec.input), hash(stringToHexByteArray(hiddec.key)));
         writeToFile(data, hiddec.output); 
