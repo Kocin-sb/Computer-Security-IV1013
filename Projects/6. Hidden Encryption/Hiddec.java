@@ -15,7 +15,7 @@ public class Hiddec {
     public static boolean isCTR = false;
     public static byte[] globalCTR;
 
-    public static byte[] hashKey(byte[] key) throws NoSuchAlgorithmException {
+    public static byte[] hash(byte[] key) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("MD5");
         
         md.update(key);
@@ -64,13 +64,18 @@ public class Hiddec {
         if(!testBlob(encData, hash)){
             throw new Exception("Could not find blob");
         }
+
+        return match(hash, encData);
+
+    }
+    public byte[] match(byte[] hash, byte[] encData) throws Exception { 
         for(int i=hash.length; i<encData.length; i++){
             if(testBlob(encData,i, hash)){
                 byte[] foundData = Arrays.copyOfRange(encData,hash.length,i);
                 int start = i;
                 start += hash.length;
                 byte[] validationData = Arrays.copyOfRange(encData,start,start+hash.length);
-                if(validate(MessageDigest.getInstance("MD5").digest(foundData),validationData)){
+                if(validate(hash(foundData), validationData)){
                     return foundData;
                 }
                 else{
@@ -113,7 +118,7 @@ public class Hiddec {
             throw new BadPaddingException(e.getMessage());
         }
     }
-    
+
     public static void main(String[] args) throws Exception{
         
 
@@ -156,7 +161,7 @@ public class Hiddec {
         System.out.println(hiddec.output);
         System.out.println("CTR: " + isCTR);
 
-        byte[] data = hiddec.findData(stringToHexByteArray(hiddec.key), readFile(hiddec.input), hashKey(stringToHexByteArray(hiddec.key)));
+        byte[] data = hiddec.findData(stringToHexByteArray(hiddec.key), readFile(hiddec.input), hash(stringToHexByteArray(hiddec.key)));
         writeToFile(data, hiddec.output); 
     }
 }
