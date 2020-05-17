@@ -171,8 +171,6 @@ public class Hiddec {
         String input = argsList.get("input");
         String output = argsList.get("output");
 
-        System.exit(1);
-
         byte[] data = hiddec.extractData(stringToHexByteArray(key), readFile(input), hash(stringToHexByteArray(key)));
         writeToFile(data, output); 
     }
