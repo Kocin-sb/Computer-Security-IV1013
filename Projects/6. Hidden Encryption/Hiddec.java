@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.BadPaddingException;
@@ -13,6 +14,7 @@ import java.util.Map;
 
 public class Hiddec {
 
+    static Cipher cipher;
     static boolean isCTR = false;
     static byte[] globalCTR;
 
@@ -58,12 +60,17 @@ public class Hiddec {
 
     static byte[] extractData(byte[] key, byte[] input, byte[] hash) throws Exception{
         byte[] data = null;
+        init(key);
         for(int i = 0; i < input.length; i += 16) {
-            data = decrypt(key, Arrays.copyOfRange(input, i, input.length));
+            data = decrypt(Arrays.copyOfRange(input, i, input.length));
             if(match(data, hash, 0))
                 return verify(hash, data);
         }
         throw new Exception("No data found");
+    }
+
+    static byte[] decrypt(byte[] blob) throws BadPaddingException, IllegalBlockSizeException {
+        return cipher.doFinal(blob);
     }
 
     static byte[] verify(byte[] hash, byte[] data) throws Exception { 
@@ -94,25 +101,18 @@ public class Hiddec {
         return Arrays.equals(hash, Arrays.copyOfRange(data,offset,offset+hash.length));
     }
 
-    static byte[] decrypt(byte[] key, byte[] encrypted) throws Exception{
-        try{
+    static void init(byte[] key) throws Exception{
             if(isCTR) {
-                Cipher cipher = Cipher.getInstance("AES/CTR/NoPadding");
+                cipher = Cipher.getInstance("AES/CTR/NoPadding");
                 IvParameterSpec ivSpec = new IvParameterSpec(globalCTR);
                 SecretKeySpec sKey = new SecretKeySpec(key, "AES");
                 cipher.init(Cipher.DECRYPT_MODE, sKey, ivSpec);
-                return cipher.doFinal(encrypted);
             }
             else {
-                Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding");
+                cipher = Cipher.getInstance("AES/ECB/NoPadding");
                 SecretKeySpec sKey = new SecretKeySpec(key, "AES");
                 cipher.init(Cipher.DECRYPT_MODE, sKey);
-                return cipher.doFinal(encrypted);
             }
-
-        } catch(BadPaddingException e){
-            throw new BadPaddingException(e.getMessage());
-        }
     }
 
     static Map<String, String> getArgs(String args[]) {
