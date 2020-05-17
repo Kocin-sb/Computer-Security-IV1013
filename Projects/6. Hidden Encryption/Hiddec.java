@@ -82,13 +82,12 @@ public class Hiddec {
                 if(Arrays.equals(hash(foundData), hashedData))
                     return foundData;
                 
-                else
-                    throw new Exception("Found data do not match verification data");
-                
+                else 
+                    System.out.println("Extracted data do not match verification data"); System.exit(1);                 
             }
         }
-        throw new Exception("Data could not be found in the blob");
-    }
+        throw new Exception("No data found");
+}
 
     public boolean testBlob(byte[] data, byte[] hash){
         return Arrays.equals(hash, Arrays.copyOfRange(data,0,hash.length));
