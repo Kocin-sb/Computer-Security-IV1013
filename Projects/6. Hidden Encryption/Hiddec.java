@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.HashMap;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.nio.file.Files;
@@ -114,6 +115,31 @@ public class Hiddec {
         }
     }
 
+    public HashMap<String, String> getArgs(String args[], HashMap<String, String> argsList) {
+
+        for (String arg: args) {
+            String[] argument = arg.split("=");
+            switch (argument[0]) {
+                case "--key":
+                argsList.put("key", argument[1]);
+                break;
+                
+                case "--ctr":
+                argsList.put("ctr", argument[1]);
+                break;
+                
+                case "--input":
+                argsList.put("input", argument[1]);
+                break;
+                
+                case "--output":
+                argsList.put("output", argument[1]);
+                break;
+            }
+        }
+        return argsList;
+    }
+
     public static void main(String[] args) throws Exception{
         
 
@@ -123,27 +149,6 @@ public class Hiddec {
         }
 
         Hiddec hiddec = new Hiddec();
-        
-        for (String arg: args) {
-            String[] argument = arg.split("=");
-            switch (argument[0]) {
-                case "--key":
-                hiddec.key = argument[1];
-                break;
-                
-                case "--ctr":
-                hiddec.ctr = argument[1];
-                break;
-                
-                case "--input":
-                hiddec.input = argument[1];
-                break;
-                
-                case "--output":
-                hiddec.output = argument[1];
-                break;
-            }
-        }
 
         if(hiddec.ctr != null) {
             isCTR = true;
