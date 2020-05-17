@@ -10,17 +10,18 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.BadPaddingException;
 import java.util.Random; 
+import java.util.Map;
+import java.util.HashMap;
 
 public class Hidenc {
 
-    String key, ctr, input, output;
-    public static boolean isCTR = false;
-    public static byte[] globalCTR;
+    static byte[] globalCTR;
+    static boolean isCTR = false;
 
-    public static byte[] hashKey(byte[] key) throws NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance("MD5");
+    static byte[] hash(byte[] array) throws NoSuchAlgorithmException {
         
-        md.update(key);
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        md.update(array);
         byte[] digest = md.digest();
         return digest;
     }
@@ -34,28 +35,29 @@ public class Hidenc {
         return data;
     }
 
-    public static byte[] readFile(String input) throws IOException{
+    static byte[] readFile(String input) {
         
         byte[] byteArray = null;
         try {
             byteArray = Files.readAllBytes(Paths.get(input));
         } 
-        catch(Exception e) {
-            System.out.println("\nAn error occured while reading from file " + input);
+        catch(IOException e) {
+            System.out.println("\nAn error occured while reading from file: " + input);
             System.exit(1);
         }
         return byteArray;
     }
 
-    public static void writeToFile(byte[] output, String outputFileName) throws IOException{
+    static void writeToFile(byte[] data, String output) {
         try {
-          Files.write(Paths.get(outputFileName), output);
+          Files.write(Paths.get(output), data);
         } catch (IOException e) {
-          throw new IOException(String.format("Couldn't write data to the file: \"%s\"", outputFileName));
+            System.out.println("\nAn error occured while writing to file: " + output);
+            System.exit(1);
         }
     }
 
-    public static byte[] encrypt(byte[] key, byte[] blob) throws Exception{
+    static byte[] encrypt(byte[] key, byte[] blob) throws Exception{
         try{
             if(isCTR) {
                 Cipher cipher = Cipher.getInstance("AES/CTR/NoPadding");
@@ -76,22 +78,22 @@ public class Hidenc {
         }
     }
 
-    public static byte[] pad(byte[] data, int offset){
+    static byte[] pad(byte[] data, int offset){
         Random rnd = new Random();
         byte[] blob = new byte[2048];
         rnd.nextBytes(blob);
-        for(int i=0; i<data.length; i++){
+        for(int i=0; i<data.length; i++) {
             blob[i+offset] = data[i];
         }
         return blob;
     }
 
-    public static byte[] createBlob(byte[] input, byte[] key, int offset)throws Exception{
+    static byte[] createBlob(byte[] input, byte[] key, int offset)throws Exception{
         //create Arraylist to add to, length of input + key*3
         List<Byte> blobList = new ArrayList<>(input.length + 3*key.length);
 
-        byte[] hashedKey = hashKey(key);
-        byte[] hashedInput = hashKey(input);
+        byte[] hashedKey = hash(key);
+        byte[] hashedInput = hash(input);
         
         //add hash to list
         for(byte hk : hashedKey)
@@ -118,55 +120,68 @@ public class Hidenc {
         return blob;
     }
 
-    public static void main(String[] args) throws Exception{
-        
+    static Map<String, String> getArgs(String args[]) {
 
-        if(args.length < 3) {
-            System.out.println("Usage: --key=KEY --ctr=CTR --input=INPUT --output=OUTPUT");
-            System.exit(1);
-        }
+        Map<String, String> argsList = new HashMap<String, String>();
 
-        Hiddec hiddec = new Hiddec();
-        int offset = 0;
-        
         for (String arg: args) {
             String[] argument = arg.split("=");
             switch (argument[0]) {
                 case "--key":
-                hiddec.key = argument[1];
+                argsList.put("key", argument[1]);
                 break;
                 
                 case "--ctr":
-                hiddec.ctr = argument[1];
+                argsList.put("ctr", argument[1]);
                 break;
                 
                 case "--input":
-                hiddec.input = argument[1];
+                argsList.put("input", argument[1]);
                 break;
                 
                 case "--output":
-                hiddec.output = argument[1];
+                argsList.put("output", argument[1]);
                 break;
 
                 case "--offset":
-                offset = Integer.parseInt(argument[1]);
+                argsList.put("offset", argument[1]);
                 break;
             }
         }
+        return argsList;
+    }
 
-        if(hiddec.ctr != null) {
-            isCTR = true;
-            globalCTR = stringToHexByteArray(hiddec.ctr);
+    public static void main(String[] args) throws Exception{
+        
+        if(args.length < 3) {
+            System.out.println("Usage: --key=KEY --ctr=CTR --input=INPUT --output=OUTPUT");
+            System.exit(1);
         }
+        
+        int offset;
+        byte[] blob, byteKey; 
+        String key, input, output;
+        Map<String, String> argsList = getArgs(args);
 
-        System.out.println(hiddec.key);
-        System.out.println(hiddec.ctr);
-        System.out.println(hiddec.input);
-        System.out.println(hiddec.output);
+        if(argsList.containsKey("ctr")) {
+            isCTR = true;
+            globalCTR = stringToHexByteArray(argsList.get("ctr"));
+        }
+        
+        key = argsList.get("key");
+        input = argsList.get("input");
+        output = argsList.get("output");
+        offset = Integer.parseInt(argsList.get("offset"));
+        byteKey = stringToHexByteArray(key);
+        
+        System.out.println(key);
+        System.out.println(argsList.get("ctr"));
+        System.out.println(input);
+        System.out.println(output);
         System.out.println(offset);
         System.out.println("CTR: " + isCTR);
 
-        byte[] blob = createBlob(readFile(hiddec.input), stringToHexByteArray(hiddec.key), offset);
-        writeToFile(blob, hiddec.output); 
+        blob = createBlob(readFile(input), byteKey, offset);
+        writeToFile(blob, output); 
     }
 }
