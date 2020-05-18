@@ -75,15 +75,15 @@ public class Hidenc {
             }
     }
 
-    static byte[] pad(byte[] data, int offset, String template, int size){
+    static byte[] pad(byte[] data, String template, int size, int offset){
 
         if(template != null) {
             byte[] byteTemplate = readFile(template);
-            byte[] templateCpy = Arrays.copyOf(byteTemplate, byteTemplate.length);
+            byte[] blob = Arrays.copyOf(byteTemplate, byteTemplate.length);
             for (int i = 0; i < data.length; i++){
-                templateCpy[i + offset] = data[i];
+                blob[i + offset] = data[i];
             }
-            return templateCpy;
+            return blob;
         }
 
         else {
@@ -123,7 +123,7 @@ public class Hidenc {
         for(int i = 0; i < blobList.size(); i++)
             blob[i] = blobList.get(i);
 
-        blob = pad(encrypt(blob), offset, template, size);
+        blob = pad(encrypt(blob), template, size, offset);
 
         return blob;
     }
