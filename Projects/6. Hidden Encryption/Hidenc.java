@@ -75,18 +75,8 @@ public class Hidenc {
             }
     }
 
-    static byte[] pad(byte[] data, String template, int size, int offset){
+    static byte[] pad(byte[] data, int size, int offset){
 
-        if(template != null) {
-            byte[] byteTemplate = readFile(template);
-            byte[] blob = Arrays.copyOf(byteTemplate, byteTemplate.length);
-            for (int i = 0; i < data.length; i++){
-                blob[i + offset] = data[i];
-            }
-            return blob;
-        }
-
-        else {
             Random rnd = new Random();
             byte[] blob = new byte[size];
             rnd.nextBytes(blob);
@@ -94,7 +84,6 @@ public class Hidenc {
                 blob[i+offset] = data[i];
             }
             return blob;
-        }
     }
 
     static byte[] encrypt(byte[] blob) throws BadPaddingException, IllegalBlockSizeException {
@@ -108,7 +97,7 @@ public class Hidenc {
         return blobList;
     }
 
-    static byte[] createBlob(byte[] input, byte[] key, String template, int size, int offset)throws Exception{
+    static byte[] createBlob(byte[] input, byte[] key, int size, int offset)throws Exception{
 
         List<Byte> blobList = new ArrayList<>(input.length + 3*key.length);
         init(key);
@@ -123,7 +112,7 @@ public class Hidenc {
         for(int i = 0; i < blobList.size(); i++)
             blob[i] = blobList.get(i);
 
-        blob = pad(encrypt(blob), template, size, offset);
+        blob = pad(encrypt(blob), size, offset);
 
         return blob;
     }
@@ -235,7 +224,7 @@ public class Hidenc {
         System.out.println("Size: "+size);
         System.out.println("CTR: " + isCTR);
 
-        blob = createBlob(readFile(input), byteKey, template, size, offset);
+        blob = createBlob(readFile(input), byteKey, size, offset);
         writeFile(blob, output); 
     }
 }
