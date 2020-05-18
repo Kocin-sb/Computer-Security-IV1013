@@ -174,7 +174,7 @@ public class Hidenc {
             System.exit(1);
         }
         
-        int offset, size = 0;
+        int offset = -1, size = -1;
         byte[] blob, byteKey; 
         String key, input, output, template;
         Map<String, String> argsList = getArgs(args);
@@ -197,11 +197,20 @@ public class Hidenc {
             size = readFile(argsList.get("template")).length;
         }
 
+        if(!argsList.containsKey("offset")) {
+            while((offset % 16) != 0){
+                offset  = new Random().nextInt(readFile(argsList.get("template")).length);
+            }
+        }
+
+        else if(argsList.containsKey("offset")) {
+            offset = Integer.parseInt(argsList.get("offset"));
+        }
+
         key = argsList.get("key");
         input = argsList.get("input");
         output = argsList.get("output");
         template = argsList.get("template");
-        offset = Integer.parseInt(argsList.get("offset"));
         byteKey = stringToHexByteArray(key);
         
         System.out.println(key);
