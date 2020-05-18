@@ -162,8 +162,8 @@ public class Hidenc {
         }
         
         int offset, size;
-        byte[] blob, byteKey; 
-        String key, input, output, template;
+        byte[] blob, byteKey, template; 
+        String key, input, output;
         Map<String, String> argsList = getArgs(args);
 
         if(argsList.containsKey("ctr")) {
@@ -181,11 +181,10 @@ public class Hidenc {
             System.out.println(size);
         }
 
-        
         key = argsList.get("key");
         input = argsList.get("input");
         output = argsList.get("output");
-        template = argsList.get("template");
+        template = readFile(argsList.get("template"));
         offset = Integer.parseInt(argsList.get("offset"));
         byteKey = stringToHexByteArray(key);
         
