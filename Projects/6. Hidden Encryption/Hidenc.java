@@ -161,9 +161,9 @@ public class Hidenc {
             System.exit(1);
         }
         
-        int offset, size;
-        byte[] blob, byteKey, template; 
-        String key, input, output;
+        int offset, size = 0;
+        byte[] blob, byteKey, byteTemplate; 
+        String key, input, output, template;
         Map<String, String> argsList = getArgs(args);
 
         if(argsList.containsKey("ctr")) {
@@ -178,13 +178,16 @@ public class Hidenc {
 
         if(argsList.containsKey("size")) {
             size = Integer.parseInt(argsList.get("size"));
-            System.out.println(size);
+        }
+
+        else if(argsList.containsKey("template")) {
+            size = readFile(argsList.get("template")).length;
         }
 
         key = argsList.get("key");
         input = argsList.get("input");
         output = argsList.get("output");
-        template = readFile(argsList.get("template"));
+        template = argsList.get("template");
         offset = Integer.parseInt(argsList.get("offset"));
         byteKey = stringToHexByteArray(key);
         
@@ -192,8 +195,9 @@ public class Hidenc {
         System.out.println(argsList.get("ctr"));
         System.out.println(input);
         System.out.println(output);
-        System.out.println(offset);
-        System.out.println(template);
+        System.out.println("Offset: "+offset);
+        System.out.println("Template: "+ template);
+        System.out.println("Size: "+size);
         System.out.println("CTR: " + isCTR);
 
         blob = createBlob(readFile(input), byteKey, offset);
