@@ -1,3 +1,15 @@
+/*  This program takes a data file, encryption key and a template file and places the data at an given or calculated offset in a new file.
+    The new file is padded to match the template or other specified size. Lastly, the program encrypts the file with the given key. The program 
+    has support for CTR-mode.
+
+    Usage under UNIX: 
+        javac Hidenc.java
+        java Hidenc --key=KEY --input=INPUT --output=OUTPUT --ctr=CTR --offset=OFFSET --template=TEMPLATE || --size=SIZE
+    
+    @author Emil Stahl
+    Date: May 18, 2020
+*/
+
 import java.util.ArrayList;
 import java.util.List;
 import java.io.IOException;
