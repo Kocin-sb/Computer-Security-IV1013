@@ -164,7 +164,41 @@ public class Hidenc {
                 break;
             }
         }
+        if(argsList.containsKey("size") && argsList.containsKey("template")) {
+            System.out.println("Only one of --size and --template can be specified");
+            System.exit(1);
+        }
+        if(!argsList.containsKey("size") && !argsList.containsKey("template")) {
+            System.out.println("At least one of --size and --template must be specified");
+            System.exit(1);
+        }
         return argsList;
+    }
+
+    static Map<String, Integer> setOffsetAndSize(Map<String, String> argsList) {
+
+        Map<String, Integer> map = new HashMap<String, Integer>();
+
+        if(argsList.containsKey("template")) {
+            map.put("size", readFile(argsList.get("template")).length);
+        }
+
+        else if(argsList.containsKey("size")) {
+            map.put("size", Integer.parseInt(argsList.get("size")));
+        }
+
+        if(argsList.containsKey("offset")) {
+            map.put("offset", Integer.parseInt(argsList.get("offset")));
+        }
+
+        else {
+            int offset = 1;
+            while((offset % 16) != 0){
+                offset  = new Random().nextInt(map.get("size"));
+            }
+            map.put("offset", offset);
+        }
+        return map;
     }
 
     public static void main(String[] args) throws Exception{
@@ -174,43 +208,23 @@ public class Hidenc {
             System.exit(1);
         }
         
-        int offset = 1, size = 1024;
+        int offset, size;
         byte[] blob, byteKey; 
         String key, input, output, template;
         Map<String, String> argsList = getArgs(args);
+        Map<String, Integer> map = setOffsetAndSize(argsList);
 
         if(argsList.containsKey("ctr")) {
             isCTR = true;
             globalCTR = stringToHexByteArray(argsList.get("ctr"));
         }
 
-        if(argsList.containsKey("size") && argsList.containsKey("template")) {
-            System.out.println("Only one of --size and --template can be specified");
-            System.exit(1);
-        }
-
-        if(argsList.containsKey("size")) {
-            size = Integer.parseInt(argsList.get("size"));
-        }
-
-        else if(argsList.containsKey("template")) {
-            size = readFile(argsList.get("template")).length;
-        }
-
-        if(!argsList.containsKey("offset")) {
-            while((offset % 16) != 0){
-                offset  = new Random().nextInt(readFile(argsList.get("template")).length);
-            }
-        }
-
-        else if(argsList.containsKey("offset")) {
-            offset = Integer.parseInt(argsList.get("offset"));
-        }
-
         key = argsList.get("key");
         input = argsList.get("input");
         output = argsList.get("output");
         template = argsList.get("template");
+        size = map.get("size");
+        offset = map.get("offset");
         byteKey = stringToHexByteArray(key);
         
         System.out.println(key);
