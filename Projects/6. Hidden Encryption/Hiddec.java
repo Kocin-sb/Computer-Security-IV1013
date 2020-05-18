@@ -1,3 +1,15 @@
+/*  This program takes an encrypted file and a decryption key and searches the given file for the hashed key, when the hashed 
+    key is found the program starts to decrypt data until the second hash is found. The extracted data is verified with the hash of the
+    data located in the input file. If the data is verfied the data is printed to an output file. The program has support for CTR-mode.
+
+    Usage under UNIX: 
+        javac Hiddec.java
+        java Hiddec --key=KEY --input=INPUT --output=OUTPUT --ctr=CTR
+    
+    @author Emil Stahl
+    Date: May 18, 2020
+*/
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.io.IOException;
