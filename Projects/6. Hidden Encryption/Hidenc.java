@@ -196,7 +196,7 @@ public class Hidenc {
 
     public static void main(String[] args) throws Exception{
         
-        if(args.length < 3) {
+        if(args.length < 4) {
             System.out.println("Usage: --key=KEY --ctr=CTR --input=INPUT --output=OUTPUT");
             System.exit(1);
         }
