@@ -139,6 +139,10 @@ public class Hiddec {
                 break;
             }
         }
+        if(argsList.containsKey("ctr")) {
+            isCTR = true;
+            globalCTR = stringToHexByteArray(argsList.get("ctr"));
+        }
         return argsList;
     }
 
@@ -152,11 +156,6 @@ public class Hiddec {
         byte[] data, byteKey;
         String key, input, output;
         Map<String, String> argsList = getArgs(args);
-
-        if(argsList.containsKey("ctr")) {
-            isCTR = true;
-            globalCTR = stringToHexByteArray(argsList.get("ctr"));
-        }
 
         System.out.println(argsList.get("key"));
         System.out.println(argsList.get("ctr"));
