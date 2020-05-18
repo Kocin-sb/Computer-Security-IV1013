@@ -1,4 +1,4 @@
 clear
-rm Hiddec.class file1.txt
+rm Hiddec.class file1.data
 javac Hiddec.java
-java Hiddec --key=1a6dde73350d5823cedffc08872c7117 --input=task1.data --output=file1.txt 
+java Hiddec --key=1a6dde73350d5823cedffc08872c7117 --input=task1.data --output=file1.data
