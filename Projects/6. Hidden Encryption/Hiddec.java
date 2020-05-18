@@ -102,17 +102,17 @@ public class Hiddec {
     }
 
     static void init(byte[] key) throws Exception{
-            if(isCTR) {
-                cipher = Cipher.getInstance("AES/CTR/NoPadding");
-                IvParameterSpec ivSpec = new IvParameterSpec(globalCTR);
-                SecretKeySpec sKey = new SecretKeySpec(key, "AES");
-                cipher.init(Cipher.DECRYPT_MODE, sKey, ivSpec);
-            }
-            else {
-                cipher = Cipher.getInstance("AES/ECB/NoPadding");
-                SecretKeySpec sKey = new SecretKeySpec(key, "AES");
-                cipher.init(Cipher.DECRYPT_MODE, sKey);
-            }
+        if(isCTR) {
+            cipher = Cipher.getInstance("AES/CTR/NoPadding");
+            IvParameterSpec ivSpec = new IvParameterSpec(globalCTR);
+            SecretKeySpec sKey = new SecretKeySpec(key, "AES");
+            cipher.init(Cipher.DECRYPT_MODE, sKey, ivSpec);
+        }
+        else {
+            cipher = Cipher.getInstance("AES/ECB/NoPadding");
+            SecretKeySpec sKey = new SecretKeySpec(key, "AES");
+            cipher.init(Cipher.DECRYPT_MODE, sKey);
+        }
     }
 
     static Map<String, String> getArgs(String args[]) {
