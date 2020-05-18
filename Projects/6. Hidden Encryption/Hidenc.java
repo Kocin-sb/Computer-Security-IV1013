@@ -13,6 +13,7 @@ import javax.crypto.BadPaddingException;
 import java.util.Random; 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Arrays;
 
 public class Hidenc {
 
@@ -74,14 +75,26 @@ public class Hidenc {
             }
     }
 
-    static byte[] pad(byte[] data, int offset){
-        Random rnd = new Random();
-        byte[] blob = new byte[2048];
-        rnd.nextBytes(blob);
-        for(int i=0; i<data.length; i++) {
-            blob[i+offset] = data[i];
+    static byte[] pad(byte[] data, int offset, String template, int size){
+
+        if(template != null) {
+            byte[] byteTemplate = readFile(template);
+            byte[] templateCpy = Arrays.copyOf(byteTemplate, byteTemplate.length);
+            for (int i = 0; i < data.length; i++){
+                templateCpy[i + offset] = data[i];
+            }
+            return templateCpy;
         }
-        return blob;
+
+        else {
+            Random rnd = new Random();
+            byte[] blob = new byte[size];
+            rnd.nextBytes(blob);
+            for(int i=0; i<data.length; i++) {
+                blob[i+offset] = data[i];
+            }
+            return blob;
+        }
     }
 
     static byte[] encrypt(byte[] blob) throws BadPaddingException, IllegalBlockSizeException {
@@ -95,7 +108,7 @@ public class Hidenc {
         return blobList;
     }
 
-    static byte[] createBlob(byte[] input, byte[] key, int offset)throws Exception{
+    static byte[] createBlob(byte[] input, byte[] key, String template, int size, int offset)throws Exception{
 
         List<Byte> blobList = new ArrayList<>(input.length + 3*key.length);
         init(key);
@@ -110,7 +123,7 @@ public class Hidenc {
         for(int i = 0; i < blobList.size(); i++)
             blob[i] = blobList.get(i);
 
-        blob = pad(encrypt(blob), offset);
+        blob = pad(encrypt(blob), offset, template, size);
 
         return blob;
     }
@@ -162,7 +175,7 @@ public class Hidenc {
         }
         
         int offset, size = 0;
-        byte[] blob, byteKey, byteTemplate; 
+        byte[] blob, byteKey; 
         String key, input, output, template;
         Map<String, String> argsList = getArgs(args);
 
@@ -200,7 +213,7 @@ public class Hidenc {
         System.out.println("Size: "+size);
         System.out.println("CTR: " + isCTR);
 
-        blob = createBlob(readFile(input), byteKey, offset);
+        blob = createBlob(readFile(input), byteKey, template, size, offset);
         writeFile(blob, output); 
     }
 }
