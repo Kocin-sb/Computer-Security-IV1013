@@ -172,6 +172,10 @@ public class Hidenc {
             System.out.println("At least one of --size and --template must be specified");
             System.exit(1);
         }
+        if(argsList.containsKey("ctr")) {
+            isCTR = true;
+            globalCTR = stringToHexByteArray(argsList.get("ctr"));
+        }
         return argsList;
     }
 
@@ -213,11 +217,6 @@ public class Hidenc {
         String key, input, output, template;
         Map<String, String> argsList = getArgs(args);
         Map<String, Integer> map = setOffsetAndSize(argsList);
-
-        if(argsList.containsKey("ctr")) {
-            isCTR = true;
-            globalCTR = stringToHexByteArray(argsList.get("ctr"));
-        }
 
         key = argsList.get("key");
         input = argsList.get("input");
