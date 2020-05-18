@@ -187,7 +187,7 @@ public class Hidenc {
         else {
             int offset = 1;
             while((offset % 16) != 0){
-                offset  = new Random().nextInt(map.get("size"));
+                offset  = new Random().nextInt(map.get("size")/2);
             }
             map.put("offset", offset);
         }
