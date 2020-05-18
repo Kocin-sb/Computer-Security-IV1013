@@ -182,11 +182,6 @@ public class Hidenc {
 
         if(argsList.containsKey("offset")) {
             map.put("offset", Integer.parseInt(argsList.get("offset")));
-
-            if(map.get("offset") > map.get("size")/2) {
-                System.out.println("Offset is too big");
-                System.exit(1);
-            }
         }
 
         else {
