@@ -141,6 +141,14 @@ public class Hidenc {
                 case "--offset":
                 argsList.put("offset", argument[1]);
                 break;
+
+                case "--template":
+                argsList.put("template", argument[1]);
+                break;
+
+                case "--size":
+                argsList.put("size", argument[1]);
+                break;
             }
         }
         return argsList;
@@ -153,19 +161,31 @@ public class Hidenc {
             System.exit(1);
         }
         
-        int offset;
+        int offset, size;
         byte[] blob, byteKey; 
-        String key, input, output;
+        String key, input, output, template;
         Map<String, String> argsList = getArgs(args);
 
         if(argsList.containsKey("ctr")) {
             isCTR = true;
             globalCTR = stringToHexByteArray(argsList.get("ctr"));
         }
+
+        if(argsList.containsKey("size") && argsList.containsKey("template")) {
+            System.out.println("Only one of --size and --template can be specified");
+            System.exit(1);
+        }
+
+        if(argsList.containsKey("size")) {
+            size = Integer.parseInt(argsList.get("size"));
+            System.out.println(size);
+        }
+
         
         key = argsList.get("key");
         input = argsList.get("input");
         output = argsList.get("output");
+        template = argsList.get("template");
         offset = Integer.parseInt(argsList.get("offset"));
         byteKey = stringToHexByteArray(key);
         
@@ -174,6 +194,7 @@ public class Hidenc {
         System.out.println(input);
         System.out.println(output);
         System.out.println(offset);
+        System.out.println(template);
         System.out.println("CTR: " + isCTR);
 
         blob = createBlob(readFile(input), byteKey, offset);
