@@ -174,7 +174,7 @@ public class Hidenc {
             System.exit(1);
         }
         
-        int offset = -1, size = -1;
+        int offset = 1, size = 1024;
         byte[] blob, byteKey; 
         String key, input, output, template;
         Map<String, String> argsList = getArgs(args);
